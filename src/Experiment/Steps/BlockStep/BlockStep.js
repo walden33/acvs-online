@@ -10,7 +10,7 @@ exp.BlockStep = class extends util.AbstractStep {
         this._blocknum = blocknum;
 
         // object which generates random datasets for the chart widget
-        this._display_dataset_generator = new exp.DisplayDatasetGenerator();
+        this._display_dataset_generator = new exp.SpatialCueTrialGenerator();
 
         // array of 1s & 0s for "correct" & "incorrect" for each trial
         this._accuracy_data = [];
