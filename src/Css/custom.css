@@ -1,0 +1,184 @@
+/* Remove default margins */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+
+body {
+  background-color: black;
+  overflow: hidden;
+  min-height: 100vmin;
+}
+H1 {
+  font-family: 'Open Sans', 'Ariel';
+  font-size: 2em;
+}
+H2 {
+  font-family: 'Open Sans', 'Ariel';
+  font-size: 1.2em;
+}
+p {
+  font-family: 'Open Sans', 'Ariel';
+  font-size: 1em;
+  color: white;
+}
+li {
+  font-family: 'Open Sans', 'Ariel';
+  font-size: 1em;
+  color: white;
+  text-align: left;
+}
+.ace_header {
+  background-color: black;
+  color: white;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 0px;
+  margin-left: 0px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  font-family: 'Open Sans', 'Ariel';
+  font-size: 2em;
+}
+.ace_message_area {
+  background-color: black;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 0px;
+  margin-left: 0px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  font-family: 'Open Sans', 'Ariel';
+  font-size: 1em;
+}
+
+#gui-container {
+  text-align: center;
+}
+.gui-div {
+  display: inline-block;
+}
+
+/* the parent container of #workspace and #window-max-alert-message */
+#gui {
+  transition: 1s; /* for the darken and brighten transition */
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.ac-workspace {
+  position: relative;
+}
+
+.ace_pretty_text {
+  font-family: 'Open Sans', 'Ariel';
+  font-weight: 400;
+  fill: white;
+}
+.ace_open_tab_button{
+  background-color: rgba(240,240,240,1.0);
+  border-style: outset;
+  border-color: rgba(230,230,230,1.0);
+  border-radius: 5px;
+  color: rgba(0,0,0,1.0);
+  text-decoration: none;
+  padding: 4px;
+  display: inline-block;
+}
+.svg_container {
+  display: inline-block;
+  position: relative;
+  width: 90vmin;
+  height: 90vmin;
+  padding-bottom: 100%;
+  vertical-align: top;
+  overflow: hidden;
+}
+.ace_svg_content_responsive {
+  display: inline-block;
+  position: absolute;
+  top: 0px;
+  left: 0;
+}
+.ace_centered_div_container {
+  margin: 0;
+  height: 90vmin;
+  position: relative;
+}
+.ace_centered_div_content {
+  margin: 0;
+  position: absolute;
+  top: 45%;
+  left: 48%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+}
+
+.darken {
+  transition: 1s;
+  filter: blur(5px);
+}
+
+/* placed on the same level as #workspace */
+.window-max-alert-transparent {
+  transition: 1s;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  font-size: 2em;
+  color: transparent;
+  z-index: 1;
+}
+
+.window-max-alert {
+  transition: 1s;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  font-size: 2em;
+  color: white;
+  z-index: 1;
+}
+
+#overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.88); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+
+#overlay-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 28px;
+  color: white;
+  transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+}
+
+.acvs-digit {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  fill: white;
+  text-anchor: middle;
+  alignment-baseline: central;  /* Warning: Check browser compatibility. WL 8/22/2020 */
+}
