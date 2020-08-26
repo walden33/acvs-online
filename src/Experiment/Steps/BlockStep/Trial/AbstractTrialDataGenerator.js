@@ -1,4 +1,4 @@
-exp.AbstractTrialGenerator = class {
+exp.AbstractTrialDataGenerator = class {
 
     constructor() {
     }

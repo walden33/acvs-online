@@ -16,7 +16,7 @@
  * @version 1.4 (07/20/2020)
  * @author Walden Li
  */
-exp.SpatialCueTrialGenerator = class extends exp.AbstractTrialGenerator {
+exp.SpatialCueTrialGenerator = class extends exp.AbstractTrialDataGenerator {
     constructor() {
         super()
         this.targetDigits = [2, 3, 4, 5];
