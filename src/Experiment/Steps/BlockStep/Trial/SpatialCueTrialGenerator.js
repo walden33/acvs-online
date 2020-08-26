@@ -319,18 +319,6 @@ exp.SpatialCueTrialGenerator = class extends exp.AbstractTrialDataGenerator {
         return result;
     }
 
-    /**
-     * Returns the next array of <DisplayDataset> with a trial condition
-     * logic array in this block.  When exhausted this method will return null.
-     * 
-     */
-    yield_trial_dataset() {
-        if ( this.blockData.length > 0 ) {
-            return this.blockData.pop();
-        } else {
-            return null;
-        }
-    }
 
 
 }

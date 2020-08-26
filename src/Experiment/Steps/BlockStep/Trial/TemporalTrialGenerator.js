@@ -12,4 +12,8 @@ exp.TemporalTrialGenerator = class extends exp.AbstractTrialDataGenerator {
 
     }   
 
+    yield_trial_dataset() {
+        
+    }
+
 }
