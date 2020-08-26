@@ -19,12 +19,9 @@
 exp.SpatialCueTrialGenerator = class extends exp.AbstractTrialDataGenerator {
     constructor() {
         super()
-        this.targetDigits = [2, 3, 4, 5];
-        this.distractorDigits = [6, 7, 8, 9];
         this.numTotalTrials = 108;  // total number of trials
         this.numRegions = 3;    // total number of separated areas in a display
         this.numTrialsPerRegion = this.numTotalTrials / this.numRegions;
-        this.display = new disp.Display();  // instantiate a disp.Display class to get display-specific parameters
         this.trialConds = this._generate_trial_conditions()
         this.blockData = this._make_block_dataset( this.trialConds );
     }
