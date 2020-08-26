@@ -16,7 +16,7 @@
  * @version 1.4 (07/20/2020)
  * @author Walden Li
  */
-exp.DisplayDatasetGenerator = class {
+exp.SpatialCueTrialGenerator = class extends exp.AbstractTrialGenerator {
     constructor() {
         this.targetDigits = [2, 3, 4, 5];
         this.distractorDigits = [6, 7, 8, 9];
