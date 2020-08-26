@@ -43,7 +43,7 @@ exp.TemporalTrialGenerator = class extends exp.AbstractTrialDataGenerator {
         for (let i = 0; i < result.length; i++) {
             let optTargSide = optTargTypesArray.pop();
             let nonOptTargSide = util.Util.select_rand_from_array([1,2], optTargSide);
-            result[i] = result[i].concat([ optTargSide, nonOptTargSide ]);
+            result[i] = result[i].concat([ optTargSide, nonOptTargSide, 10, 15 ]);  // TODO
         }
         return result;
     }
@@ -185,6 +185,22 @@ exp.TemporalTrialGenerator = class extends exp.AbstractTrialDataGenerator {
 
     }
 
+    /**
+     * This method generates a 2D array of <DisplayDataset>. The first dimension
+     * is the cue display and the second is the stimuli display in each trial.
+     * 
+     * @param {Array<number>} trialConds 
+     */
+    _make_block_dataset( trialConds ) {
+        let trial_conditions = trialConds.slice();  // make a copy
+        let result = [];
+        let currentTrialCond;
+        while( trial_conditions.length > 0 ) {
+            currentTrialCond = trial_conditions.pop();
+            result.push( this._make_stimuli_display( ...currentTrialCond ) )
+        }
+        return result;
+    }
 
 
 }
