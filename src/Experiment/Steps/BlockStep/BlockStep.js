@@ -96,6 +96,8 @@ exp.BlockStep = class extends util.AbstractStep {
     /// Override the <AbstractStep> execute method.
     ///
     execute() {
+        exp.HtmlGui.clear_header();
+        exp.HtmlGui.clear_workspace();
         this._db.EventsTable.add_new_row("beginning block step #" + this._blocknum);
         this._run_next_trial();
         exp.HtmlGui.show_message(".", "black");

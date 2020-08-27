@@ -11,8 +11,6 @@ exp.Trial = class extends exp.AbstractTrial {
    */
   constructor ( cue_dataset, stimuli_dataset ) {
     super()
-    exp.HtmlGui.clear_header();
-    exp.HtmlGui.clear_workspace();
 
     this.cue_dataset = cue_dataset;
     this.stimuli_dataset = stimuli_dataset;
