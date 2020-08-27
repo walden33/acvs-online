@@ -180,7 +180,7 @@ exp.Trial = class extends exp.AbstractTrial {
     }
 
 
-      this.display_widget.draw_cue();
+    this.display_widget.draw_cue();
 
 
     // wait a second...

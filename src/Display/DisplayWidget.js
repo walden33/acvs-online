@@ -11,6 +11,8 @@
  * @package ac-spatial-cue-1
  * @version 1.4 (07/20/2020)
  * @author Walden Li
+ * 
+ * @update 1.5 Added run_rsvp() method.
  */
 disp.DisplayWidget = class {
     constructor(parent) {
@@ -131,4 +133,18 @@ disp.DisplayWidget = class {
     draw_stimuli() {
         this.draw(this.stimuli);
     }
+
+    /**
+     * 
+     * @param {Array<disp.DisplayDataset>} datasets 
+     * @param {number} interval
+     */
+    run_rsvp( datasets, interval ) {
+
+        for( let i = 0; i < datasets.length; i++ ) {
+            setTimeout(()=>{this.draw(datasets[i])}, interval*i );
+        }
+
+    }
+
 }
