@@ -136,13 +136,20 @@ disp.DisplayWidget = class {
 
     /**
      * 
-     * @param {Array<disp.DisplayDataset>} datasets 
-     * @param {number} interval
+     * @param {disp.DisplayDataset} cue
+     * @param {Array<disp.DisplayDataset>} stimuli
+     * @param {number} cue_duration : time cue lasts
+     * @param {number} soa : stimulus-onset async., time between cue and stimuli
+     * @param {number} isi: interstimulus interval for the RSVP stream
      */
-    run_rsvp( datasets, interval ) {
+    run_rsvp( cue, stimuli, cue_duration, soa, isi ) {
+
+        setTimeout( ()=>{ this.draw( cue ) }, 0 );
+
+        setTimeout( ()=>{ this.clear()}, cue_duration );
 
         for( let i = 0; i < datasets.length; i++ ) {
-            setTimeout(()=>{this.draw(datasets[i])}, interval*i );
+            setTimeout(()=>{ this.draw( stimuli[i] ) }, isi*i + soa );
         }
 
     }
