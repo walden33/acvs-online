@@ -7,7 +7,7 @@ exp.AbstractTrialDataGenerator = class {
         this.blockData = [];
     }
 
-    
+
     /**
      * A helper method. Used to generate a "run" of trials in which the optimal
      * target have certain same attribute. For example, in previous color
@@ -25,7 +25,7 @@ exp.AbstractTrialDataGenerator = class {
         if (reps%1 !== 0) throw("Total number of trials must be a multiple of optimal target types.")
 
         let result = [];
-        for (let i = 1; i <= num_opt_type; i++) {
+        for (let i = 0; i < num_opt_type; i++) {
             for (let j = 0; j < reps; j++) {
                 result.push(i);
             }
