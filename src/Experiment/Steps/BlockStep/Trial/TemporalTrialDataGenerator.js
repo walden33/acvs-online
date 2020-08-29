@@ -17,6 +17,7 @@ exp.TemporalTrialDataGenerator = class extends exp.AbstractTrialDataGenerator {
             "rgb(128, 128, 128)"
         ]
         this.targetTypes = [1, 2];  // 1 for RED optimal and 2 for BLUE optimal
+        this.targetColors = [ this.colors[0], this.colors[1] ];
         this.trialConds = this._generate_trial_conditions();
         this.blockData = this._make_block_dataset( this.trialConds );
     }
@@ -50,48 +51,7 @@ exp.TemporalTrialDataGenerator = class extends exp.AbstractTrialDataGenerator {
         }
         return result;
     }
-
-    /**
-     * A helper method. Used to generate a "run" of trials in which the optimal
-     * target have certain same attribute. For example, in previous color
-     * versions of ACVS, we have "runs" of RED or BLUE optimal.  Here, we have
-     * "runs" of LEFT or RIGHT optimal.
-     * 
-     * @param {number} num_opt_type : Number of optimal target types. For example, 2 for experiments that have BLUE optimal and RED optmial trials.
-     * @param {number} max_rep : Maximum number of repitions allowed for each run of optimal target type trials.
-     */
-    _generate_opt_target_types( num_opt_type, max_rep) {
-
-        // Calculate the number of reps that need to be generated
-        const reps = this.numTotalTrials / num_opt_type;
-        if (reps%1 !== 0) throw("Total number of trials must be a multiple of optimal target types.")
-
-        let result = [];
-        for (let i = 1; i <= num_opt_type; i++) {
-            for (let j = 0; j < reps; j++) {
-                result.push(i);
-            }
-        }
-        util.Util.fisher_yates_shuffle(result);
-
-        // Check if there are more than MAXREP reps in a run
-        let previous = result[0];
-        // rep: current run rep numbers; maxRep: max rep numbers recorded so far
-        let rep = 1, maxRep = 1;
-        for (let i = 1; i < result.length; i++) {
-            if (result[i] === previous) {
-                rep++;
-            } else {
-                maxRep = Math.max(rep, maxRep);
-                rep = 1;
-            }
-            previous = result[i];
-        }
-        if ( maxRep > max_rep ) {
-            return this._generate_opt_target_types()    // generate another array
-        } else return result;
-
-    }
+    
 
     /**
      * A helper method previously known as _make_chartDataset, but it did not
@@ -99,20 +59,18 @@ exp.TemporalTrialDataGenerator = class extends exp.AbstractTrialDataGenerator {
      * disp.Display class and makes a <disp.DisplayDataset> that can be directly
      * used by display widget to draw the stimuli.
      * 
-     * @param {number} optTargEcc : 1-3
-     * @param {number} nonOptTargEcc : 1-3
      * @param {number} optTargDigit : 2-5
      * @param {number} nonOptTargDigit :2-5
-     * @param {number} optTargSide : 1-2
-     * @param {number} nonOptTargSide : 1-2
+     * @param {number} optTargColor : 1-2
      * @param {number} optTargPosition : 8, 9, 10, 11, 12
      * @param {number} nonOptTargPosition : 13, 14, 15, 16, 17
      * 
      * @returns {disp.DisplayDataset}
      */
-    _make_stimuli_display(optTargEcc, nonOptTargEcc, optTargDigit,
-        nonOptTargDigit, optTargSide, nonOptTargSide, optTargPosition,
-        nonOptTargPosition) {
+    _make_stimuli_display(optTargDigit, nonOptTargDigit, optTargColor,
+        optTargPosition, nonOptTargPosition) {
+
+        
 
         let result;
 
