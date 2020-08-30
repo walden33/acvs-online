@@ -114,18 +114,18 @@ exp.TemporalTrialDataGenerator = class extends exp.AbstractTrialDataGenerator {
                     optSideSeq[i],
                     this.display.screen_center_x - 20+"",
                     this.display.screen_center_y,
-                    'white',
+                    this.display.digit_color,
                     this.display.digit_size,
-                    'acvs-digit'
+                    this.display.digit_class_name
                 ))
                 // Add non-optimal side digit
                 d.add_a_text( new disp.Text(
                     nonOptSideSeq[i],
                     this.display.screen_center_x + 20+"",
                     this.display.screen_center_y,
-                    'white',
+                    this.display.digit_color,
                     this.display.digit_size,
-                    'acvs-digit'
+                    this.display.digit_class_name
                 ))
             } else if ( optTargSide === 2 ) {   // if optimal target on the right
                 // Add optimal side digit
@@ -133,18 +133,18 @@ exp.TemporalTrialDataGenerator = class extends exp.AbstractTrialDataGenerator {
                     optSideSeq[i],
                     this.display.screen_center_x + 20+"",
                     this.display.screen_center_y,
-                    'white',
+                    this.display.digit_color,
                     this.display.digit_size,
-                    'acvs-digit'
+                    this.display.digit_class_name
                 ))
                 // Add non-optimal side digit
                 d.add_a_text( new disp.Text(
                     nonOptSideSeq[i],
                     this.display.screen_center_x - 20+"",
                     this.display.screen_center_y,
-                    'white',
+                    this.display.digit_color,
                     this.display.digit_size,
-                    'acvs-digit'
+                    this.display.digit_class_name
                 ))
             }
 

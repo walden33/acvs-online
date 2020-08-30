@@ -156,9 +156,9 @@ exp.SpatialCueTrialGenerator = class extends exp.AbstractTrialDataGenerator {
                 optTargDigit+'',
                 optGrid.x+'',
                 optGrid.y+'',
-                'white',
+                this.display.digit_color,
                 this.display.digit_size,
-                'acvs-digit'
+                this.display.digit_class_name
             )
         ]);
         result.add_texts([
@@ -166,9 +166,9 @@ exp.SpatialCueTrialGenerator = class extends exp.AbstractTrialDataGenerator {
                 nonOptTargDigit+'',
                 nonOptGrid.x+'',
                 nonOptGrid.y+'',
-                'white',
+                this.display.digit_color,
                 this.display.digit_size,
-                'acvs-digit'
+                this.display.digit_class_name
             )
         ]);
 
@@ -183,16 +183,16 @@ exp.SpatialCueTrialGenerator = class extends exp.AbstractTrialDataGenerator {
                         this.display.square_size+'',
                         this.display.square_size+'',
                         this.display.square_color,
-                        'acvs-digit'
+                        this.display.digit_class_name
                     ));
                     // And the digit
                     result.add_a_text( new disp.Text(
                         util.Util.select_rand_from_array( this.distractorDigits ) +'',
                         grid.x,
                         grid.y,
-                        'white',
+                        this.display.digit_color,
                         this.display.digit_size,
-                        'acvs-digit'
+                        this.display.digit_class_name
                     ));
                 }
             }
