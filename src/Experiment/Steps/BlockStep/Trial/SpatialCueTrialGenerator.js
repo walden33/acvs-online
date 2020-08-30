@@ -50,7 +50,7 @@ exp.SpatialCueTrialGenerator = class extends exp.AbstractTrialDataGenerator {
         }
         result = util.Util.fisher_yates_shuffle(result);    // shuffle the combination
         // Then add optimal target regions
-        let optTargTypesArray = this._generate_opt_target_types();
+        let optTargTypesArray = this._generate_opt_target_types( this.numRegions, this.numTotalTrials, 3 );
         for (let i = 0; i < result.length; i++) {
             let optTargRegion = optTargTypesArray.pop();
             let nonOptTargRegion = util.Util.select_rand_from_array([1,2,3], optTargRegion);
@@ -59,40 +59,6 @@ exp.SpatialCueTrialGenerator = class extends exp.AbstractTrialDataGenerator {
         return result;
     }
 
-    /**
-     * A helper method. Used to generate a "run" of trials in which the optimal
-     * target have certain same attribute. For example, in previous color
-     * versions of ACVS, we have "runs" of RED or BLUE optimal.  Here, we have
-     * "runs" of REGION 1, REGION 2, ... or REGION n, optimal target position.
-     * 
-     * @since 1.4
-     */
-    _generate_opt_target_types() {
-        const MAXREP = 3;
-        let result = [];
-        for (let i = 1; i <= 3; i++) {
-            for (let j = 0; j < 36; j++) {
-                result.push(i);
-            }
-        }
-        util.Util.fisher_yates_shuffle(result);
-        // Check if there are more than MAXREP reps in a run
-        let previous = result[0];
-        let rep = 1, maxRep = 1;
-        for (let i = 1; i < result.length; i++) {
-            if (result[i] === previous) {
-                rep++;
-            } else {
-                maxRep = Math.max(rep, maxRep);
-                rep = 1;
-            }
-            previous = result[i];
-        }
-        if (maxRep > MAXREP) {
-            return this._generate_opt_target_types()    // generate another array
-        } else return result;
-
-    }
 
     /**
      * A helper method previously known as _make_chartDataset, but it did not
