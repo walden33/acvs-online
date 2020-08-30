@@ -13,6 +13,7 @@ disp.Display = class {
         this.ring_radius = 45;
         this.square_size = 4;
         this.digit_size = this.square_size * 0.5;
+        this.digit_color = "white";
         this.ring_square_numbers = [ 12, 18, 24 ];
         this.subring_radius_proportion = [ 0.5, 0.75, 1 ];
         this.square_color = "rgb(128, 128, 128)";

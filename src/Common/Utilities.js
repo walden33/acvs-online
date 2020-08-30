@@ -164,13 +164,20 @@ util.Util = class Util {
     return "";
   }
 
-  static select_rand_from_array (array, exclude=null) {
+  /**
+   * 
+   * @param {Array<*>} array 
+   * @param {*} exclude : an object of array to be excluded when selecting
+   * @param {boolean} replace : whether to remove the selected item from array
+   */
+  static select_rand_from_array (array, exclude=null, replace=true) {
     let rand_index = Util.gen_random_int(0, array.length);
-    let rand_digit = array[rand_index];
-    if (rand_digit === exclude){
+    let result = array[rand_index];
+    if (result === exclude){
       return Util.select_rand_from_array(array, exclude);
     }
-    return rand_digit;
+    if (replace) array.splice( rand_index, 1 );
+    return result;
   }
 
 }
