@@ -108,33 +108,6 @@ util.Util = class Util {
     }
   }
 
-  static window_is_maximized() {
-    return ((screen.availHeight-100) <= window.innerHeight);
-  }
-
-  static check_window_max() {
-    const check = function() {
-      if (!util.Util.window_is_maximized()) {
-        exp.HtmlGui.workspace().attr("class", "ac-workspace darken");
-        exp.HtmlGui.guiDiv().selectAll("text").filter(".window-max-alert-transparent")
-          .attr("class", "window-max-alert");
-      } else {
-        exp.HtmlGui.workspace().attr("class", "ac-workspace");
-        exp.HtmlGui.guiDiv().selectAll("text").filter(".window-max-alert")
-          .attr("class", "window-max-alert-transparent");
-      }
-    }
-    if (exp.HtmlGui.guiDiv().selectAll("text").filter(".window-max-alert-transparent").empty()) {
-      exp.HtmlGui.guiDiv().append("text")
-      .attr("class", "window-max-alert-transparent")
-      .text("Please maximize your browser window");
-    }
-    check();
-    // trigger the checking process every time window resizes
-    window.addEventListener("resize", () => { check() });
-  }
-
-
   ///////////////////////////////////////////////////////////////////////////////
   ///
   /// Plays a beep audio sound.
