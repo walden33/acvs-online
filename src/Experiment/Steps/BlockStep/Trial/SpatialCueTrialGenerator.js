@@ -16,7 +16,7 @@
  * @version 1.4 (07/20/2020)
  * @author Walden Li
  */
-exp.SpatialCueTrialGenerator = class extends exp.AbstractTrialDataGenerator {
+exp.SpatialCueTrialGenerator = class extends exp.TrialDataGenerator {
     constructor() {
         super()
         this.numTotalTrials = 108;  // total number of trials

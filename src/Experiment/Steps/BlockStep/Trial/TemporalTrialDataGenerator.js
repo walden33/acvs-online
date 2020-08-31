@@ -5,7 +5,7 @@
  * @version 1.1 (08/26/2020)
  * @author Walden Li
  */
-exp.TemporalTrialDataGenerator = class extends exp.AbstractTrialDataGenerator {
+exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
 
     constructor() {
         super()

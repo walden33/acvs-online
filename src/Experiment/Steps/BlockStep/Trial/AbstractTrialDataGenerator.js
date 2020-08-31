@@ -1,4 +1,4 @@
-exp.AbstractTrialDataGenerator = class {
+exp.TrialDataGenerator = class {
 
     constructor() {
         this.targetDigits = [2, 3, 4, 5];
