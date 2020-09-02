@@ -6,19 +6,18 @@
  * @version 1.4 (07/21/2020)
  * @author Walden Li
  * 
+ * @update 1.5 added a duplicate() method and removed the logic object
  * @update 1.4 added a setter method to logic
  * @update 1.3 added a "logic" object to the constructor
  * @update 1.2 fixed bugs in methods for adding arrays
  */
 disp.DisplayDataset = class {
 
-    constructor() {
-        this.lines = [];
-        this.texts = [];
-        this.rects = [];
-        this.circles = [];
-        // The logic object contains properties of this display at an abstract level
-        this.logic = {};
+    constructor( lines=[], texts=[], rects=[], circles=[] ) {
+        this.lines = lines;
+        this.texts = texts;
+        this.rects = rects;
+        this.circles = circles;
     }
 
     // Setter methods.
@@ -48,14 +47,8 @@ disp.DisplayDataset = class {
 
     add_a_circle(circle) { this.circles.push(circle) }
 
-    /**
-     *  A method for adding a property to the logic object.
-     * 
-     * @param {string} field : the name of the property, e.g., "OptTargIndex"
-     * @param {*} value : the value of the property
-     */
-    set_logic( field, value ) {
-        this.logic[field] = value;
+    duplicate() {
+        return new disp.DisplayDataset(this.lines, this.texts, this.rects, this.circles);
     }
 
 }
