@@ -31,10 +31,12 @@ disp.DisplayWidget = class {
         // window.addEventListener("resize", this.show.bind(this));  // redraw the graphic if the window resizes.
     }
 
-    /** A setter method for cue and stimuli display datasets */
-    set_dataset( cue_dataset, stimuli_dataset ) {
-        this.cue = cue_dataset;
-        this.stimuli = stimuli_dataset;
+    set_cue( cue ) {
+        this.cue = cue;
+    }
+
+    set_stimuli( stimuli ) {
+        this.stimuli = stimuli;
     }
 
     /** A method to destroy this widget object. */

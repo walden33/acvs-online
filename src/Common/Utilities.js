@@ -176,7 +176,7 @@ util.Util = class Util {
     if (result === exclude){
       return Util.select_rand_from_array(array, exclude);
     }
-    if (replace) array.splice( rand_index, 1 );
+    if (!replace) array.splice( rand_index, 1 );
     return result;
   }
 

@@ -44,10 +44,9 @@ exp.DefaultExperiment = class extends util.ExperimentBase {
 
         // this.add_new_step( new exp.BriefingStep(this._db, ['<img src="https://bb.githack.com/Clemente159/mturk_adaptive_choice/raw/default/images/StartInstr2.png" style="width:90vmin;">'], " ") );
         // this.add_new_step( new exp.BriefingStep(this._db, ['<img src="https://bb.githack.com/Clemente159/mturk_adaptive_choice/raw/default/images/StartInstr3.png" style="width:90vmin;">'], " ") );
-
         const number_of_blocks = 3;
         for (let i = 1; i <= number_of_blocks; i++) {
-            this.add_new_step(new exp.BlockStep(this._db, i));
+            this.add_new_step(new exp.Block(this._db, i, "Standard", new exp.StandardTrialDataGenerator(true)));
         }
 
         this.add_new_step(new exp.SubmitDataStep(this._db));

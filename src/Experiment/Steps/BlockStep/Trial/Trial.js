@@ -6,16 +6,28 @@ exp.Trial = class extends exp.AbstractTrial {
 
   /**
    * 
-   * @param {*} cue_dataset 
-   * @param {*} stimuli_dataset 
+   * @param {} logic 
+   * @param {Array<disp.DisplayDataset} cue 
+   * @param {Array<disp.DisplayDataset} stimuli 
+   * @param {Array<number>} timing : time stamps of the trial in ms
    */
-  constructor ( cue_dataset, stimuli_dataset ) {
-    super()
+  constructor ( logic, cue, stimuli, timing ) {
 
-    this.cue_dataset = cue_dataset;
-    this.stimuli_dataset = stimuli_dataset;
+    super();
+    // Check if enough time stamps are provided
+    if( (timing.length-1) !== cue.length ) throw ( "ERROR: Mismatch in cue frames and number of time stamps" );
+    this.logic = logic;
+    this.timing = timing;
+    this.cue = cue;
+    this.stimuli = stimuli;
+
 
     this.trial_completed_signal = new util.Signal();
+
+    this.display_widget = new disp.DisplayWidget( exp.HtmlGui.workspace() );
+
+    this.display_widget.set_cue( cue );
+    this.display_widget.set_stimuli( stimuli );
 
     // create an object to store the data for this Trial
     this.trial_data = { "trialCreatedAt" : performance.now() };
@@ -24,9 +36,6 @@ exp.Trial = class extends exp.AbstractTrial {
     this.length_of_time_debreifing_is_shown = 1000; //ms
     // this is the amount of time a fixation cross is shown to the user before
     // the graphic is shown
-
-    this.display_widget = new disp.DisplayWidget( exp.HtmlGui.workspace() );
-    this.display_widget.set_dataset( this.cue_dataset, this.stimuli_dataset );
 
     //TODO: blank screen 500ms
 
@@ -39,6 +48,10 @@ exp.Trial = class extends exp.AbstractTrial {
     // this is a counter for the total number of keys the user presses during
     // the trial
     this.num_keys_pressed = 0;
+
+    // These two parameters are used in blockstep
+    this._block_number;
+    this._trial_number_in_block;
   }
 
   ///////////////////////////////////////////////////////////////////////////////
@@ -82,8 +95,8 @@ exp.Trial = class extends exp.AbstractTrial {
   ///
   respond_to_valid_user_keyboard_input (the_key_the_user_pressed, time_stamp) {
     let result = false;
-    if ( this.answer_keys.get(the_key_the_user_pressed) == this.stimuli_dataset.logic.optTargDigit ||
-         this.answer_keys.get(the_key_the_user_pressed) == this.stimuli_dataset.logic.nonOptTargDigit ) {
+    if ( this.answer_keys.get(the_key_the_user_pressed) == this.logic.optTargDigit ||
+         this.answer_keys.get(the_key_the_user_pressed) == this.logic.nonOptTargDigit ) {
       result = true;
     } else {
       util.Util.play_beep_sound();
@@ -93,17 +106,17 @@ exp.Trial = class extends exp.AbstractTrial {
     this.trial_data.blockNumber = this._block_number;
 
     
-    this.trial_data.optTargIndex = this.stimuli_dataset.logic.optTargIndex;
-    this.trial_data.nonOptTargIndex = this.stimuli_dataset.logic.nonOptTargIndex;
+    this.trial_data.optTargIndex = this.logic.optTargIndex;
+    this.trial_data.nonOptTargIndex = this.logic.nonOptTargIndex;
     
-    this.trial_data.optTargDigit = this.stimuli_dataset.logic.optTargDigit;
-    this.trial_data.nonOptTargDigit = this.stimuli_dataset.logic.nonOptTargDigit;
+    this.trial_data.optTargDigit = this.logic.optTargDigit;
+    this.trial_data.nonOptTargDigit = this.logic.nonOptTargDigit;
 
-    this.trial_data.optTargEcc = this.stimuli_dataset.logic.optTargEcc;
-    this.trial_data.nonOptTargEcc = this.stimuli_dataset.logic.nonOptTargEcc;
+    this.trial_data.optTargEcc = this.logic.optTargEcc;
+    this.trial_data.nonOptTargEcc = this.logic.nonOptTargEcc;
 
-    this.trial_data.optTargRegion = this.stimuli_dataset.logic.optTargRegion;
-    this.trial_data.nonOptTargRegion = this.stimuli_dataset.logic.nonOptTargRegion;
+    this.trial_data.optTargRegion = this.logic.optTargRegion;
+    this.trial_data.nonOptTargRegion = this.logic.nonOptTargRegion;
 
     this.trial_data.response = this.answer_keys.get(the_key_the_user_pressed);
     this.trial_data.targChoice = this.trial_data.response == this.trial_data.optTargDigit ? 1 :
@@ -173,20 +186,22 @@ exp.Trial = class extends exp.AbstractTrial {
     // this.chart_widget.show_cross_only();
     this.display_widget.clear();
 
-    if (window._secret_speed != undefined) {
-      this.length_of_time_cue_is_shown = window._secret_speed;
+    for( let i = 0; i < this.cue.length ; i++ ) {
+      setTimeout( (() => {
+        this.display_widget.draw( this.cue[i] );
+      }).bind(this), this.timing[i] );
     }
 
+    for( let i = 0 ; i < this.stimuli.length; i++ ) {
+      setTimeout( (() => {
+        this.display_widget.draw( this.stimuli[i] );
+        // turn on keyboard at the first iteration
+        if( i==0 ) {
+          this.keyboard.turn_on();
+          this.trial_data.stimuli_shown_at = performance.now();
+        }
+      }).bind(this), this.timing[ this.cue.length + i ] );
+    }
 
-    this.display_widget.draw_cue();
-
-
-    // wait a second...
-    setTimeout( (function () {
-      // show the chart and turn on the keypress listener:
-      this.display_widget.draw_stimuli();
-      this.keyboard.turn_on();
-      this.trial_data.chart_shown_to_user_at_time = performance.now();
-    }).bind(this), this.length_of_time_cue_is_shown );
   }
 }
