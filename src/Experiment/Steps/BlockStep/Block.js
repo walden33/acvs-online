@@ -45,7 +45,7 @@ exp.Block = class extends util.AbstractStep {
     _construct_trial(logic, cue, stimuli) {
         switch (this._blockType) {
             case "Standard":
-                return new exp.Trial(logic, cue, stimuli, [0, 500, 1000]);
+                return new exp.Trial(logic, cue, stimuli, [0, 400, 1000]);
         }
     }
 

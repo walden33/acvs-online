@@ -13,7 +13,7 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
         this.colors = [
             "rgb(255, 0, 0)",
             "rgb(0, 0, 255)",
-            "rgb(0, 255, 0)"
+            "rgb(0, 150, 0)"
         ];
         // 1+1+14+12+12+14=54
         this.numGreenDist = 14;
@@ -136,8 +136,8 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
             this.colors[optTargColor]
         );
         let nonOptRect = new disp.Rect(
-            optTargGrid.rect_x + '',
-            optTargGrid.rect_y + '',
+            nonOptTargGrid.rect_x + '',
+            nonOptTargGrid.rect_y + '',
             sz + '',
             sz + '',
             this.colors[optTargColor]
@@ -250,7 +250,7 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
         }
 
         // 5. Add variable distractor rects and digits
-        for (let i = 0; i < this.numBlueDist; i++) {
+        for (let i = 0; i < this.numVarDist; i++) {
 
             let j = nonTargPool.pop();  // grid position number
             let grid = gridPos.get(j);  // grid info
