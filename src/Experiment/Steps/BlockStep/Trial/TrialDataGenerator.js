@@ -7,7 +7,7 @@ exp.TrialDataGenerator = class {
         this.blockData = [];
     }
 
-    
+
     /**
      * A helper method. Used to generate a "run" of trials in which the optimal
      * target have certain same attribute. For example, in previous color
@@ -46,7 +46,7 @@ exp.TrialDataGenerator = class {
             previous = result[i];
         }
         if ( maxRep > max_rep ) {
-            return this._generate_opt_target_types()    // generate another array
+            return this._generate_opt_target_types(num_opt_type, num_total_trials, max_rep)    // generate another array
         } else return result;
 
     }
