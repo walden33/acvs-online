@@ -182,3 +182,8 @@ li {
   text-anchor: middle;
   alignment-baseline: central;  /* Warning: Check browser compatibility. WL 8/22/2020 */
 }
+
+.fixation-cross-center {
+  text-anchor: middle;
+  alignment-baseline: central;
+}

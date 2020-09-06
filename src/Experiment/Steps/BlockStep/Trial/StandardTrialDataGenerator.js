@@ -280,7 +280,7 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
 
         // Finally, generate a fixation cross to everything
         const fixation_text = new disp.Text(
-            '+', x, y, 'white', 5, 'fixation-cross'
+            '+', x, y, 'white', 5, this.display.fixation_cross_class_name
         );
 
         fixation.add_a_text(fixation_text);
