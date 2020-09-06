@@ -140,7 +140,7 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
             nonOptTargGrid.rect_y + '',
             sz + '',
             sz + '',
-            this.colors[optTargColor]
+            this.colors[nonOptTargColor]
         );
 
         stimuli.add_rects([optRect, nonOptRect]);
@@ -303,6 +303,20 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
     }
 
 
+    _make_trial_logic(optTargEcc, nonOptTargEcc, optTargDigit,
+        nonOptTargDigit, optTargColor, nonOptTargColor) {
+        return (
+        {
+            optTargEcc: optTargEcc,
+            nonOptTargEcc: nonOptTargEcc,
+            optTargDigit: optTargDigit,
+            nonOptTargDigit: nonOptTargDigit,
+            optTargColor: optTargColor,
+            nonOptTargColor: nonOptTargColor
+        }
+        );
+    }
+
     /**
      * 
      * 
@@ -315,9 +329,10 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
         while (trial_conditions.length > 0) {
             currentTrialCond = trial_conditions.pop();
             let currentTrialDisplays = this._make_trial_dataset(...currentTrialCond);
+            let currentTrialLogic = this._make_trial_logic(...currentTrialCond);
             result.push(
                 {
-                    "logic": this.currentTrialCond,
+                    "logic": currentTrialLogic,
                     "cue": currentTrialDisplays.cue,
                     "stimuli": currentTrialDisplays.stimuli
                 }
