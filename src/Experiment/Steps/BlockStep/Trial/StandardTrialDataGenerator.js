@@ -8,21 +8,21 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
 
     constructor(is_practice = false, has_preview = false) {
         super();
-        this.is_practice = is_practice; // if block is practice block, _make_block_dataset will return only 10 trials
-        this.has_preview = has_preview; // if task has preview, _make_stimuli_dataset will return both preview and search array displays
-        this.numTotalTrials = 108;
-        this.colors = [
+        this._is_practice = is_practice; // if block is practice block, _make_block_dataset will return only 10 trials
+        this._has_preview = has_preview; // if task has preview, _make_stimuli_dataset will return both preview and search array displays
+        this._numTotalTrials = 108;
+        this._colors = [
             "rgb(255, 0, 0)",
             "rgb(0, 0, 255)",
             "rgb(0, 150, 0)"
         ];
         // 1+1+14+12+12+14=54
-        this.numGreenDist = 14;
-        this.numRedDist = 12;
-        this.numBlueDist = 12;
-        this.numVarDist = 14;
-        this.trialConds = this._generate_trial_conditions();
-        this.blockData = this._make_block_dataset(this.trialConds);
+        this._numGreenDist = 14;
+        this._numRedDist = 12;
+        this._numBlueDist = 12;
+        this._numVarDist = 14;
+        this._trialConds = this._generate_trial_conditions();
+        this._blockData = this._make_block_dataset(this._trialConds);
     }
 
 
@@ -50,7 +50,7 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
         }
         result = util.Util.fisher_yates_shuffle(result);
 
-        let optTargColorArray = this._generate_opt_target_types(2, this.numTotalTrials, 6);
+        let optTargColorArray = this._generate_opt_target_types(2, this._numTotalTrials, 6);
         let optColor, nonOptColor;  // temp vars for each trial
         for (let i = 0; i < result.length; i++) {
             optColor = optTargColorArray.pop();
@@ -74,16 +74,16 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
      */
     _make_trial_dataset(optTargEcc, nonOptTargEcc, optTargDigit,
         nonOptTargDigit, optTargColor, nonOptTargColor) {
-        const x = this.display.screen_center_x;
-        const y = this.display.screen_center_y;
-        const sz = this.display.square_size;
-        const digit_size = this.display.digit_size;
+        const x = this._display.screen_center_x;
+        const y = this._display.screen_center_y;
+        const sz = this._display.square_size;
+        const digit_size = this._display.digit_size;
 
         let fixation = new disp.DisplayDataset();
         let preview = new disp.DisplayDataset();
         let stimuli = new disp.DisplayDataset();
 
-        let gridPos = this.display.get_grid_pos();
+        let gridPos = this._display.get_grid_pos();
         // Add potential targets to pools according to required eccentricity
         let optTargPool = [];
         let nonOptTargPool = [];
@@ -134,40 +134,40 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
             optTargGrid.rect_y + '',
             sz + '',
             sz + '',
-            this.colors[optTargColor]
+            this._colors[optTargColor]
         );
         let nonOptRect = new disp.Rect(
             nonOptTargGrid.rect_x + '',
             nonOptTargGrid.rect_y + '',
             sz + '',
             sz + '',
-            this.colors[nonOptTargColor]
+            this._colors[nonOptTargColor]
         );
 
         stimuli.add_rects([optRect, nonOptRect]);
 
-        if (this.has_preview) preview.add_rects([optRect, nonOptRect]);
+        if (this._has_preview) preview.add_rects([optRect, nonOptRect]);
 
         // 1.2 Add digits to stimuli but not preview
         stimuli.add_a_text(new disp.Text(
             optTargDigit + '',
             optTargGrid.x + '',
             optTargGrid.y + '',
-            this.display.digit_color,
-            this.display.digit_size,
-            this.display.digit_class_name
+            this._display.digit_color,
+            this._display.digit_size,
+            this._display.digit_class_name
         ));
         stimuli.add_a_text(new disp.Text(
             nonOptTargDigit + '',
             nonOptTargGrid.x + '',
             nonOptTargGrid.y + '',
-            this.display.digit_color,
-            this.display.digit_size,
-            this.display.digit_class_name
+            this._display.digit_color,
+            this._display.digit_size,
+            this._display.digit_class_name
         ));
 
         // 2. Add GREEN distractor rects and digits. They can be of any digit.
-        for (let i = 0; i < this.numGreenDist; i++) {
+        for (let i = 0; i < this._numGreenDist; i++) {
 
             let j = nonTargPool.pop();  // grid position number
             let grid = gridPos.get(j);  // grid info
@@ -178,24 +178,24 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
                 grid.rect_y + '',
                 sz + '',
                 sz + '',
-                this.colors[2]
+                this._colors[2]
             );
             stimuli.add_a_rect(currentRect);
-            if (this.has_preview) preview.add_a_rect(currentRect);
+            if (this._has_preview) preview.add_a_rect(currentRect);
 
             // 2.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
-                util.Util.select_rand_from_array(this.targetDigits.concat(this.distractorDigits)) + '',
+                util.Util.select_rand_from_array(this._targetDigits.concat(this._distractorDigits)) + '',
                 grid.x + '',
                 grid.y + '',
-                this.display.digit_color,
-                this.display.digit_size,
-                this.display.digit_class_name
+                this._display.digit_color,
+                this._display.digit_size,
+                this._display.digit_class_name
             ));
         }
 
         // 3. Add RED distractor rects and digits. Digits must be 6-9.
-        for (let i = 0; i < this.numRedDist; i++) {
+        for (let i = 0; i < this._numRedDist; i++) {
 
             let j = nonTargPool.pop();  // grid position number
             let grid = gridPos.get(j);  // grid info
@@ -206,24 +206,24 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
                 grid.rect_y + '',
                 sz + '',
                 sz + '',
-                this.colors[0]
+                this._colors[0]
             );
             stimuli.add_a_rect(currentRect);
-            if (this.has_preview) preview.add_a_rect(currentRect);
+            if (this._has_preview) preview.add_a_rect(currentRect);
 
             // 3.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
-                util.Util.select_rand_from_array(this.distractorDigits) + '',
+                util.Util.select_rand_from_array(this._distractorDigits) + '',
                 grid.x + '',
                 grid.y + '',
-                this.display.digit_color,
-                this.display.digit_size,
-                this.display.digit_class_name
+                this._display.digit_color,
+                this._display.digit_size,
+                this._display.digit_class_name
             ));
         }
 
         // 4. Add BLUE distractor rects and digits. Digits must be 6-9.
-        for (let i = 0; i < this.numBlueDist; i++) {
+        for (let i = 0; i < this._numBlueDist; i++) {
 
             let j = nonTargPool.pop();  // grid position number
             let grid = gridPos.get(j);  // grid info
@@ -234,24 +234,24 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
                 grid.rect_y + '',
                 sz + '',
                 sz + '',
-                this.colors[1]
+                this._colors[1]
             );
             stimuli.add_a_rect(currentRect);
-            if (this.has_preview) preview.add_a_rect(currentRect);
+            if (this._has_preview) preview.add_a_rect(currentRect);
 
             // 4.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
-                util.Util.select_rand_from_array(this.distractorDigits) + '',
+                util.Util.select_rand_from_array(this._distractorDigits) + '',
                 grid.x + '',
                 grid.y + '',
-                this.display.digit_color,
-                this.display.digit_size,
-                this.display.digit_class_name
+                this._display.digit_color,
+                this._display.digit_size,
+                this._display.digit_class_name
             ));
         }
 
         // 5. Add variable distractor rects and digits
-        for (let i = 0; i < this.numVarDist; i++) {
+        for (let i = 0; i < this._numVarDist; i++) {
 
             let j = nonTargPool.pop();  // grid position number
             let grid = gridPos.get(j);  // grid info
@@ -263,34 +263,34 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
                 sz + '',
                 sz + '',
                 // if opt targ color is RED, var dist color should be blue, and vice versa
-                optTargColor === 0 ? this.colors[1] : this.colors[0]
+                optTargColor === 0 ? this._colors[1] : this._colors[0]
             );
             stimuli.add_a_rect(currentRect);
-            if (this.has_preview) preview.add_a_rect(currentRect);
+            if (this._has_preview) preview.add_a_rect(currentRect);
 
             // 5.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
-                util.Util.select_rand_from_array(this.distractorDigits) + '',
+                util.Util.select_rand_from_array(this._distractorDigits) + '',
                 grid.x + '',
                 grid.y + '',
-                this.display.digit_color,
-                this.display.digit_size,
-                this.display.digit_class_name
+                this._display.digit_color,
+                this._display.digit_size,
+                this._display.digit_class_name
             ));
         }
 
         // Finally, generate a fixation cross to everything
         const fixation_text = new disp.Text(
-            '+', x, y, 'white', 3, this.display.fixation_cross_class_name
+            '+', x, y, 'white', 3, this._display.fixation_cross_class_name
         );
 
         fixation.add_a_text(fixation_text);
-        if (this.has_preview) preview.add_a_text(fixation_text);
+        if (this._has_preview) preview.add_a_text(fixation_text);
         stimuli.add_a_text(fixation_text);
 
 
         // Decide if return includes a preview
-        if (this.has_preview) {
+        if (this._has_preview) {
             return {
                 cue: [fixation, preview],
                 stimuli: [stimuli]
@@ -339,7 +339,7 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
                 }
             );
         }
-        if (this.is_practice) return result.slice(0, 10);
+        if (this._is_practice) return result.slice(0, 10);
         return result;
     }
 
