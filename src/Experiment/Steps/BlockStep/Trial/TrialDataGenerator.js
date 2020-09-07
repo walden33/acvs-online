@@ -1,10 +1,10 @@
 exp.TrialDataGenerator = class {
 
     constructor() {
-        this.targetDigits = [2, 3, 4, 5];
-        this.distractorDigits = [6, 7, 8, 9];
-        this.display = new disp.Display();
-        this.blockData = [];
+        this._targetDigits = [2, 3, 4, 5];
+        this._distractorDigits = [6, 7, 8, 9];
+        this._display = new disp.Display();
+        this._blockData = [];
     }
 
 
@@ -58,8 +58,8 @@ exp.TrialDataGenerator = class {
      * 
      */
     yield_trial_dataset() {
-        if ( this.blockData.length > 0 ) {
-            return this.blockData.pop();
+        if ( this._blockData.length > 0 ) {
+            return this._blockData.pop();
         } else {
             return null;
         }
