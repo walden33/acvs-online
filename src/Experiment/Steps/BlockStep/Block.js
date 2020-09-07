@@ -62,7 +62,7 @@ exp.Block = class extends util.AbstractStep {
             let trial = this._construct_trial(datasets.logic, datasets.cue, datasets.stimuli);
             trial._trial_number_in_block = this._trial_num;
             this._trial_num++;
-            trial._block_number = this._blocknum;
+            trial._block_number = this._blockNo;
 
             // when the trial is completed call the next trial (~recursive)
             trial.trial_completed_signal.connect(this._run_next_trial.bind(this));
@@ -77,14 +77,15 @@ exp.Block = class extends util.AbstractStep {
     }
 
     _save_data() {
-        this._db.ExperimentTable.add_new_row(this._blocknum, this._all_trials_data);
+        this._db.ExperimentTable.add_new_row(this._blockNo, this._all_trials_data);
+        console.log(this._db);
         localStorage.setItem(window._acvs_guid, btoa(JSON.stringify(this._db)));
     }
 
     _show_summary() {
         let paragraph = [];
         paragraph.push("<br><br><br>");
-        paragraph.push("<b>You Completed Block #" + this._blocknum + "!</b>");
+        paragraph.push("<b>You Completed Block #" + this._blockNo + "!</b>");
         paragraph.push("<hr>");
         paragraph.push("Your Accuracy: " + (Math.round(util.Util.mean(this._accuracy_data) * 1000) / 10) + "%");
         paragraph.push("<hr>");
@@ -99,7 +100,7 @@ exp.Block = class extends util.AbstractStep {
     execute() {
         exp.HtmlGui.clear_header();
         exp.HtmlGui.clear_workspace();
-        this._db.EventsTable.add_new_row("beginning block step #" + this._blocknum);
+        this._db.EventsTable.add_new_row("beginning block step #" + this._blockNo);
         this._run_next_trial();
         exp.HtmlGui.show_message(".", "black");
     }
