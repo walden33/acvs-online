@@ -27,9 +27,9 @@ disp.Rect = class {
 disp.Circle = class {
     /**
      * 
-     * @param {Number} cx
-     * @param {Number} cy 
-     * @param {Number} r 
+     * @param {String} cx
+     * @param {String} cy 
+     * @param {String} r 
      * @param {String} fill 
      * @param {String} stroke 
      * @param {String} strokeWidth : <svg> <circle> attr "stroke-width" 
