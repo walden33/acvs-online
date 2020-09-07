@@ -83,48 +83,15 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
         let preview = new disp.DisplayDataset();
         let stimuli = new disp.DisplayDataset();
 
-        let gridPos = this._display.get_grid_pos();
-        // Add potential targets to pools according to required eccentricity
-        let optTargPool = [];
-        let nonOptTargPool = [];
-        let nonTargPool = [];
-        // If optTargEcc === nonOptTargEcc, put them in a combined pool, and then split in half
-        let targPool = [];
-        if (optTargEcc !== nonOptTargEcc) {
-            for (let [i, grid] of gridPos) {
-                if (grid.ecc === optTargEcc) {
-                    optTargPool.push(i);
-                } else if (grid.ecc === nonOptTargEcc) {
-                    nonOptTargPool.push(i);
-                } else {    // add the rest to non-target pool
-                    nonTargPool.push(i);
-                }
-            }
-        } else {
-            for (let [i, grid] of gridPos) {
-                if (grid.ecc === optTargEcc) {
-                    targPool.push(i);
-                } else {    // add the rest to non-target pool
-                    nonTargPool.push(i);
-                }
-            }
-            // find a roughly center of the targPool
-            let n = Math.floor(targPool.length/2);
-            // give each half of targPool items to optTargPool and nonOptTargPool
-            optTargPool = targPool.slice( 0, n );
-            nonOptTargPool = targPool.slice( n );
-        }
+        const gridPos = this._display.get_grid_pos();
 
-        // Randomly select targets
-        const optTargPos = util.Util.select_rand_from_array(optTargPool, null, false);
+        const targPosInfo = this._generate_target_pools_by_ecc(gridPos, optTargEcc, nonOptTargEcc);
+        const optTargPos = targPosInfo.optTargPos;
+        const nonOptTargPos = targPosInfo.nonOptTargPos;
+        const nonTargPool = targPosInfo.nonTargPool;
+
         const optTargGrid = gridPos.get(optTargPos);
-        const nonOptTargPos = util.Util.select_rand_from_array(nonOptTargPool, null, false);
         const nonOptTargGrid = gridPos.get(nonOptTargPos);
-
-        // Add the rest to non-target pool
-        nonTargPool = nonTargPool.concat(optTargPool).concat(nonOptTargPool);
-        // Shuffle the non-target pool
-        util.Util.fisher_yates_shuffle(nonTargPool);
 
         // 1. Add two targets
 
