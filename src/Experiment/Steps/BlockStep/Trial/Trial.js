@@ -2,15 +2,8 @@
  * 
  */
 exp.Trial = class extends exp.AbstractTrial {
-    /**
-   * 
-   * @param {} logic 
-   * @param {Array<disp.DisplayDataset} cue 
-   * @param {Array<disp.DisplayDataset} stimuli 
-   * @param {Array<number>} timing : time stamps of the trial in ms
-   */
-    constructor(logic, cue, stimuli, timing) {
 
+    constructor(logic, cue, stimuli, timing) {
         super();
         // Check if enough time stamps are provided
         if ((timing.length - 1) !== cue.length) throw ("ERROR: Mismatch in cue frames and number of time stamps");
@@ -60,12 +53,6 @@ exp.Trial = class extends exp.AbstractTrial {
     initialize_chart_settings() {
         exp.HtmlGui.clear_header();
         exp.HtmlGui.clear_workspace();
-
-
-        // this.chart_widget.set_ring_radius( 45 );
-        // this.chart_widget.set_square_size( 4 );
-        // this.chart_widget.set_cross_color( "rgb(255,255,255)" );
-        // this.chart_widget.set_square_colors(["rgb(254, 0, 254)", "rgb(0, 150, 150)", "rgb(105, 105, 105)"]);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -103,18 +90,19 @@ exp.Trial = class extends exp.AbstractTrial {
         this.trial_data.blockTrial = this._trial_number_in_block;
         this.trial_data.blockNumber = this._block_number;
 
+        this.trial_data.logic = this.logic;
 
-        this.trial_data.optTargIndex = this.logic.optTargIndex;
-        this.trial_data.nonOptTargIndex = this.logic.nonOptTargIndex;
+        // this.trial_data.optTargIndex = this.logic.optTargIndex;
+        // this.trial_data.nonOptTargIndex = this.logic.nonOptTargIndex;
 
-        this.trial_data.optTargDigit = this.logic.optTargDigit;
-        this.trial_data.nonOptTargDigit = this.logic.nonOptTargDigit;
+        // this.trial_data.optTargDigit = this.logic.optTargDigit;
+        // this.trial_data.nonOptTargDigit = this.logic.nonOptTargDigit;
 
-        this.trial_data.optTargEcc = this.logic.optTargEcc;
-        this.trial_data.nonOptTargEcc = this.logic.nonOptTargEcc;
+        // this.trial_data.optTargEcc = this.logic.optTargEcc;
+        // this.trial_data.nonOptTargEcc = this.logic.nonOptTargEcc;
 
-        this.trial_data.optTargRegion = this.logic.optTargRegion;
-        this.trial_data.nonOptTargRegion = this.logic.nonOptTargRegion;
+        // this.trial_data.optTargRegion = this.logic.optTargRegion;
+        // this.trial_data.nonOptTargRegion = this.logic.nonOptTargRegion;
 
         this.trial_data.response = this.answer_keys.get(the_key_the_user_pressed);
         this.trial_data.targChoice = this.trial_data.response == this.trial_data.optTargDigit ? 1 :
@@ -122,7 +110,7 @@ exp.Trial = class extends exp.AbstractTrial {
                 0;
         this.trial_data.acc = result ? 1 : 0;
         this.trial_data.bool = result;
-        this.trial_data.rt = time_stamp - this.trial_data.chart_shown_to_user_at_time;
+        this.trial_data.rt = time_stamp - this.trial_data.stimuli_shown_at;
         this.trial_data.answerKeyRecieved = the_key_the_user_pressed;
         this.trial_data.answerDigitRecieved = this.answer_keys.get(the_key_the_user_pressed);
         this.trial_data.numberOfKeysPressed = this.num_keys_pressed;
@@ -157,9 +145,9 @@ exp.Trial = class extends exp.AbstractTrial {
     show_debriefing() {
         // WL: this is adapted from RewardTrial.js
         if (this.trial_data.result == "incorrect") {
-            this.display_widget.show_text("Incorrect");
+            this.display_widget.show_feedback("Incorrect");
         } else {
-            this.display_widget.show_text("Correct");
+            this.display_widget.show_feedback("Correct");
         }
 
         if (window._secret_speed != undefined) {
@@ -184,6 +172,10 @@ exp.Trial = class extends exp.AbstractTrial {
         // this.chart_widget.show_cross_only();
         this.display_widget.clear();
 
+        if(window._test) {
+            this.keyboard.turn_on();
+        }
+
         for (let i = 0; i < this.cue.length; i++) {
             setTimeout((() => {
                 this.display_widget.draw(this.cue[i]);
@@ -202,4 +194,5 @@ exp.Trial = class extends exp.AbstractTrial {
         }
 
     }
+
 }

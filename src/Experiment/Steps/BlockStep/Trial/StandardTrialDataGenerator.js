@@ -6,9 +6,10 @@
  */
 exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
 
-    constructor(preview = false) {
+    constructor(is_practice = false, has_preview = false) {
         super();
-        this.preview = preview; // if preview, _make_stimuli_dataset will return both preview and search array displays
+        this.is_practice = is_practice; // if block is practice block, _make_block_dataset will return only 10 trials
+        this.has_preview = has_preview; // if task has preview, _make_stimuli_dataset will return both preview and search array displays
         this.numTotalTrials = 108;
         this.colors = [
             "rgb(255, 0, 0)",
@@ -145,7 +146,7 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
 
         stimuli.add_rects([optRect, nonOptRect]);
 
-        if (this.preview) preview.add_rects([optRect, nonOptRect]);
+        if (this.has_preview) preview.add_rects([optRect, nonOptRect]);
 
         // 1.2 Add digits to stimuli but not preview
         stimuli.add_a_text(new disp.Text(
@@ -180,7 +181,7 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
                 this.colors[2]
             );
             stimuli.add_a_rect(currentRect);
-            if (this.preview) preview.add_a_rect(currentRect);
+            if (this.has_preview) preview.add_a_rect(currentRect);
 
             // 2.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
@@ -208,7 +209,7 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
                 this.colors[0]
             );
             stimuli.add_a_rect(currentRect);
-            if (this.preview) preview.add_a_rect(currentRect);
+            if (this.has_preview) preview.add_a_rect(currentRect);
 
             // 3.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
@@ -236,7 +237,7 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
                 this.colors[1]
             );
             stimuli.add_a_rect(currentRect);
-            if (this.preview) preview.add_a_rect(currentRect);
+            if (this.has_preview) preview.add_a_rect(currentRect);
 
             // 4.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
@@ -265,7 +266,7 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
                 optTargColor === 0 ? this.colors[1] : this.colors[0]
             );
             stimuli.add_a_rect(currentRect);
-            if (this.preview) preview.add_a_rect(currentRect);
+            if (this.has_preview) preview.add_a_rect(currentRect);
 
             // 5.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
@@ -280,16 +281,16 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
 
         // Finally, generate a fixation cross to everything
         const fixation_text = new disp.Text(
-            '+', x, y, 'white', 5, this.display.fixation_cross_class_name
+            '+', x, y, 'white', 3, this.display.fixation_cross_class_name
         );
 
         fixation.add_a_text(fixation_text);
-        if (this.preview) preview.add_a_text(fixation_text);
+        if (this.has_preview) preview.add_a_text(fixation_text);
         stimuli.add_a_text(fixation_text);
 
 
         // Decide if return includes a preview
-        if (this.preview) {
+        if (this.has_preview) {
             return {
                 cue: [fixation, preview],
                 stimuli: [stimuli]
@@ -338,6 +339,7 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
                 }
             );
         }
+        if (this.is_practice) return result.slice(0, 10);
         return result;
     }
 
