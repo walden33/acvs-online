@@ -77,7 +77,6 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
         const x = this._display.screen_center_x;
         const y = this._display.screen_center_y;
         const sz = this._display.square_size;
-        const digit_size = this._display.digit_size;
 
         let fixation = new disp.DisplayDataset();
         let preview = new disp.DisplayDataset();
