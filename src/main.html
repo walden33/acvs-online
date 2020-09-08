@@ -5,7 +5,6 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
   <!--JAVASCRIPT_INCLUDES_BEGIN-->
-    <script src="https://s3.amazonaws.com/mturk-public/externalHIT_v1.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bowser/1.9.4/bowser.min.js"></script>
@@ -24,42 +23,6 @@
 
 
 <body>
-  <!-- If we are in the MTurk iframe window, this button shows up so the user
-       can open the app in a new full sized window -->
-  <div id="ace_instructions" style="text-align:left">
-    <p><b>Qualifications:</b></p>
-    <ul>
-      <li> Must be at 18-45 years of age and speak fluent English to participate. </li>
-      <li> Must have normal or corrected visual acuity. </li>
-      <li> Must have normal color vision. </li>
-    </ul>
-    <p><b>Instructions:</b></p>
-    <ol>
-      <li> Accept the HIT. </li>
-      <li> Complete the experiment.</li>
-      <li> Return here and click the submit button. </li>
-      <li> You should only complete this HIT once. </li>
-    </ol>
-
-    <p style="margin-left: 3em;">
-      <a class="ace_open_tab_button" href="" target="_blank">Click here to start (opens in new tab)</a>
-    </p>
-
-    <form name="mturk_form" method="POST" id="mturk_form" action="https://workersandbox.mturk.com/mturk/externalSubmit" onsubmit="return validate_form()" style="margin-left: 3em;">
-      <p>
-        <input type="hidden" value="" name="assignmentId" id="assignmentId"/>
-        <input type="hidden" value="" name="hitId" id="hitId"/>
-        <input type="hidden" value="" name="workerId" id="workerId"/>
-      </p>
-      <p class="text-center">
-        <input class="ace_open_tab_button" id="submitButton" type="submit" value="Submit" />
-      </p>
-      <p>
-        <input id="user_result" name="user_result" type="text" value="" style="display:none;"/>
-      </p>
-    </form>
-  </div>
-
   <!-- This is where the GUI will be inserted -->
   <div id="gui-container">
     <div id="gui" class="gui-div">

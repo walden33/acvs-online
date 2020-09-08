@@ -36,10 +36,6 @@ exp.ConsentStep = class extends(util.AbstractStep) {
             let gender = prompt("Please type your gender:", "N/A");
             alert("Thank you!");
             this._db._user_data = {
-                workerId: turkGetParam( "workerId", "NONE" ),
-                assignmentId: turkGetParam( "assignmentId", "NONE" ),
-                hitId: turkGetParam( "hitId", "NONE" ),
-                turkSubmitTo: turkGetParam( "turkSubmitTo", "NONE" ),
                 self_reported_age: age,
                 self_reported_gender: gender
             };
