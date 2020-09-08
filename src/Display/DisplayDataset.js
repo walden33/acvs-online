@@ -51,4 +51,16 @@ disp.DisplayDataset = class {
         return new disp.DisplayDataset(this.lines, this.texts, this.rects, this.circles);
     }
 
+    /**
+     * Merge the current <DisplayDataset> with another one.
+     * 
+     * @param {disp.DisplayDataset} dispDataset 
+     */
+    merge( dispDataset ) {
+        this.add_lines( dispDataset.lines );
+        this.add_texts( dispDataset.texts );
+        this.add_rects( dispDataset.rects );
+        this.add_circles( dispDataset.circles );
+    }
+
 }
