@@ -3,6 +3,10 @@
  * 
  * RED optimal trials: 13 RED, 27 BLUE, 14 GREEN
  * BLUE optimal trials: 27 RED, 13 BLUE, 14 GREEN
+ * 
+ * @package acvs-online
+ * @version 1.4 (9/7/2020)
+ * @author Walden Li
  */
 exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
 

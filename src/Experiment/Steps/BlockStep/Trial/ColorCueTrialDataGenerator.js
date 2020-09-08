@@ -1,5 +1,9 @@
 /**
+ * A block trial data generator for AC_Color_Cue experiment.
  * 
+ * @package acvs-online
+ * @version 1.4 (9/7/2020)
+ * @author Walden Li
  */
 exp.ColorCueTrialDataGenerator = class extends exp.TrialDataGenerator {
 
