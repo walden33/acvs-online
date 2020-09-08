@@ -20,7 +20,7 @@ disp.Display = class {
         this.subring_radius_proportion = [ 0.5, 0.75, 1 ];
         this.square_color = "rgb(128, 128, 128)";
         // Specific to spatial cue paradigm
-        this.cue_radius = this.square_size/2;
+        this.cue_radius = this.square_size/1.5;
         this.cue_stroke_color = "white";
         this.cue_stroke_width = 0.2;
     }
