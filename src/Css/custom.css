@@ -30,17 +30,9 @@ li {
   text-align: left;
 }
 .ace_header {
-  background-color: black;
   color: white;
-  margin-top: 0px;
-  margin-bottom: 0px;
-  margin-right: 0px;
-  margin-left: 0px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  padding-right: 10px;
-  padding-left: 10px;
-  font-family: 'Open Sans', 'Ariel';
+  margin: 5px;
+  font-family: 'Georgia', 'serif';
   font-size: 2em;
 }
 .ace_message_area {
@@ -175,12 +167,21 @@ li {
   -ms-transform: translate(-50%,-50%);
 }
 
-.acvs-digit, .acvs-feedback {
+.acvs-digit {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 400;
   fill: white;
   text-anchor: middle;
   alignment-baseline: central;  /* Warning: Check browser compatibility. WL 8/22/2020 */
+}
+
+.acvs-feedback {
+  font-family: Arial, Helvetica, sans-serif;
+  font-style: italic;
+  font-size: 2pt;
+  fill: white;
+  text-anchor: middle;
+  alignment-baseline: central;
 }
 
 .fixation-cross-center {
