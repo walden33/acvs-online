@@ -8,13 +8,20 @@
 disp.Display = class { 
 
     constructor() {
+        // screen center coordinates
         this.screen_center_x = 50;
         this.screen_center_y = 50;
+        // ACVS rings
         this.ring_radius = 45;
         this.square_size = 4;
+        // digits
         this.digit_size = this.square_size * 0.65;
         this.digit_color = "white";
         this.digit_class_name = "acvs-digit";
+        // for non-Chrome browsers, text location needs to be adjusted in order to center on squares
+        this.digit_shift_x = 0;
+        this.digit_shift_y = this.digit_size * 0.35;
+        // fixation cross (as text "+")
         this.fixation_cross_class_name = "fixation-cross-center";
         this.ring_square_numbers = [ 12, 18, 24 ];
         this.subring_radius_proportion = [ 0.5, 0.75, 1 ];

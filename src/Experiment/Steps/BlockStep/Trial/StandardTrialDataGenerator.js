@@ -121,16 +121,16 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
         // 1.2 Add digits to stimuli but not preview
         stimuli.add_a_text(new disp.Text(
             optTargDigit + '',
-            optTargGrid.x + '',
-            optTargGrid.y + '',
+            optTargGrid.x + this._display.digit_shift_x + '',
+            optTargGrid.y + this._display.digit_shift_y + '',
             this._display.digit_color,
             this._display.digit_size,
             this._display.digit_class_name
         ));
         stimuli.add_a_text(new disp.Text(
             nonOptTargDigit + '',
-            nonOptTargGrid.x + '',
-            nonOptTargGrid.y + '',
+            nonOptTargGrid.x + this._display.digit_shift_x + '',
+            nonOptTargGrid.y + this._display.digit_shift_y + '',
             this._display.digit_color,
             this._display.digit_size,
             this._display.digit_class_name
@@ -156,8 +156,8 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
             // 2.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
                 util.Util.select_rand_from_array(this._targetDigits.concat(this._distractorDigits)) + '',
-                grid.x + '',
-                grid.y + '',
+                grid.x + this._display.digit_shift_x + '',
+                grid.y + this._display.digit_shift_y + '',
                 this._display.digit_color,
                 this._display.digit_size,
                 this._display.digit_class_name
@@ -184,8 +184,8 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
             // 3.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
                 util.Util.select_rand_from_array(this._distractorDigits) + '',
-                grid.x + '',
-                grid.y + '',
+                grid.x + this._display.digit_shift_x + '',
+                grid.y + this._display.digit_shift_y + '',
                 this._display.digit_color,
                 this._display.digit_size,
                 this._display.digit_class_name
@@ -212,8 +212,8 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
             // 4.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
                 util.Util.select_rand_from_array(this._distractorDigits) + '',
-                grid.x + '',
-                grid.y + '',
+                grid.x + this._display.digit_shift_x + '',
+                grid.y + this._display.digit_shift_y + '',
                 this._display.digit_color,
                 this._display.digit_size,
                 this._display.digit_class_name
@@ -241,8 +241,8 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
             // 5.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
                 util.Util.select_rand_from_array(this._distractorDigits) + '',
-                grid.x + '',
-                grid.y + '',
+                grid.x + this._display.digit_shift_x + '',
+                grid.y + this._display.digit_shift_y + '',
                 this._display.digit_color,
                 this._display.digit_size,
                 this._display.digit_class_name
