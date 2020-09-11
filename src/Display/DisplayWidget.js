@@ -66,7 +66,6 @@ disp.DisplayWidget = class {
             .text(text)
             .attr("x", '50')
             .attr("y", '50')
-            .attr("font-size", '6')
             .attr("class", "acvs-feedback");
     }
 
