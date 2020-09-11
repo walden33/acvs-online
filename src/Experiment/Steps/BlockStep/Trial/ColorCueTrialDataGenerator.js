@@ -12,9 +12,9 @@ exp.ColorCueTrialDataGenerator = class extends exp.TrialDataGenerator {
         this._is_practice = is_practice; // if the block is a practice block
         this._numTotalTrials = 108;
         this._colors = [
-            "rgb(254, 0, 254)", // MAGENTA
-            "rgb(0, 150, 150)", // CYAN
-            "rgb(105, 105, 105)"  // GRAY
+            "rgb(150, 0, 150)", // MAGENTA
+            "rgb(0, 115, 115)", // CYAN
+            "rgb(179, 107, 0)"  // GRAY
         ];
         this._trialConds = this._generate_trial_conditions();
         this._blockData = this._make_block_dataset(this._trialConds);
