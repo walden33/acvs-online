@@ -29,12 +29,17 @@ li {
   color: white;
   text-align: left;
 }
+
 .ace_header {
   color: white;
-  margin: 5px;
+  margin: 20px 0;
+  padding: 12px 0;
+  border-bottom: 1px solid white;    /* a divider */
   font-family: 'Georgia', 'serif';
   font-size: 2em;
+  text-align: center;
 }
+
 .ace_message_area {
   background-color: black;
   margin-top: 0px;
@@ -172,7 +177,7 @@ li {
   font-weight: 400;
   fill: white;
   text-anchor: middle;
-  alignment-baseline: central;  /* Warning: Check browser compatibility. WL 8/22/2020 */
+  /* alignment-baseline: central; */ /* Warning: Check browser compatibility. WL 8/22/2020 */
 }
 
 .acvs-feedback {
@@ -181,10 +186,27 @@ li {
   font-size: 2pt;
   fill: white;
   text-anchor: middle;
-  alignment-baseline: central;
+  /* alignment-baseline: central; */
 }
 
 .fixation-cross-center {
   text-anchor: middle;
-  alignment-baseline: central;
+  /* alignment-baseline: central; */
+}
+
+.consent-form-btn {
+  background-color: white;
+  color: black;
+  font-size: 1.2em;
+  margin: 24px;
+  padding: 8px;
+  width: 300px;
+  height: 45px;
+  border-radius: 24px;
+}
+
+.consent-form-btn:hover {
+  transition-duration: 250ms;
+  background-color: black;
+  color: white;
 }
