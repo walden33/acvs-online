@@ -9,7 +9,7 @@ exp.ConsentStep = class extends(util.AbstractStep) {
 
     execute() {
 
-        const CONSENT_FORM_URL = "https://psy-ccl.asc.ohio-state.edu/files/consent-forms/consent_REP_online_exempt.pdf";
+        const CONSENT_FORM_URL = "https://psy-ccl.asc.ohio-state.edu/files/forms/consent_REP_online_exempt.pdf";
 
         // The message
         exp.HtmlGui.workspace().append("p")
