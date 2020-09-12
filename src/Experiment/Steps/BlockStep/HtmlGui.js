@@ -33,7 +33,7 @@ exp.HtmlGui = class HtmlGui {
   /// Clear the header area
   ///
   static clear_header () {
-    d3.selectAll("#headerDiv").data([]).exit().remove();
+    d3.selectAll("#headerDiv").remove();
   }
 
   /////////////////////////////////////////////////////////////////////////////
