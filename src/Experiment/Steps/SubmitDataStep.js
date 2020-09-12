@@ -41,7 +41,7 @@ exp.SubmitDataStep = class extends util.AbstractStep {
 
         // Debriefing form button
         exp.HtmlGui.workspace().append("button")
-            .attr("class", "debriefing-form-btn")
+            .attr("class", "btn-regular")
             .text("Download")
             .on("click", () => {
                 window.open("https://psy-ccl.asc.ohio-state.edu/files/forms/debrief_REP_online.pdf")

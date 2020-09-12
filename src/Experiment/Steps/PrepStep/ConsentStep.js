@@ -31,7 +31,7 @@ exp.ConsentStep = class extends(util.AbstractStep) {
             .style("margin", "auto");
         
         responseArea.append("button")
-        .attr("class", "consent-form-btn")
+        .attr("class", "btn-wide")
         .text("I agree to participate")
         .on("click", (function(){
             this._db.EventsTable.add_new_row("Worker agreed to consent form");
@@ -49,7 +49,7 @@ exp.ConsentStep = class extends(util.AbstractStep) {
 
         responseArea.append("button")
         .text("I do NOT agree to participate")
-        .attr("class", "consent-form-btn")
+        .attr("class", "btn-wide")
         .on("click", () => {
             exp.HtmlGui.clear_header();
             exp.HtmlGui.clear_workspace();

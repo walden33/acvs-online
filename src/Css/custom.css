@@ -193,7 +193,7 @@ li {
   /* alignment-baseline: central; */
 }
 
-.consent-form-btn, .debriefing-form-btn {
+.btn-wide {
   background-color: white;
   color: black;
   font-size: 1.2em;
@@ -204,7 +204,18 @@ li {
   border-radius: 24px;
 }
 
-.consent-form-btn:hover, .debriefing-form-btn:hover {
+.btn-regular {
+  background-color: white;
+  color: black;
+  font-size: 1.2em;
+  margin: 24px;
+  padding: 8px;
+  width: 200px;
+  height: 45px;
+  border-radius: 24px;
+}
+
+.btn-wide:hover, .btn-regular:hover {
   transition-duration: 250ms;
   background-color: black;
   color: white;
