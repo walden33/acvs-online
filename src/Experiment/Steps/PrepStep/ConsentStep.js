@@ -9,14 +9,20 @@ exp.ConsentStep = class extends(util.AbstractStep) {
 
     execute() {
 
-        exp.HtmlGui.append_paragraphs([
-            "The following is the consent form. Please read it carefully."
-        ])
+        const CONSENT_FORM_URL = "https://psy-ccl.asc.ohio-state.edu/files/consent-forms/consent_REP_online_exempt.pdf";
 
-        const pdf = exp.HtmlGui.workspace().append("iframe")
+        // The message
+        exp.HtmlGui.workspace().append("p")
+            .html("The following is the consent form. Please read it carefully.")
+            .style("font-size", "1.2em")
+            .style("font-style", "italic")
+            .style("text-align", "center")
+
+        // Use an <iframe> to display the consent form
+        exp.HtmlGui.workspace().append("iframe")
             .attr("width", "70%")
             .attr("height", "400")
-            .attr("src", "/Users/walden/Google Drive/Leber Lab/IRB/Online REP/Consent Forms/Consent_REP_Online_Short.pdf");
+            .attr("src", CONSENT_FORM_URL);
         
         const responseArea = exp.HtmlGui.workspace().append("div")
             .attr("id", "consent-response-area")
@@ -25,10 +31,8 @@ exp.ConsentStep = class extends(util.AbstractStep) {
             .style("margin", "auto");
         
         responseArea.append("button")
-        .text("I agree to participate.")
-        .style("font-size", "1.5em")
-        .style("padding", "8px")
-        .style("margin", "24px")
+        .attr("class", "consent-form-btn")
+        .text("I agree to participate")
         .on("click", (function(){
             this._db.EventsTable.add_new_row("Worker agreed to consent form");
             alert("Before we get started, please answer 2 quick questions.");
@@ -44,10 +48,8 @@ exp.ConsentStep = class extends(util.AbstractStep) {
             }).bind(this));
 
         responseArea.append("button")
-        .text("I DO NOT agree to participate.")
-        .style("font-size", "1.5em")
-        .style("padding", "8px")
-        .style("margin", "24px")
+        .text("I do NOT agree to participate")
+        .attr("class", "consent-form-btn")
         .on("click", () => {
             exp.HtmlGui.clear_header();
             exp.HtmlGui.clear_workspace();
