@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="../Common/UtilNamespace.js"></script>
+    <script src="../Common/Utilities.js"></script>
+    <script src="../Common/Signal.js"></script>
+    <script src="../Common/KeyFilter.js"></script>
+    <script src="../Common/Hash.js"></script>
+    <script src="../Common/ExperimentBase.js"></script>
+    <script src="../Common/AbstractStep.js"></script>
+    <script src="../Common/Database.js"></script>
+    <script src="../Display/DisplayNamespace.js"></script>
+    <script src="../Display/Display.js"></script>
+    <script src="../Display/Shapes.js"></script>
+    <script src="../Display/DisplayDataset.js"></script>
+    <script src="../Display/DisplayWidget.js"></script>
+    <script src="../Experiment/ExpNamespace.js"></script>
+    <script src="../Experiment/Steps/PrepStep/TestStep.js"></script>
+    <script src="../Experiment/Steps/PrepStep/ConsentStep.js"></script>
+    <script src="../Experiment/Steps/PrepStep/CheckBrowserStep.js"></script>
+    <script src="../Experiment/Steps/PrepStep/PreparationStep.js"></script>
+    <script>
+        window.onload = () => {
+            exp.HtmlGui.show_header("Online REP Experiment - Cognitive Control Lab");
+    const experiment = new exp.DefaultExperiment("");
+    experiment.run();
+        }
+    </script>
+</body>
+</html>
