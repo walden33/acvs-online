@@ -8,18 +8,36 @@
 exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
 
     constructor() {
-        super()
-        this.numTotalTrials = 96;   // 24*4
+
+        super();
+
+        // Task-specific display settings
         this.colors = [
             "rgb(255, 50, 50)",
             "rgb(50, 50, 255)",
             "rgb(50, 255, 50)",
             "rgb(128, 128, 128)"
-        ]
+        ];
+
+        this.targColorIndexPool = [0, 1];
+        this.distractorColorIndexPool = [2, 3];
+
+        // Trial settings
+        this.numFrames = 20;
+        this.isi = 250;
+        this.trialDuration = this.numFrames * this.isi;
+        this.preTargFillerRSVPPositionPool = [1, 2, 3, 4];
+        this.optTargRSVPPositionPool = [5, 6, 7, 8];
+        this.nonOptTargRSVPPositionPool = [9, 10, 11, 12];
+        this.postTargFillerRSVPPositionPool = [13, 14, 15, 16];
+
+        // Block settings
+        this.numTotalTrials = 96;   // 24*4
         this.targetTypes = [1, 2];  // 1 for RED optimal and 2 for BLUE optimal
-        this.targetColors = [ this.colors[0], this.colors[1] ];
+
+        // Create final display dataset
         this.trialConds = this._generate_trial_conditions();
-        this.blockData = this._make_block_dataset( this.trialConds );
+        this.blockData = this._make_block_dataset(this.trialConds);
     }
 
     /**
@@ -32,129 +50,87 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
     _generate_trial_conditions() {
         let result = [];
         for (let rep = 0; rep < 4; rep++) { // rep for times so that 24*4=96 = total trials in block
-            for (let color = 1; color <= 2; color++) {
+            for (let color = 0; color <= 1; color++) {
                 for (let d1 = 2; d1 <= 5; d1++) {
                     for (let d2 = 2; d2 <= 5; d2++) {
                         if (d1 != d2)
-                            result.push([d1, d2, color]);
+                            result.push([d1, d2, color, color===0? 1:0]);
                     }
                 }
             }
         }
-        result = util.Util.fisher_yates_shuffle(result);    // shuffle the combination
-        // Then add optimal target regions
-        let optTargTypesArray = this._generate_opt_target_types( 2, 6 );
+
+        util.Util.fisher_yates_shuffle(result);    // shuffle the combination
+
+        // Then add optimal and non-optimal target positions
         for (let i = 0; i < result.length; i++) {
-            let optTargSide = optTargTypesArray.pop();
-            let nonOptTargSide = util.Util.select_rand_from_array([1,2], optTargSide);
-            result[i] = result[i].concat([ optTargSide, nonOptTargSide, 10, 15 ]);  // TODO
+            let optTargRSVPPos = util.Util.select_rand_from_array(this.optTargRSVPPositionPool);
+            let nonOptTargRSVPPosition = util.Util.select_rand_from_array(this.nonOptTargRSVPPositionPool);
+            result[i] = result[i].concat([optTargRSVPPos, nonOptTargRSVPPosition]);
         }
         return result;
     }
-    
 
     /**
-     * A helper method previously known as _make_chartDataset, but it did not
-     * incorprate any display-specific parameters. This new version queries
-     * disp.Display class and makes a <disp.DisplayDataset> that can be directly
-     * used by display widget to draw the stimuli.
+     * This method creates a cue display and all frames of stimuli in a trial
+     * given optimal target digit, non-optimal target digit, optimal target
+     * color index, non-optimal target color index, optimal target position in
+     * the RSVP stream, and non-optimal target position in the RSVP stream.
      * 
      * @param {number} optTargDigit : 2-5
-     * @param {number} nonOptTargDigit :2-5
-     * @param {number} optTargColor : 1-2
-     * @param {number} optTargPosition : 8, 9, 10, 11, 12
-     * @param {number} nonOptTargPosition : 13, 14, 15, 16, 17
-     * 
-     * @returns {disp.DisplayDataset}
+     * @param {number} nonOptTargDigit : 2-5
+     * @param {number} optTargColor : 0-1
+     * @param {number} nonOptTargColor : 0-1
+     * @param {number} optTargRSVPPosition : 
+     * @param {number} nonOptTargRSVPPosition :
      */
-    _make_stimuli_display(optTargDigit, nonOptTargDigit, optTargColor,
-        optTargPosition, nonOptTargPosition) {
-
+    _make_trial_dataset(optTargDigit, nonOptTargDigit, optTargColorIndex,
+        nonOptTargColorIndex, optTargRSVPPosition, nonOptTargRSVPPosition) {
         
+        // Initialize return objects
+        let cue_display = new disp.DisplayDataset();
+        let rsvp_stream = [];
 
-        let result;
-
-        const numFrames = 20;
-
-        // Copy some established logic to the object
-        result.set_logic( "optTargEcc", optTargEcc );
-        result.set_logic( "nonOptTargEcc", nonOptTargEcc );
-        result.set_logic( "optTargDigit", optTargDigit );
-        result.set_logic( "nonOptTargDigit", nonOptTargDigit );
-        result.set_logic( "optTargSide", optTargSide );
-        result.set_logic( "nonOptTargSide", nonOptTargSide );
-        result.set_logic( "optTargPosition", optTargPosition );
-        result.set_logic( "nonOptTargPosition", nonOptTargPosition );
-
-        // Generate the RSVP sequence of digits
-        let optSideSeq = [], nonOptSideSeq = [];
-        for ( let i = 0; i < numFrames; i++ ) {
-            optSideSeq.push( util.Util.select_rand_from_array(this.distractorDigits) );
-            nonOptSideSeq.push( util.Util.select_rand_from_array(this.distractorDigits) );
-        }
-        // Replace corresponding positions with the target digit
-        optSideSeq[optTargPosition-1] = optTargDigit;
-        nonOptSideSeq[nonOptTargPosition-1] = nonOptTargDigit;
-
-
-        // Start making the display
-        // The result is an array containing all frames in this trial. Each
-        // frame has its own <DisplayDataset>
-        let result = [];
-
-        // Add each frame to the result
-        for ( let i = 0; i < numFrames; i++ ) {
-            // Create a new display dataset
-            let d = new disp.DisplayDataset();
-
-            // Add digits to each frame
-            if ( optTargSide === 1 ) {  // if optimal target on the left
-                // Add optimal side digit
-                d.add_a_text( new disp.Text(
-                    optSideSeq[i],
-                    this.display.screen_center_x - 20+"",
-                    this.display.screen_center_y,
-                    this.display.digit_color,
-                    this.display.digit_size,
-                    this.display.digit_class_name
-                ))
-                // Add non-optimal side digit
-                d.add_a_text( new disp.Text(
-                    nonOptSideSeq[i],
-                    this.display.screen_center_x + 20+"",
-                    this.display.screen_center_y,
-                    this.display.digit_color,
-                    this.display.digit_size,
-                    this.display.digit_class_name
-                ))
-            } else if ( optTargSide === 2 ) {   // if optimal target on the right
-                // Add optimal side digit
-                d.add_a_text( new disp.Text(
-                    optSideSeq[i],
-                    this.display.screen_center_x + 20+"",
-                    this.display.screen_center_y,
-                    this.display.digit_color,
-                    this.display.digit_size,
-                    this.display.digit_class_name
-                ))
-                // Add non-optimal side digit
-                d.add_a_text( new disp.Text(
-                    nonOptSideSeq[i],
-                    this.display.screen_center_x - 20+"",
-                    this.display.screen_center_y,
-                    this.display.digit_color,
-                    this.display.digit_size,
-                    this.display.digit_class_name
-                ))
+        // Create 2D trial arrays of digit and color. In every array, each
+        // dimension represents one of the two superimposed stimulus.
+        let digits = [ [], [] ];
+        let colors = [ [], [] ];
+        for (let i = 0; i < this.numFrames; i++) {
+            if( i === optTargRSVPPosition-1 ) {   // if current frame shows the opt targ
+                // Add optimal target digit and color to one of the superimposed place
+                let targ = Math.round(Math.random());    // random 0 or 1; index to put the target
+                let nontarg = targ === 1 ? 0 : 1;    // corresponding index for the non-target
+                digits[targ].push( optTargDigit );
+                digits[nontarg].push( util.Util.select_rand_from_array(this._distractorDigits) );
+                colors[targ].push( optTargColorIndex );
+                colors[nontarg].push( util.Util.select_rand_from_array(this.distractorColorIndexPool) );
+            } else if ( i === nonOptTargRSVPPosition-1 ) {  // if current frame shows the non opt targ
+                // Add non-optimal target digit and color to one of the superimposed place
+                let targ = Math.round(Math.random());    // random 0 or 1; index to put the optimal target
+                let nontarg = targ === 1 ? 0 : 1;   // corresponding index for the non-optimal target
+                digits[targ].push( nonOptTargDigit );
+                digits[nontarg].push( util.Util.select_rand_from_array(this._distractorDigits) );
+                colors[targ].push( nonOptTargColorIndex );
+                colors[nontarg].push( util.Util.select_rand_from_array(this.distractorColorIndexPool) );
+            } else {    // if current frame shows a filler
+                // Add two fillers
+                for(let j = 0; j < 2; j++) {
+                    digits[j].push( util.Util.select_rand_from_array(this._distractorDigits) );
+                    colors[j].push( util.Util.select_rand_from_array(this.distractorColorIndexPool) );
+                }
             }
+        }
 
-            // Add current display dataset to the result
-            result.push(d);
+        // Create RSVP stream 
+        for (let i = 0; i<this.numFrames; i++) {
+            let stimuli_display = new disp.DisplayDataset();
 
         }
 
-        return result;
-
+        return {
+            cue: [cue_display],
+            stimuli: rsvp_stream
+        }
     }
 
     /**
@@ -163,16 +139,19 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
      * 
      * @param {Array<number>} trialConds 
      */
-    _make_block_dataset( trialConds ) {
+    _make_block_dataset(trialConds) {
         let trial_conditions = trialConds.slice();  // make a copy
         let result = [];
         let currentTrialCond;
-        while( trial_conditions.length > 0 ) {
+        while (trial_conditions.length > 0) {
             currentTrialCond = trial_conditions.pop();
+            let currentTrialDisplays = this._make_trial_dataset(...currentTrialCond);
+            let currentTrialLogic = {}; //TODO
             result.push(
                 {
-                    "logic" : this.currentTrialCond,
-                    "display": this._make_stimuli_display( ...currentTrialCond ) 
+                    "logic": currentTrialLogic,
+                    "cue": currentTrialDisplays.cue,
+                    "stimuli": currentTrialDisplays.stimuli
                 }
             );
         }
