@@ -19,7 +19,7 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
             "rgb(128, 128, 128)"
         ];
         this.targColorIndexPool = [0, 1];
-        this.distractorColorIndexPool = [2, 3];
+        this.distractorColorIndexPool = [0, 1, 2, 3];
         // The offset between two digit in one stimulus frame
         this.stimHorizOffset = 2;
         this.stimVertOffset = 2;
@@ -107,22 +107,30 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
                 let targ = Math.round(Math.random());    // random 0 or 1; index to put the target
                 let nontarg = targ === 1 ? 0 : 1;    // corresponding index for the non-target
                 digits[targ].push( optTargDigit );
-                digits[nontarg].push( util.Util.select_rand_from_array(this._distractorDigits) );
+                digits[nontarg].push( util.Util.select_rand_from_array(
+                    this._distractorDigits,
+                    i === 0 ? undefined : digits[nontarg][i-1]) );  // exclude the one from last trial
                 colors[targ].push( optTargColorIndex );
-                colors[nontarg].push( util.Util.select_rand_from_array(this.distractorColorIndexPool) );
+                colors[nontarg].push( util.Util.select_rand_from_array(
+                    this.distractorColorIndexPool,
+                    i === 0 ? undefined : colors[nontarg][i-1]) );
             } else if ( i === nonOptTargRSVPPosition-1 ) {  // if current frame shows the non opt targ
                 // Add non-optimal target digit and color to one of the superimposed place
                 let targ = Math.round(Math.random());    // random 0 or 1; index to put the optimal target
                 let nontarg = targ === 1 ? 0 : 1;   // corresponding index for the non-optimal target
                 digits[targ].push( nonOptTargDigit );
-                digits[nontarg].push( util.Util.select_rand_from_array(this._distractorDigits) );
+                digits[nontarg].push( util.Util.select_rand_from_array(this._distractorDigits,
+                    i === 0 ? undefined : digits[nontarg][i-1] ) );
                 colors[targ].push( nonOptTargColorIndex );
-                colors[nontarg].push( util.Util.select_rand_from_array(this.distractorColorIndexPool) );
+                colors[nontarg].push( util.Util.select_rand_from_array(this.distractorColorIndexPool,
+                    i === 0 ? undefined : colors[nontarg][i-1] ) );
             } else {    // if current frame shows a filler
                 // Add two fillers
                 for(let j = 0; j < 2; j++) {
-                    digits[j].push( util.Util.select_rand_from_array(this._distractorDigits) );
-                    colors[j].push( util.Util.select_rand_from_array(this.distractorColorIndexPool) );
+                    digits[j].push( util.Util.select_rand_from_array(this._distractorDigits,
+                        i === 0 ? undefined : digits[j][i-1] ) );
+                    colors[j].push( util.Util.select_rand_from_array(this.distractorColorIndexPool,
+                        i === 0 ? undefined : colors[j][i-1]) );
                 }
             }
         }
@@ -143,8 +151,18 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
             rsvp_stream.push(stim);
         }
 
+        // Create the cue
+        cue_display.add_a_text( new disp.Text(
+            optTargColorIndex === 0 ? "RED" : "BLUE",
+            this._display.screen_center_x,
+            this._display.screen_center_y,
+            this._display.letter_cue_color,
+            this._display.letter_cue_font_size+'',
+            null
+        ));
+
         return {
-            cue: [cue_display],
+            cue: cue_display,
             stimuli: rsvp_stream
         }
     }
@@ -171,7 +189,6 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
                 }
             );
         }
-        console.log(result)
         return result;
     }
 

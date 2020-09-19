@@ -30,6 +30,9 @@ disp.Display = class {
         this.cue_radius = this.square_size/1.5;
         this.cue_stroke_color = "white";
         this.cue_stroke_width = 0.2;
+        // Specific to temporal paradigm
+        this.letter_cue_color = "white";
+        this.letter_cue_font_size = 12;
     }
 
     /** Some setter methods. */
