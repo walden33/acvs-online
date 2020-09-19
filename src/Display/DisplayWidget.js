@@ -77,7 +77,7 @@ disp.DisplayWidget = class {
      * @param {disp.DisplayDataset} dataset
      */
     draw( dataset ) {
-        console.log(dataset)
+        // console.log(dataset)
         // Clear the display
         this.clear();
 
@@ -151,7 +151,7 @@ disp.DisplayWidget = class {
 
         setTimeout( ()=>{ this.clear()}, cue_duration );
 
-        for( let i = 0; i < datasets.length; i++ ) {
+        for( let i = 0; i < stimuli.length; i++ ) {
             setTimeout(()=>{ this.draw( stimuli[i] ) }, isi*i + soa );
         }
 
