@@ -18,9 +18,15 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
             "rgb(50, 255, 50)",
             "rgb(128, 128, 128)"
         ];
-
         this.targColorIndexPool = [0, 1];
         this.distractorColorIndexPool = [2, 3];
+        // The offset between two digit in one stimulus frame
+        this.stimHorizOffset = 2;
+        this.stimVertOffset = 2;
+        this.firstDigitX = this._display.screen_center_x - this.stimHorizOffset/2;
+        this.firstDigitY = this._display.screen_center_y - this.stimVertOffset/2;
+        this.secondDigitX = this._display.screen_center_x + this.stimHorizOffset/2;
+        this.secondDigitY = this._display.screen_center_y + this.stimVertOffset/2;
 
         // Trial settings
         this.numFrames = 20;
@@ -36,8 +42,8 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
         this.targetTypes = [1, 2];  // 1 for RED optimal and 2 for BLUE optimal
 
         // Create final display dataset
-        this.trialConds = this._generate_trial_conditions();
-        this.blockData = this._make_block_dataset(this.trialConds);
+        this._trialConds = this._generate_trial_conditions();
+        this._blockData = this._make_block_dataset(this._trialConds);
     }
 
     /**
@@ -123,8 +129,18 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
 
         // Create RSVP stream 
         for (let i = 0; i<this.numFrames; i++) {
-            let stimuli_display = new disp.DisplayDataset();
-
+            let stim = new disp.DisplayDataset();
+            for (let j = 0; j < 2; j++) {
+                stim.add_a_text( new disp.Text(
+                    digits[j][i]+'',
+                    j === 0 ? this.firstDigitX+'' : this.secondDigitX+'',
+                    j === 0 ? this.firstDigitY+'' : this.secondDigitY+'',
+                    this.colors[colors[j][i]],
+                    null,
+                    null
+                ))
+            }
+            rsvp_stream.push(stim);
         }
 
         return {
@@ -149,12 +165,13 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
             let currentTrialLogic = {}; //TODO
             result.push(
                 {
-                    "logic": currentTrialLogic,
-                    "cue": currentTrialDisplays.cue,
-                    "stimuli": currentTrialDisplays.stimuli
+                    logic: currentTrialLogic,
+                    cue: currentTrialDisplays.cue,
+                    stimuli: currentTrialDisplays.stimuli
                 }
             );
         }
+        console.log(result)
         return result;
     }
 
