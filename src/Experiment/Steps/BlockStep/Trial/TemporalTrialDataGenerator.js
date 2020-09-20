@@ -11,6 +11,13 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
 
         super();
 
+        this._display.digit_size = 14;
+        this._display.digit_shift_x = - 2.5;
+        this._display.digit_shift_y = 2.5;
+        this._display.cue_size = 12;
+        this._display.cue_shift_x = -2.7;
+        this._display.cue_shift_y = 2.5;
+
         // Task-specific display settings
         this.colors = [
             "rgb(255, 50, 50)",
@@ -23,10 +30,10 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
         // The offset between two digit in one stimulus frame
         this.stimHorizOffset = 2;
         this.stimVertOffset = 2;
-        this.firstDigitX = this._display.screen_center_x - this.stimHorizOffset/2;
-        this.firstDigitY = this._display.screen_center_y - this.stimVertOffset/2;
-        this.secondDigitX = this._display.screen_center_x + this.stimHorizOffset/2;
-        this.secondDigitY = this._display.screen_center_y + this.stimVertOffset/2;
+        this.firstDigitX = this._display.screen_center_x - this.stimHorizOffset/2 + this._display.digit_shift_x;
+        this.firstDigitY = this._display.screen_center_y - this.stimVertOffset/2 + this._display.digit_shift_y;
+        this.secondDigitX = this._display.screen_center_x + this.stimHorizOffset/2 + this._display.digit_shift_x;
+        this.secondDigitY = this._display.screen_center_y + this.stimVertOffset/2 + this._display.digit_shift_y;
 
         // Trial settings
         this.numFrames = 20;
@@ -144,20 +151,21 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
                     j === 0 ? this.firstDigitX+'' : this.secondDigitX+'',
                     j === 0 ? this.firstDigitY+'' : this.secondDigitY+'',
                     this.colors[colors[j][i]],
-                    null,
+                    this._display.digit_size,
                     null
                 ))
             }
+            
             rsvp_stream.push(stim);
         }
 
         // Create the cue
         cue_display.add_a_text( new disp.Text(
-            optTargColorIndex === 0 ? "RED" : "BLUE",
-            this._display.screen_center_x,
-            this._display.screen_center_y,
+            optTargColorIndex === 0 ? "R" : "B",
+            this._display.screen_center_x + this._display.cue_shift_x,
+            this._display.screen_center_y + this._display.cue_shift_y,
             this._display.letter_cue_color,
-            this._display.letter_cue_font_size+'',
+            this._display.cue_size+'',
             null
         ));
 
@@ -165,6 +173,20 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
             cue: cue_display,
             stimuli: rsvp_stream
         }
+    }
+
+    _make_trial_logic(optTargDigit, nonOptTargDigit, optTargColorIndex,
+        nonOptTargColorIndex, optTargRSVPPosition, nonOptTargRSVPPosition) {
+        return (
+            {
+                optTargDigit: optTargDigit,
+                nonOptTargDigit: nonOptTargDigit,
+                optTargColorIndex: optTargColorIndex,
+                nonOptTargColorIndex : nonOptTargColorIndex,
+                optTargRSVPPosition: optTargRSVPPosition,
+                nonOptTargRSVPPosition: nonOptTargRSVPPosition
+            }
+        );
     }
 
     /**
@@ -180,7 +202,7 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
         while (trial_conditions.length > 0) {
             currentTrialCond = trial_conditions.pop();
             let currentTrialDisplays = this._make_trial_dataset(...currentTrialCond);
-            let currentTrialLogic = {}; //TODO
+            let currentTrialLogic = this._make_trial_logic(...currentTrialCond); //TODO
             result.push(
                 {
                     logic: currentTrialLogic,
