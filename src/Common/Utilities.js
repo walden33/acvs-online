@@ -7,10 +7,10 @@ util.Util = class Util {
   ///
   /// Return the sum of a numeric array.
   ///
-  static sum (arr) {
-    if (arr.length == 0) {return 0;} // edge case
+  static sum(arr) {
+    if (arr.length == 0) { return 0; } // edge case
     let result = 0.0;
-    arr.forEach(function(item) {
+    arr.forEach(function (item) {
       result += item;
     });
     return result;
@@ -20,8 +20,8 @@ util.Util = class Util {
   ///
   /// Returns the mean of the array, arr.
   ///
-  static mean (arr) {
-    if (arr.length == 0) {throw RangeError("Can not calculate mean of empty array.");}
+  static mean(arr) {
+    if (arr.length == 0) { throw RangeError("Can not calculate mean of empty array."); }
     let result = Util.sum(arr) / arr.length;
     return result;
   }
@@ -30,11 +30,11 @@ util.Util = class Util {
   ///
   /// Returns the standard deviation of arr.
   ///
-  static stdev (arr) {
-    if (arr.length == 0) {throw RangeError("Can not calculate stdev of empty array.");}
+  static stdev(arr) {
+    if (arr.length == 0) { throw RangeError("Can not calculate stdev of empty array."); }
     let m = Util.mean(arr);
     let result = 0.0;
-    arr.forEach(function(item){
+    arr.forEach(function (item) {
       result += Math.abs(item - m);
     });
     result /= arr.length;
@@ -45,8 +45,8 @@ util.Util = class Util {
   ///
   /// Returns the standard error of the mean of arr
   ///
-  static std_error_of_the_mean (arr) {
-    if (arr.length == 0) {throw RangeError("Can not calculate standard error of the mean of empty array.");}
+  static std_error_of_the_mean(arr) {
+    if (arr.length == 0) { throw RangeError("Can not calculate standard error of the mean of empty array."); }
     let result = Util.stdev(arr) / Math.sqrt(arr.length);
     return result;
   }
@@ -56,11 +56,11 @@ util.Util = class Util {
   /// Returns a integer pseudo-randomly drawn from the range [min, max) or
   /// [min, max]
   ///
-  static gen_random_int (min, max, inclusive=false) {
-    if (inclusive == false){
-      return Math.floor(Math.random() * (max-min)) + min;
+  static gen_random_int(min, max, inclusive = false) {
+    if (inclusive == false) {
+      return Math.floor(Math.random() * (max - min)) + min;
     } else {
-      return Math.floor(Math.random() * (max-min+1)) + min;
+      return Math.floor(Math.random() * (max - min + 1)) + min;
     }
   }
 
@@ -69,11 +69,11 @@ util.Util = class Util {
   /// Returns a float pseudo-randomly drawn from the range [min, max) or
   /// [min, max]
   ///
-  static gen_random_float (min, max, inclusive=false) {
-    if (inclusive == false){
-      return Math.random() * (max-min) + min;
+  static gen_random_float(min, max, inclusive = false) {
+    if (inclusive == false) {
+      return Math.random() * (max - min) + min;
     } else {
-      return Math.random() * (max-min+1) + min;
+      return Math.random() * (max - min + 1) + min;
     }
   }
 
@@ -82,11 +82,11 @@ util.Util = class Util {
   /// Randomly shuffles the array, arr, in-place using the Fisher-Yates
   /// algorithm. Note the original array (not a copy) is modified.
   ///
-  static fisher_yates_shuffle (arr) {
+  static fisher_yates_shuffle(arr) {
     let j = undefined;
     let k = undefined;
-    for (let i = arr.length-1; i >=0; i--){
-      j = Util.gen_random_int(0,i,true);
+    for (let i = arr.length - 1; i >= 0; i--) {
+      j = Util.gen_random_int(0, i, true);
       k = arr[j];
       arr[j] = arr[i];
       arr[i] = k;
@@ -101,9 +101,9 @@ util.Util = class Util {
   /// iframe.
   ///
   static window_is_iframe() {
-    try{
+    try {
       return window.self !== window.top;
-    } catch(err) {
+    } catch (err) {
       return true;
     }
   }
@@ -137,7 +137,7 @@ util.Util = class Util {
   ///
   static set_cookie(key, value, expires_in_N_days) {
     let d = new Date();
-    d.setTime(d.getTime() + (expires_in_N_days*24*60*60*1000));
+    d.setTime(d.getTime() + (expires_in_N_days * 24 * 60 * 60 * 1000));
     let expires = "expires=" + d.toGMTString();
     document.cookie = btoa(key) + "=" + value + ";" + expires + ";path=/";
   }
@@ -152,7 +152,7 @@ util.Util = class Util {
     key = btoa(key) + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(';');
-    for(let i = 0; i < ca.length; i++) {
+    for (let i = 0; i < ca.length; i++) {
       let c = ca[i];
       while (c.charAt(0) == ' ') {
         c = c.substring(1);
@@ -170,14 +170,33 @@ util.Util = class Util {
    * @param {*} exclude : an object of array to be excluded when selecting
    * @param {boolean} replace : whether to remove the selected item from array
    */
-  static select_rand_from_array (array, exclude=null, replace=true) {
+  static select_rand_from_array(array, exclude = null, replace = true) {
     let rand_index = Util.gen_random_int(0, array.length);
     let result = array[rand_index];
-    if (result === exclude){
+    if (result === exclude) {
       return Util.select_rand_from_array(array, exclude);
     }
-    if (!replace) array.splice( rand_index, 1 );
+    if (!replace) array.splice(rand_index, 1);
     return result;
   }
+
+  static choose_from(array, exclude = [], replace = true) {
+    let index = Util.gen_random_int(0, array.length);
+    let result = array[index];
+    if (exclude.length > 0) {
+      for (let i = 0; i < exclude.length; i++) {
+        if (array[index] === exclude[i]) {
+          return Util.choose_from(array, exclude, replace);
+        }
+      }
+    }
+    if (!replace) array.splice(rand_index, 1);
+    return result;
+  }
+
+  static is_test_mode() {
+    return d3.select("#hidden-test").html() === "true";
+  }
+
 
 }
