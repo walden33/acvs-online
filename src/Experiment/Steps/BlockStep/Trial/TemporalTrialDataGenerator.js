@@ -1,14 +1,25 @@
 /**
- * This is a generator class for temporal acvs experiment.
+ * This is a generator class for temporal acvs experiment. It creates an array
+ * of three-object arrays including one logic and two disp.DisplayDataset arrays
+ * representing the trial logic and display content for the cue and RSVP stream
+ * for every trial.
+ * 
+ * @tutorial Instantiate where block data needed. Call yield_trial_dataset()
+ * public method to get the data of the next trial. Do not change private
+ * variables. Change public variables specifc to display settings if needed.
+ * 
+ * @todo Move common variables to super constructor
  * 
  * @package acvs-online
- * @version 1.1 (08/26/2020)
+ * @version 1.2 (09/20/2020)
  * @author Walden Li
  */
 exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
 
     constructor() {
 
+        // The super() constructor inherits _targetDigits, _distractorDigits,
+        // _display, and the initialized _blockData.
         super();
 
         this._display.digit_size = 14;
@@ -30,10 +41,10 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
         // The offset between two digit in one stimulus frame
         this.stimHorizOffset = 2;
         this.stimVertOffset = 2;
-        this.firstDigitX = this._display.screen_center_x - this.stimHorizOffset/2 + this._display.digit_shift_x;
-        this.firstDigitY = this._display.screen_center_y - this.stimVertOffset/2 + this._display.digit_shift_y;
-        this.secondDigitX = this._display.screen_center_x + this.stimHorizOffset/2 + this._display.digit_shift_x;
-        this.secondDigitY = this._display.screen_center_y + this.stimVertOffset/2 + this._display.digit_shift_y;
+        this.firstDigitX = this._display.screen_center_x - this.stimHorizOffset / 2 + this._display.digit_shift_x;
+        this.firstDigitY = this._display.screen_center_y - this.stimVertOffset / 2 + this._display.digit_shift_y;
+        this.secondDigitX = this._display.screen_center_x + this.stimHorizOffset / 2 + this._display.digit_shift_x;
+        this.secondDigitY = this._display.screen_center_y + this.stimVertOffset / 2 + this._display.digit_shift_y;
 
         // Trial settings
         this.numFrames = 20;
@@ -57,8 +68,9 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
      * A method that generates a trial condition matrix (here implemented by a
      * two-dimensional Array).
      * 
-     * What get controlled in temporal ACVS?
      * Crossed vars: optDigit (4) * nonoptDigit (3) * optColor(2) = 24
+     * Randomized vars: opt and nonOpt targ RSVP positions. Randomly drawn from
+     * a target position pool.
      */
     _generate_trial_conditions() {
         let result = [];
@@ -67,7 +79,7 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
                 for (let d1 = 2; d1 <= 5; d1++) {
                     for (let d2 = 2; d2 <= 5; d2++) {
                         if (d1 != d2)
-                            result.push([d1, d2, color, color===0? 1:0]);
+                            result.push([d1, d2, color, color === 0 ? 1 : 0]);
                     }
                 }
             }
@@ -99,73 +111,119 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
      */
     _make_trial_dataset(optTargDigit, nonOptTargDigit, optTargColorIndex,
         nonOptTargColorIndex, optTargRSVPPosition, nonOptTargRSVPPosition) {
-        
+
         // Initialize return objects
         let cue_display = new disp.DisplayDataset();
         let rsvp_stream = [];
 
         // Create 2D trial arrays of digit and color. In every array, each
         // dimension represents one of the two superimposed stimulus.
-        let digits = [ [], [] ];
-        let colors = [ [], [] ];
+        let digits = [[], []];
+        let colors = [[], []];
         for (let i = 0; i < this.numFrames; i++) {
-            if( i === optTargRSVPPosition-1 ) {   // if current frame shows the opt targ
+            if (i === optTargRSVPPosition - 1) {   // if current frame shows the opt targ
                 // Add optimal target digit and color to one of the superimposed place
                 let targ = Math.round(Math.random());    // random 0 or 1; index to put the target
                 let nontarg = targ === 1 ? 0 : 1;    // corresponding index for the non-target
-                digits[targ].push( optTargDigit );
-                digits[nontarg].push( util.Util.select_rand_from_array(
-                    this._distractorDigits,
-                    i === 0 ? undefined : digits[nontarg][i-1]) );  // exclude the one from last trial
-                colors[targ].push( optTargColorIndex );
-                colors[nontarg].push( util.Util.select_rand_from_array(
-                    this.distractorColorIndexPool,
-                    i === 0 ? undefined : colors[nontarg][i-1]) );
-            } else if ( i === nonOptTargRSVPPosition-1 ) {  // if current frame shows the non opt targ
+                digits[targ].push(optTargDigit);
+                digits[nontarg].push(
+                    util.Util.choose_from(
+                        this._distractorDigits,
+                        [   // exclude the one from last trial and the one next to it
+                            i === 0 ? undefined : digits[nontarg][i - 1],
+                            optTargDigit
+                        ]
+                    )
+                );
+                colors[targ].push(optTargColorIndex);
+                colors[nontarg].push(
+                    util.Util.choose_from(
+                        this.distractorColorIndexPool,
+                        [   // exclude the one from last trial and the one next to it
+                            i === 0 ? undefined : colors[nontarg][i - 1],
+                            optTargColorIndex
+                        ]
+                    )
+                );
+            } else if (i === nonOptTargRSVPPosition - 1) {  // if current frame shows the non opt targ
                 // Add non-optimal target digit and color to one of the superimposed place
                 let targ = Math.round(Math.random());    // random 0 or 1; index to put the optimal target
                 let nontarg = targ === 1 ? 0 : 1;   // corresponding index for the non-optimal target
-                digits[targ].push( nonOptTargDigit );
-                digits[nontarg].push( util.Util.select_rand_from_array(this._distractorDigits,
-                    i === 0 ? undefined : digits[nontarg][i-1] ) );
-                colors[targ].push( nonOptTargColorIndex );
-                colors[nontarg].push( util.Util.select_rand_from_array(this.distractorColorIndexPool,
-                    i === 0 ? undefined : colors[nontarg][i-1] ) );
+                digits[targ].push(nonOptTargDigit);
+                digits[nontarg].push(
+                    util.Util.choose_from(
+                        this._distractorDigits,
+                        [   // exclude the one from last trial and the one next to it
+                            i === 0 ? undefined : digits[nontarg][i - 1],
+                            nonOptTargDigit
+                        ]
+                    )
+                );
+                colors[targ].push(nonOptTargColorIndex);
+                colors[nontarg].push(
+                    util.Util.choose_from(
+                        this.distractorColorIndexPool,
+                        [   // exclude the one from last trial and the one next to it
+                            i === 0 ? undefined : colors[nontarg][i - 1],
+                            nonOptTargColorIndex
+                        ]
+                    )
+                );
             } else {    // if current frame shows a filler
                 // Add two fillers
-                for(let j = 0; j < 2; j++) {
-                    digits[j].push( util.Util.select_rand_from_array(this._distractorDigits,
-                        i === 0 ? undefined : digits[j][i-1] ) );
-                    colors[j].push( util.Util.select_rand_from_array(this.distractorColorIndexPool,
-                        i === 0 ? undefined : colors[j][i-1]) );
+                for (let j = 0; j < 2; j++) {
+                    // First choose color and then choose digit, and if the
+                    // color if a distractor color, we can put target digits
+                    // on it
+                    colors[j].push(
+                        util.Util.choose_from(
+                            this.distractorColorIndexPool,
+                            [
+                                i === 0 ? undefined : colors[j][i - 1], // color from last trial
+                                j === 0 ? undefined : colors[0][i]
+                            ]
+                        )
+                    );
+                    digits[j].push(
+                        util.Util.choose_from(
+                            this.targColorIndexPool.includes(colors[j][i]) ?    // if color is a targ color
+                                this._distractorDigits :
+                                this._distractorDigits.concat(this._targetDigits)
+                                ,
+                            [
+                                i === 0 ? undefined : digits[j][i - 1], // digit from last trial
+                                j === 0 ? undefined : digits[0][i]  // digit next to it
+                            ]
+                        )
+                    );
                 }
             }
         }
 
         // Create RSVP stream 
-        for (let i = 0; i<this.numFrames; i++) {
+        for (let i = 0; i < this.numFrames; i++) {
             let stim = new disp.DisplayDataset();
             for (let j = 0; j < 2; j++) {
-                stim.add_a_text( new disp.Text(
-                    digits[j][i]+'',
-                    j === 0 ? this.firstDigitX+'' : this.secondDigitX+'',
-                    j === 0 ? this.firstDigitY+'' : this.secondDigitY+'',
+                stim.add_a_text(new disp.Text(
+                    digits[j][i] + '',
+                    j === 0 ? this.firstDigitX + '' : this.secondDigitX + '',
+                    j === 0 ? this.firstDigitY + '' : this.secondDigitY + '',
                     this.colors[colors[j][i]],
                     this._display.digit_size,
                     null
                 ))
             }
-            
+
             rsvp_stream.push(stim);
         }
 
         // Create the cue
-        cue_display.add_a_text( new disp.Text(
+        cue_display.add_a_text(new disp.Text(
             optTargColorIndex === 0 ? "R" : "B",
             this._display.screen_center_x + this._display.cue_shift_x,
             this._display.screen_center_y + this._display.cue_shift_y,
             this._display.letter_cue_color,
-            this._display.cue_size+'',
+            this._display.cue_size + '',
             null
         ));
 
@@ -182,7 +240,7 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
                 optTargDigit: optTargDigit,
                 nonOptTargDigit: nonOptTargDigit,
                 optTargColorIndex: optTargColorIndex,
-                nonOptTargColorIndex : nonOptTargColorIndex,
+                nonOptTargColorIndex: nonOptTargColorIndex,
                 optTargRSVPPosition: optTargRSVPPosition,
                 nonOptTargRSVPPosition: nonOptTargRSVPPosition
             }
@@ -190,8 +248,11 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
     }
 
     /**
-     * This method generates a 2D array of <DisplayDataset>. The first dimension
-     * is the cue display and the second is the stimuli display in each trial.
+     * This method generates an object of three elements:
+     *   0: logic
+     *   1: cue
+     *   2: stimuli
+     * Called when class is instantiated.
      * 
      * @param {Array<number>} trialConds 
      */
@@ -202,7 +263,7 @@ exp.TemporalTrialDataGenerator = class extends exp.TrialDataGenerator {
         while (trial_conditions.length > 0) {
             currentTrialCond = trial_conditions.pop();
             let currentTrialDisplays = this._make_trial_dataset(...currentTrialCond);
-            let currentTrialLogic = this._make_trial_logic(...currentTrialCond); //TODO
+            let currentTrialLogic = this._make_trial_logic(...currentTrialCond);
             result.push(
                 {
                     logic: currentTrialLogic,
