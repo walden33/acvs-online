@@ -149,4 +149,47 @@ util.Util = class Util {
     static get_sub_id() {
         return d3.select("#hidden-sub-id").html();
     }
+
+    /**
+     * Generate a randomized array of objects chosen from a given array of
+     * unique items, with a maximum number of repititions of the same item
+     * allowed. The returned array will contain an equal number of each unique
+     * item from the input items array.
+     * 
+     * @param {Array<*>} items : an array of unique objects
+     * @param {number} length : expected output array length
+     * @param {number} max_rep : maximum number of repeats of a single object
+     */
+    static generate_random_array(items, length, max_rep) {
+        if (length % items.length !== 0) {
+            throw ("Output array length has to be a multiple of number of items")
+        }
+        const reps = length / items.length;
+        let result = [];
+        for (let i = 0; i < items.length; i++) {
+            for (let j = 0; j < reps; j++) {
+                result.push(items[i]);
+            }
+        }
+        Util.fisher_yates_shuffle(result);
+
+        // Check if there are more than MAXREP reps in a run
+        let previous = result[0];
+        // rep: current run rep numbers; maxRep: max rep numbers recorded so far
+        let rep = 1, maxRep = 1;
+        for (let i = 1; i < result.length; i++) {
+            if (result[i] === previous) {
+                rep++;
+            } else {
+                maxRep = Math.max(rep, maxRep);
+                rep = 1;
+            }
+            previous = result[i];
+        }
+        if (maxRep > max_rep) {
+            return Util.generate_random_array(items, length, max_rep);
+        } else return result;
+
+    }
+
 }
