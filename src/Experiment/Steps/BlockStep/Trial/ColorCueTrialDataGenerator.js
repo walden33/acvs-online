@@ -10,11 +10,11 @@ exp.ColorCueTrialDataGenerator = class extends exp.TrialDataGenerator {
     constructor(is_practice = false) {
         super();
         this._is_practice = is_practice; // if the block is a practice block
-        this._numTotalTrials = 108;
+        this._numTotalTrials = 72;
         this._colors = [
             "rgb(150, 0, 150)", // MAGENTA
             "rgb(0, 115, 115)", // CYAN
-            "rgb(179, 107, 0)"  // GRAY
+            "rgb(179, 107, 0)"  // ORANGE
         ];
         this._trialConds = this._generate_trial_conditions();
         this._blockData = this._make_block_dataset(this._trialConds);
@@ -34,30 +34,39 @@ exp.ColorCueTrialDataGenerator = class extends exp.TrialDataGenerator {
 
         let result = [];
 
-        for (let ecc1 = 1; ecc1 <= 3; ecc1++) {
-            for (let ecc2 = 1; ecc2 <= 3; ecc2++) {
-                for (let d1 = 2; d1 <= 5; d1++) {
-                    for (let d2 = 2; d2 <= 5; d2++) {
-                        if (d1 !== d2) result.push([ecc1, ecc2, d1, d2]);
-                    }
-                }
-            }
-        }
-
-        util.Util.fisher_yates_shuffle(result);
+        // All possible combinations of target digits
+        // Every row is a choice of optimal target digit
+        const digit_combs = [
+            [[2, 3], [2, 4], [2, 5]],   // opt digit == 2
+            [[3, 2], [3, 4], [3, 5]],   // opt digit == 3
+            [[4, 2], [4, 3], [4, 5]],
+            [[5, 2], [5, 3], [5, 4]]
+        ]
+        const digitRows = util.Util.generate_random_array([0, 1, 2, 3], this._numTotalTrials, 3);
+        const digitColumns = util.Util.generate_random_array([0, 1, 2], this._numTotalTrials, 3);
 
         const color_combs = [
             [[0, 1, 2], [0, 2, 1]],   // MAGENTA optimal
             [[1, 0, 2], [1, 2, 0]],   // CYAN optimal
-            [[2, 0, 1], [2, 1, 0]]    // GRAY optimal
+            [[2, 0, 1], [2, 1, 0]]    // ORANGE optimal
         ];
 
-        const opt = this._generate_opt_target_types(3, 108, 3);
-        const nonOpt = this._generate_opt_target_types(2, 108, 6);    // it actually doesn't matter
-        for (let i = 0; i < result.length; i++) {
-            let current_color_comb = color_combs[opt.pop()][nonOpt.pop()];  // get current trial opt & nonOpt color code
-            result[i] = result[i].concat(current_color_comb);
+        const colorRows = util.Util.generate_random_array( [0, 1, 2], this._numTotalTrials, 3 );
+        const colorColumns = util.Util.generate_random_array( [0, 1], this._numTotalTrials, 3 );
+
+        const ecc1 = util.Util.generate_random_array( [1, 2, 3], this._numTotalTrials, 3 );
+        const ecc2 = util.Util.generate_random_array( [1, 2, 3], this._numTotalTrials, 3 );
+
+        for (let i = 0; i < this._numTotalTrials; i++) {
+            result.push([ecc1.pop(), ecc2.pop()]);
         }
+
+        for (let i = 0; i < this._numTotalTrials; i++) {
+            let current_digit_comb = digit_combs[digitRows.pop()][digitColumns.pop()];
+            let current_color_comb = color_combs[colorRows.pop()][colorColumns.pop()];  // get current trial opt & nonOpt color code
+            result[i] = result[i].concat(current_digit_comb).concat(current_color_comb);
+        }
+        util.Util.fisher_yates_shuffle(result);
         return result;
 
     }
@@ -114,16 +123,16 @@ exp.ColorCueTrialDataGenerator = class extends exp.TrialDataGenerator {
         // 1.2 Add digits
         stimuli.add_a_text(new disp.Text(
             optTargDigit + '',
-            optTargGrid.x + '',
-            optTargGrid.y + '',
+            optTargGrid.x + this._display.digit_shift_x + '',
+            optTargGrid.y + this._display.digit_shift_y +'',
             this._display.digit_color,
             this._display.digit_size,
             this._display.digit_class_name
         ));
         stimuli.add_a_text(new disp.Text(
             nonOptTargDigit + '',
-            nonOptTargGrid.x + '',
-            nonOptTargGrid.y + '',
+            nonOptTargGrid.x + this._display.digit_shift_x + '',
+            nonOptTargGrid.y + this._display.digit_shift_y + '',
             this._display.digit_color,
             this._display.digit_size,
             this._display.digit_class_name
@@ -154,8 +163,8 @@ exp.ColorCueTrialDataGenerator = class extends exp.TrialDataGenerator {
                 // 2.2 add distractor digits
                 stimuli.add_a_text(new disp.Text(
                     util.Util.select_rand_from_array(this._distractorDigits) + '',
-                    grid.x + '',
-                    grid.y + '',
+                    grid.x + this._display.digit_shift_x + '',
+                    grid.y + this._display.digit_shift_y + '',
                     this._display.digit_color,
                     this._display.digit_size,
                     this._display.digit_class_name
