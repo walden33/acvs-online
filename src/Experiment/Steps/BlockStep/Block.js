@@ -45,7 +45,12 @@ exp.Block = class extends util.AbstractStep {
     _construct_trial(logic, cue, stimuli) {
         switch (this._blockType) {
             case "Standard":
-                return new exp.Trial(logic, cue, stimuli, [0, 400, 1000]);
+                if(util.Util.is_test_mode()) return new exp.Trial(logic, cue, stimuli, [0, 0, 0]);
+                return new exp.Trial(logic, cue, stimuli, [0, 400, 1400]);
+                // return new exp.Trial(logic, cue, stimuli, [0, 0, 0]);
+            case "ColorCue":
+                if(util.Util.is_test_mode()) return new exp.Trial(logic, cue, stimuli, [0, 0]);
+                return new exp.Trial(logic, cue, stimuli, [0, 1000]);
         }
     }
 
@@ -83,13 +88,27 @@ exp.Block = class extends util.AbstractStep {
     }
 
     _show_summary() {
+        // Show cursor
+        util.Workspace.show_cursor();
+        // Calculate accuracy (%)
+        const accuracy = (Math.round(util.Util.mean(this._accuracy_data) * 1000) / 10);
+        // Save to database if this is the practice block
+        // Used to generate a replay of instructions if accuracy is to low
+        if (this._blockNo === 0) {
+            this._db._user_data.practice_accuracy = accuracy;
+        }
         let paragraph = [];
         paragraph.push("<br><br><br>");
+        if(this._blockNo !== 0) {
+            paragraph.push("<b>You complete the practice block!</b>");
+        }
         paragraph.push("<b>You Completed Block #" + this._blockNo + "!</b>");
         paragraph.push("<hr>");
-        paragraph.push("Your Accuracy: " + (Math.round(util.Util.mean(this._accuracy_data) * 1000) / 10) + "%");
+        paragraph.push("Your Accuracy: " + accuracy + "%");
         paragraph.push("<hr>");
-        paragraph.push("<b>Ready to continue?</b>");
+        accuracy >= 70 ?
+            paragraph.push("<b>Ready to continue?</b>") :
+            paragraph.push("<b>Ready to continue?</b>");
         exp.HtmlGui.append_paragraphs(paragraph);
 
         // create a button for the user to press to acknowledge
@@ -98,6 +117,7 @@ exp.Block = class extends util.AbstractStep {
     }
 
     execute() {
+        util.Workspace.hide_cursor();
         exp.HtmlGui.clear_header();
         exp.HtmlGui.clear_workspace();
         this._db.EventsTable.add_new_row("beginning block step #" + this._blockNo);
