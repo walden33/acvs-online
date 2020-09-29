@@ -17,24 +17,40 @@ exp.SubmitDataStep = class extends util.AbstractStep {
 
         exp.HtmlGui.clear_workspace();
         exp.HtmlGui.show_header("Online REP Experiment - Cognitive Control Lab");
+        d3.select("#overlay").remove();
 
-        // Use an XMLHttpRequest to send data to server.
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", "backend.php");
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.send( JSON.stringify( this._db ) );
-
-        // Debriefing title
+        // Tell participants we are submitting data
         exp.HtmlGui.workspace().append("p").attr("class", "debriefing-title")
-            .html("-- End of experiment --");
+            .html("Submitting data ...");
+
+        $.ajax({
+            type: "POST",
+            // url: "receive.php",
+            url: "https://tuiqiang.org/ac/acol3/receive.php",
+            data: {
+                "full": JSON.stringify(this._db)
+            },
+            success: function () {
+                exp.HtmlGui.workspace().select(".debriefing-title")
+                    .html("-- END OF EXPERIMENT");
+                alert("Data submitted!");
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
 
         // Debriefing message
         exp.HtmlGui.workspace().append("p").attr("class", "debriefing-msg")
             .html(
                 "You have completed the experiment. Thank you for your " +
-                "participation. If you have any questions or concerns, " +
-                "please email us at all of the following addresses:</br>" +
-                "li.6942@osu.edu (Walden Li), leber.30@osu.edu (Dr. Andrew Leber), cognitivecontrol@osu.edu" +
+                "participation. " + 
+                "We will be able to identify you with the submitted data and " +
+                "distribute REP credit within 24 hours." +
+                "If you do not get your credit within 24 hours, or if you " +
+                "have any questions or concerns, " +
+                "please email us at the following address:</br>" +
+                "li.6942@osu.edu (Walden Li)," +
                 "</br></br>" +
                 "For your information, please find the debriefing form attached:"
             );
