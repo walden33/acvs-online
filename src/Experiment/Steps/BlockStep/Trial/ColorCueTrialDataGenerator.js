@@ -7,9 +7,10 @@
  */
 exp.ColorCueTrialDataGenerator = class extends exp.TrialDataGenerator {
 
-    constructor(is_practice = false) {
+    constructor(is_practice = false, has_preview = false) {
         super();
         this._is_practice = is_practice; // if the block is a practice block
+        this._has_preview = has_preview;
         this._numTotalTrials = 72;
         this._colors = [
             "rgb(150, 0, 150)", // MAGENTA
@@ -88,6 +89,7 @@ exp.ColorCueTrialDataGenerator = class extends exp.TrialDataGenerator {
         const sz = this._display.square_size;
 
         let cue_display = new disp.DisplayDataset();
+        let preview = new disp.DisplayDataset();
         let stimuli = new disp.DisplayDataset();
 
         const gridPos = this._display.get_grid_pos();
@@ -119,6 +121,7 @@ exp.ColorCueTrialDataGenerator = class extends exp.TrialDataGenerator {
         );
 
         stimuli.add_rects([optRect, nonOptRect]);
+        if (this._has_preview) preview.add_rects([optRect, nonOptRect]);
 
         // 1.2 Add digits
         stimuli.add_a_text(new disp.Text(
@@ -178,10 +181,16 @@ exp.ColorCueTrialDataGenerator = class extends exp.TrialDataGenerator {
         stimuli.merge( the_cue );
 
         // Return displays
-        return {
-            cue: [ cue_display ],
-            stimuli: [ stimuli ]
+        let returnObject = {};
+        if (this._has_preview) {
+            // If task has preview, include it
+            returnObject.cue = [ cue_display, preview ];
+        } else {
+            returnObject.cue = [ cue_display ];
         }
+        returnObject.stimuli = [ stimuli ];
+
+        return returnObject;
 
     }
 
