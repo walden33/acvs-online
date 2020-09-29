@@ -49,8 +49,8 @@ exp.Block = class extends util.AbstractStep {
                 return new exp.Trial(logic, cue, stimuli, [0, 400, 1400]);
                 // return new exp.Trial(logic, cue, stimuli, [0, 0, 0]);
             case "ColorCue":
-                if(util.Util.is_test_mode()) return new exp.Trial(logic, cue, stimuli, [0, 0]);
-                return new exp.Trial(logic, cue, stimuli, [0, 1000]);
+                if(util.Util.is_test_mode()) return new exp.Trial(logic, cue, stimuli, [0, 0, 0]);
+                return new exp.Trial(logic, cue, stimuli, [0, 400, 1400]);
         }
     }
 
@@ -99,10 +99,11 @@ exp.Block = class extends util.AbstractStep {
         }
         let paragraph = [];
         paragraph.push("<br><br><br>");
-        if(this._blockNo !== 0) {
+        if(this._blockNo === 0) {
             paragraph.push("<b>You complete the practice block!</b>");
+        } else {
+            paragraph.push("<b>You Completed Block #" + this._blockNo + "!</b>");
         }
-        paragraph.push("<b>You Completed Block #" + this._blockNo + "!</b>");
         paragraph.push("<hr>");
         paragraph.push("Your Accuracy: " + accuracy + "%");
         paragraph.push("<hr>");
