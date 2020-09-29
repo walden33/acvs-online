@@ -175,9 +175,10 @@ exp.ColorCueTrialDataGenerator = class extends exp.TrialDataGenerator {
             }
         }
 
-        // Add a cue to both cue and stimuli displays
+        // Add the cue to all cue, preview, and stimuli displays
         const the_cue = this._make_a_cue( optTargColor, nonOptTargColor, nonTargColor );
         cue_display.merge( the_cue );
+        preview.merge( the_cue );
         stimuli.merge( the_cue );
 
         // Return displays
