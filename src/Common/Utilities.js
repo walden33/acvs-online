@@ -160,7 +160,7 @@ util.Util = class Util {
      * @param {number} length : expected output array length
      * @param {number} max_rep : maximum number of repeats of a single object
      */
-    static generate_random_array(items, length, max_rep) {
+    static generate_random_array(items, length, max_rep=0) {
         if (length % items.length !== 0) {
             throw ("Output array length has to be a multiple of number of items")
         }
@@ -172,6 +172,7 @@ util.Util = class Util {
             }
         }
         Util.fisher_yates_shuffle(result);
+        if ( max_rep===0 ) return result;
 
         // Check if there are more than MAXREP reps in a run
         let previous = result[0];
