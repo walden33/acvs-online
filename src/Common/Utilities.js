@@ -138,7 +138,7 @@ util.Util = class Util {
                 }
             }
         }
-        if (!replace) array.splice(rand_index, 1);
+        if (!replace) array.splice(index, 1);
         return result;
     }
 
