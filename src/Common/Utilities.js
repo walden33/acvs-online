@@ -193,4 +193,12 @@ util.Util = class Util {
 
     }
 
+    static zeros(n) {
+        let result = new Array(n);
+        for (let i = 0; i < result.length; i++) {
+            result[i] = 0;
+        }
+        return result;
+    }
+
 }
