@@ -32,7 +32,7 @@ disp.Display = class {
         this.cue_stroke_width = 0.2;
         // Specific to temporal paradigm
         this.letter_cue_color = "white";
-        this.letter_cue_font_size = 12;
+        // this.letter_cue_font_size = this.digit_size;
     }
 
     /** Some setter methods. */
