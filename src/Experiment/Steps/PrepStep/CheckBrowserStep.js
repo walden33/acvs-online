@@ -22,7 +22,11 @@ exp.CheckBrowserStep = class extends(util.AbstractStep) {
 
     execute() {
 
-        const is_fullscreen = () => { return document.fullscreenElement !== null }
+        if ( navigator.cookieEnabled === false ) {
+        
+        }
+
+        const is_fullscreen = () => { return document.fullscreenElement !== null };
 
         // This function requests the browser to enter full screen. In Chrome,
         // the request can only be called by a user action such as a mouseclick

@@ -10,6 +10,7 @@ exp.ConsentStep = class extends(util.AbstractStep) {
     execute() {
 
         const CONSENT_FORM_URL = "https://psy-ccl.asc.ohio-state.edu/files/forms/consent_REP_online_exempt.pdf";
+        const SUB_ID = d3.select("#hidden-sub-id").html();
 
         // The message
         exp.HtmlGui.workspace().append("p")
@@ -34,14 +35,15 @@ exp.ConsentStep = class extends(util.AbstractStep) {
         .attr("class", "btn-wide")
         .text("I agree to participate")
         .on("click", (function(){
-            this._db.EventsTable.add_new_row("Worker agreed to consent form");
+            this._db.EventsTable.add_new_row("Subject agreed to consent form");
             alert("Before we get started, please answer 2 quick questions.");
             let age = prompt("Please type your age:", "N/A");
             let gender = prompt("Please type your gender:", "N/A");
             alert("Thank you!");
             this._db._user_data = {
                 self_reported_age: age,
-                self_reported_gender: gender
+                self_reported_gender: gender,
+                sub_id: SUB_ID
             };
             exp.HtmlGui.clear_workspace();
             this.step_completed_signal.emit();
