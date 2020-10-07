@@ -27,7 +27,7 @@ util.Database = class {
   ///
   constructor () {
     // timestamp for when this object was created
-    this._time_instantiated = performance.now();
+    this._database_created_at = performance.now();
     // an array containing the names of the tables in this db
     this._array_of_table_names = [];
   }
@@ -40,7 +40,7 @@ util.Database = class {
     // record the new table's name
     this._array_of_table_names.push(table_name);
     // create the new table
-    this[table_name] = new util.Table(this._time_instantiated);
+    this[table_name] = new util.Table(this._database_created_at);
   }
 
   /////////////////////////////////////////////////////////////////////////////

@@ -3,7 +3,9 @@
  * 
  * @package acvs-online
  * @author Walden Li
- * @version 1.4 (8/30/2020)
+ * @version 1.5 (10/2/2020)
+ * 
+ * @update 1.5 : added timeline parameter to the constructor
  */
 exp.Block = class extends util.AbstractStep {
 
@@ -11,17 +13,21 @@ exp.Block = class extends util.AbstractStep {
      * 
      * @param {util.Database} db 
      * @param {number} blockNo 
-     * @param {string} blockType
      * @param {exp.TrialDataGenerator} dataGenerator 
+     * @param {Array<number>} timeline
      */
-    constructor(db, blockNo, blockType, dataGenerator) {
+    constructor(db, blockNo, dataGenerator, timeline) {
         super();
 
         this._db = db;
 
         this._blockNo = blockNo;
 
-        this._blockType = blockType;
+        if (util.Util.is_test_mode()) {
+            this._trial_timeline = util.Util.zeros(timeline.length);
+        } else {
+            this._trial_timeline = timeline;
+        }
 
         this._display_dataset_generator = dataGenerator;
 
@@ -43,15 +49,19 @@ exp.Block = class extends util.AbstractStep {
      * @param {Array<disp.DisplayDataset>} stimuli : array (also usually one element) that contains the stimuli <DisplayDataset>(s) for the trial
      */
     _construct_trial(logic, cue, stimuli) {
-        switch (this._blockType) {
-            case "Standard":
-                if(util.Util.is_test_mode()) return new exp.Trial(logic, cue, stimuli, [0, 0, 0]);
-                return new exp.Trial(logic, cue, stimuli, [0, 400, 1400]);
-                // return new exp.Trial(logic, cue, stimuli, [0, 0, 0]);
-            case "ColorCue":
-                if(util.Util.is_test_mode()) return new exp.Trial(logic, cue, stimuli, [0, 0, 0]);
-                return new exp.Trial(logic, cue, stimuli, [0, 400, 1400]);
-        }
+        // switch (this._blockType) {
+        //     case "Standard":
+        //         if(util.Util.is_test_mode()) return new exp.Trial(logic, cue, stimuli, [0, 0, 0]);
+        //         return new exp.Trial(logic, cue, stimuli, [0, 400, 1400]);
+        //         // return new exp.Trial(logic, cue, stimuli, [0, 0, 0]);
+        //     case "ColorCue":
+        //         if(util.Util.is_test_mode()) return new exp.Trial(logic, cue, stimuli, [0, 0, 0]);
+        //         return new exp.Trial(logic, cue, stimuli, [0, 400, 1400]);
+        //     case "SpatialCue":
+        //         if(util.Util.is_test_mode()) return new exp.Trial(logic, cue, stimuli, [0, 0]);
+        //         return new exp.Trial(logic, cue, stimuli, [0, 400]);
+        // }
+        return new exp.Trial(logic, cue, stimuli, this._trial_timeline);
     }
 
     _run_next_trial(previous_results = null) {
@@ -90,13 +100,7 @@ exp.Block = class extends util.AbstractStep {
     _show_summary() {
         // Show cursor
         util.Workspace.show_cursor();
-        // Calculate accuracy (%)
-        const accuracy = (Math.round(util.Util.mean(this._accuracy_data) * 1000) / 10);
-        // Save to database if this is the practice block
-        // Used to generate a replay of instructions if accuracy is to low
-        if (this._blockNo === 0) {
-            this._db._user_data.practice_accuracy = accuracy;
-        }
+
         let paragraph = [];
         paragraph.push("<br><br><br>");
         if(this._blockNo === 0) {

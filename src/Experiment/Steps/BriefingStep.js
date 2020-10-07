@@ -25,8 +25,7 @@ exp.BriefingStep = class extends(util.AbstractStep) {
     let keyboard = new util.KeyFilter( (function (key) {
         if (key == this._callbackKey) {
           keyboard.destroy();
-          this._db.EventsTable.add_new_row("briefing was step completed");
-          // while(!util.Util.window_is_maximized()) {}
+          this._db.EventsTable.add_new_row("Instruction page callback key received.");
           this.step_completed_signal.emit();
         }
       }).bind(this)
