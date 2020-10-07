@@ -14,7 +14,7 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
         super();
         this._is_practice = is_practice; // if block is practice block, _make_block_dataset will return only 10 trials
         this._has_preview = has_preview; // if task has preview, _make_stimuli_dataset will return both preview and search array displays
-        this._numTotalTrials = 108;
+        this._numTotalTrials = 84;
         this._colors = [
             "rgb(255, 0, 0)",
             "rgb(0, 0, 255)",
@@ -43,23 +43,25 @@ exp.StandardTrialDataGenerator = class extends exp.TrialDataGenerator {
 
         let result = [];
 
-        for (let ecc1 = 1; ecc1 <= 3; ecc1++) {
-            for (let ecc2 = 1; ecc2 <= 3; ecc2++) {
-                for (let d1 = 2; d1 <= 5; d1++) {
-                    for (let d2 = 2; d2 <= 5; d2++) {
-                        if (d1 !== d2) result.push([ecc1, ecc2, d1, d2]);
-                    }
-                }
-            }
-        }
-        result = util.Util.fisher_yates_shuffle(result);
+        // Determine target eccentricity
+        let ecc1 = util.Util.generate_random_array([1, 2, 3], this._numTotalTrials, 3);
+        let ecc2 = util.Util.generate_random_array([1, 2, 3], this._numTotalTrials, 3);
 
-        let optTargColorArray = this._generate_opt_target_types(2, this._numTotalTrials, 6);
-        let optColor, nonOptColor;  // temp vars for each trial
-        for (let i = 0; i < result.length; i++) {
-            optColor = optTargColorArray.pop();
-            optColor === 1 ? nonOptColor = 0 : nonOptColor = 1;
-            result[i] = result[i].concat([optColor, nonOptColor]);
+        for (let i = 0; i < this._numTotalTrials; i++) {
+            result.push([ecc1.pop(), ecc2.pop()]);
+        }
+        util.Util.fisher_yates_shuffle(result);    // shuffle the combination
+        
+        // Generate digits
+        let digits = this._generate_trial_digits(this._numTotalTrials);
+
+        // Generate optimal target colors
+        let optColors = util.Util.generate_random_array([1,2], this._numTotalTrials, 3);
+        // Add everything to the output
+        for( let i = 0; i < result.length; i++ ) {
+            let optColor = optColors.pop();
+            let nonOptColor = util.Util.choose_from([1,2], [optColor]);
+            result[i] = result[i].concat(digits.pop().concat([optColor, nonOptColor]));
         }
 
         return result;

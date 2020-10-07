@@ -17,54 +17,51 @@
  * @author Walden Li
  */
 exp.SpatialCueTrialDataGenerator = class extends exp.TrialDataGenerator {
-    constructor() {
-        super()
-        this.numTotalTrials = 108;  // total number of trials
-        this.numRegions = 3;    // total number of separated areas in a display
-        this.numTrialsPerRegion = this.numTotalTrials / this.numRegions;
-        this.trialConds = this._generate_trial_conditions()
-        this.blockData = this._make_block_dataset( this.trialConds );
+
+    constructor(is_practice = false) {
+        super();
+        this._is_practice = is_practice;
+        this._numTotalTrials = 108;  // total number of trials
+        this._numRegions = 5;    // total number of separated areas in a display
+        this._numTrialsPerRegion = this._numTotalTrials / this._numRegions;
+        this._square_color = "rgb(98, 98, 98)";
+        this._trialConds = this._generate_trial_conditions();
+        this._blockData = this._make_block_dataset(this._trialConds);
     }
 
     /**
      * A method that generates a trial condition matrix (here implemented by a
      * two-dimensional Array).
-     * 
-     * What get controlled in ac-spatial-cue?
-     * Crossed vars: optDigit (4) * nonoptDigit (3) * optEcc (3) * nonoptEcc(3) = 108
-     * We also want to balance optimal target regions (3/5), but will not cross
-     * them with other variables.
      */
     _generate_trial_conditions() {
-        // First add non target region-specific conditions
+
         let result = [];
-        for (let ecc1 = 1; ecc1 <= 3; ecc1++) {
-            for (let ecc2 = 1; ecc2 <= 3; ecc2++) {
-                for (let d1 = 2; d1 <= 5; d1++) {
-                    for (let d2 = 2; d2 <= 5; d2++) {
-                        if (d1 != d2)
-                            result.push([ecc1, ecc2, d1, d2]);
-                    }
-                }
-            }
+
+        // Determine target eccentricity
+        let ecc1 = util.Util.generate_random_array([1, 2, 3], this._numTotalTrials, 3);
+        let ecc2 = util.Util.generate_random_array([1, 2, 3], this._numTotalTrials, 3);
+
+        for (let i = 0; i < this._numTotalTrials; i++) {
+            result.push([ecc1.pop(), ecc2.pop()]);
         }
-        result = util.Util.fisher_yates_shuffle(result);    // shuffle the combination
+        util.Util.fisher_yates_shuffle(result);    // shuffle the combination
+
+        // Generate digits
+        let digits = this._generate_trial_digits(this._numTotalTrials);
+
         // Then add optimal target regions
-        let optTargTypesArray = this._generate_opt_target_types( this.numRegions, this.numTotalTrials, 3 );
+        let optRegions = util.Util.generate_random_array([1, 2, 3], this._numTotalTrials, 3);
         for (let i = 0; i < result.length; i++) {
-            let optTargRegion = optTargTypesArray.pop();
-            let nonOptTargRegion = util.Util.select_rand_from_array([1,2,3], optTargRegion);
-            result[i] = result[i].concat([ optTargRegion, nonOptTargRegion ]);
+            let optRegion = optRegions.pop();
+            let nonOptRegion = util.Util.choose_from([1, 2, 3], [optRegion]);
+            result[i] = result[i].concat(digits.pop())
+                .concat([optRegion, nonOptRegion]);
         }
         return result;
     }
 
 
     /**
-     * A helper method previously known as _make_chartDataset, but it did not
-     * incorprate any display-specific parameters. This new version queries
-     * disp.Display class and makes a <disp.DisplayDataset> that can be directly
-     * used by display widget to draw the stimuli.
      * 
      * @param {number} optTargEcc : 1-3
      * @param {number} nonOptTargEcc : 1-3
@@ -75,8 +72,10 @@ exp.SpatialCueTrialDataGenerator = class extends exp.TrialDataGenerator {
      * 
      * @returns {disp.DisplayDataset}
      */
-    _make_stimuli_display(optTargEcc, nonOptTargEcc, optTargDigit,
+    _make_trial_dataset(optTargEcc, nonOptTargEcc, optTargDigit,
         nonOptTargDigit, optTargRegion, nonOptTargRegion) {
+
+        const sz = this._display.square_size;
 
         /**
          * A helper function that tells if a certain grid belongs to an AC
@@ -95,174 +94,181 @@ exp.SpatialCueTrialDataGenerator = class extends exp.TrialDataGenerator {
             return 0;
         }
 
-        // Initialize a display dataset object
-        let result = new disp.DisplayDataset();
-
-        // Copy some established logic to the object
-        result.set_logic( "optTargEcc", optTargEcc );
-        result.set_logic( "nonOptTargEcc", nonOptTargEcc );
-        result.set_logic( "optTargDigit", optTargDigit );
-        result.set_logic( "nonOptTargDigit", nonOptTargDigit );
-        result.set_logic( "optTargRegion", optTargRegion );
-        result.set_logic( "nonOptTargRegion", nonOptTargRegion );
-
+        // Initialize display datasets
+        let cue_display = new disp.DisplayDataset();
+        let stimuli = new disp.DisplayDataset();
 
         // Get grid position coordinates
-        const gridPos = this.display.get_grid_pos();
+        const gridPos = this._display.get_grid_pos();
 
-        // Add candidate grid indexes into pools
-        let optTargPool = [], nonOptTargPool = [], distractorPool = [];
-        for ( let [i, grid] of gridPos ) {
-            if ( grid.ecc === optTargEcc && getRegionOf(grid.alpha) === optTargRegion ) {
-                optTargPool.push(i);    // add the grid index to the pool
-            } else if ( grid.ecc === nonOptTargEcc && getRegionOf(grid.alpha) === nonOptTargRegion) {
+        // Add potential targets to pools according to required eccentricity and region
+        let optTargPool = [];
+        let nonOptTargPool = [];
+        let nonTargPool = [];
+
+        for (let [i, grid] of gridPos) {
+            let gridRegion = getRegionOf(grid.alpha);
+            if ((grid.ecc === optTargEcc) &&
+                (gridRegion === optTargRegion)) {
+                optTargPool.push(i);
+            } else if ((grid.ecc === nonOptTargEcc) &&
+                (gridRegion === nonOptTargRegion)) {
                 nonOptTargPool.push(i);
-            // Next add distractors, and in this paradigm, avoid region boundary lines
-            } else if ( getRegionOf(grid.alpha) !== 0 ) {    // if region is not 0 (boundary lines)
-                distractorPool.push(i);
+            } else {    // add the rest to non-target pool
+                if (gridRegion!==0) nonTargPool.push(i);
             }
         }
 
-        // Select the optimal and non-optimal target
-        let optTargIndex = util.Util.select_rand_from_array( optTargPool );
-        let nonOptTargIndex = util.Util.select_rand_from_array( nonOptTargPool );
+        // Randomly select targets
+        const optTargPos = util.Util.choose_from(optTargPool, [], false);
+        const nonOptTargPos = util.Util.choose_from(nonOptTargPool, [], false);
 
-        // Store these information in the logic of the dataset
-        result.set_logic( "optTargIndex", optTargIndex );
-        result.set_logic( "nonOptTargIndex", nonOptTargIndex );
+        // Add the rest to non-target pool
+        nonTargPool = nonTargPool.concat(optTargPool).concat(nonOptTargPool);
 
-        // Start making the display
-        // First add two target squares
-        let optGrid = gridPos.get(optTargIndex);
-        let nonOptGrid = gridPos.get(nonOptTargIndex);
-        result.add_rects([
-            new disp.Rect(
-                optGrid.rect_x+'',
-                optGrid.rect_y+'',
-                this.display.square_size+'',
-                this.display.square_size+'',
-                this.display.square_color
-            ),
-            new disp.Rect(
-                nonOptGrid.rect_x+'',
-                nonOptGrid.rect_y+'',
-                this.display.square_size+'',
-                this.display.square_size+'',
-                this.display.square_color
-            )
-        ]);
-        result.add_texts([
-            new disp.Text(
-                optTargDigit+'',
-                optGrid.x+'',
-                optGrid.y+'',
-                this.display.digit_color,
-                this.display.digit_size,
-                this.display.digit_class_name
-            )
-        ]);
-        result.add_texts([
-            new disp.Text(
-                nonOptTargDigit+'',
-                nonOptGrid.x+'',
-                nonOptGrid.y+'',
-                this.display.digit_color,
-                this.display.digit_size,
-                this.display.digit_class_name
-            )
-        ]);
+        // Shuffle the non-target pool
+        // util.Util.fisher_yates_shuffle(nonTargPool);
 
-        // Then add distractor squares
-        for ( let [i, grid] of gridPos ) {
-            if ( i !== optTargIndex && i !== nonOptTargIndex) { // if non-target
-                if ( getRegionOf(grid.alpha) !== 0 ) {   // if not on the region boundary lines
-                    // Add the rect
-                    result.add_a_rect( new disp.Rect(
-                        grid.rect_x+'',
-                        grid.rect_y+'',
-                        this.display.square_size+'',
-                        this.display.square_size+'',
-                        this.display.square_color,
-                        this.display.digit_class_name
-                    ));
-                    // And the digit
-                    result.add_a_text( new disp.Text(
-                        util.Util.select_rand_from_array( this.distractorDigits ) +'',
-                        grid.x,
-                        grid.y,
-                        this.display.digit_color,
-                        this.display.digit_size,
-                        this.display.digit_class_name
-                    ));
-                }
-            }
+
+        const optTargGrid = gridPos.get(optTargPos);
+        const nonOptTargGrid = gridPos.get(nonOptTargPos);
+
+        // 1. Add two targets
+
+        // 1.1 Add rects
+        let optRect = new disp.Rect(
+            optTargGrid.rect_x + '',
+            optTargGrid.rect_y + '',
+            sz + '',
+            sz + '',
+            this._square_color
+        );
+        let nonOptRect = new disp.Rect(
+            nonOptTargGrid.rect_x + '',
+            nonOptTargGrid.rect_y + '',
+            sz + '',
+            sz + '',
+            this._square_color
+        );
+
+        stimuli.add_rects([optRect, nonOptRect]);
+
+        // 1.2 Add digits
+        stimuli.add_a_text(new disp.Text(
+            optTargDigit + '',
+            optTargGrid.x + this._display.digit_shift_x + '',
+            optTargGrid.y + this._display.digit_shift_y +'',
+            this._display.digit_color,
+            this._display.digit_size,
+            this._display.digit_class_name
+        ));
+        stimuli.add_a_text(new disp.Text(
+            nonOptTargDigit + '',
+            nonOptTargGrid.x + this._display.digit_shift_x + '',
+            nonOptTargGrid.y + this._display.digit_shift_y + '',
+            this._display.digit_color,
+            this._display.digit_size,
+            this._display.digit_class_name
+        ));
+
+        // 2. Add distractors
+        const n = nonTargPool.length;   // number of distractor squares
+        for( let i = 0; i <n; i++ ) {
+            let grid = gridPos.get(nonTargPool.pop());
+
+            // 2.1 Add distractor rects
+            stimuli.add_a_rect( new disp.Rect(
+                grid.rect_x + '',
+                grid.rect_y + '',
+                sz + '',
+                sz + '',
+                this._square_color
+            ));
+
+            // 2.2 Add distractor digits
+            stimuli.add_a_text(new disp.Text(
+                util.Util.select_rand_from_array(this._distractorDigits) + '',
+                grid.x + this._display.digit_shift_x + '',
+                grid.y + this._display.digit_shift_y + '',
+                this._display.digit_color,
+                this._display.digit_size,
+                this._display.digit_class_name
+            ));
         }
 
-        this._add_a_cue( result, optTargRegion, nonOptTargRegion );
+        // Add the cue to all cue, preview, and stimuli displays
+        const the_cue = this._make_a_cue( optTargRegion, nonOptTargRegion );
+        cue_display.merge( the_cue );
+        stimuli.merge( the_cue );
 
-        return result;
+        // Return displays
+        return {
+            cue: [ cue_display ],
+            stimuli: [ stimuli ]
+        };
 
     }
 
-    /**
-     * Given an optTargRegion and nonOptTargRegion combination, generate a cue
-     * that indicates these two regions.
-     * 
-     * @returns {disp.DisplayDataset}
-     * 
-     * TODO: Remove unused params
-     */
-    _make_cue_display(optTargEcc, nonOptTargEcc, optTargDigit,
-        nonOptTargDigit, optTargRegion, nonOptTargRegion) {
+
+    _make_a_cue(optTargRegion, nonOptTargRegion) {
+
         let result = new disp.DisplayDataset();
-        // Draw a circle on the center of the screen
-        this._add_a_cue( result, optTargRegion, nonOptTargRegion );
-        return result;
-    }
-
-
-    /**
-     * Given a display dataset and opt/nonopt regions, add to the dataset a
-     * circle cue at the center of the display.
-     * 
-     * @param {disp.DisplayDataset} dispDataset : A display dataset that needs to add the cue to
-     * @param {number} optTargRegion 
-     * @param {number} nonOptTargRegion 
-     * 
-     */
-    _add_a_cue( dispDataset, optTargRegion, nonOptTargRegion ) {
 
         // Get some useful variables
-        const x = this.display.screen_center_x, y = this.display.screen_center_y;
-        const r = this.display.cue_radius;
-        const color = this.display.square_color;
-        const sw = this.display.cue_stroke_width;
+        const x = this._display.screen_center_x, y = this._display.screen_center_y;
+        const r = this._display.cue_radius;
+        const color = this._display.square_color;
+        const sw = this._display.cue_stroke_width;
 
         // Draw a circle on the center of the screen
-        dispDataset.add_a_circle(new disp.Circle(
+        result.add_a_circle(new disp.Circle(
             x, y, r, null, color, sw
         ));
 
         // optTargRegion = 1, 2, 3
         // Draw region boundary line #1 (smaller rotation from origin)
-        dispDataset.add_a_line(new disp.Line(
+        result.add_a_line(new disp.Line(
             x,
             y,
-            x + Math.cos(Math.PI/2 + 2*Math.PI/3*(optTargRegion-1)) * r ,
-            y + Math.sin(Math.PI/2 + 2*Math.PI/3*(optTargRegion-1)) * r,
+            x + Math.cos(Math.PI / 2 + 2 * Math.PI / 3 * (optTargRegion - 1)) * r,
+            y + Math.sin(Math.PI / 2 + 2 * Math.PI / 3 * (optTargRegion - 1)) * r,
             color,
             sw
         ));
 
         // Draw region boundary line #2 (larger rotation from origin)
-        dispDataset.add_a_line(new disp.Line(
+        result.add_a_line(new disp.Line(
             x,
             y,
-            x + Math.cos(Math.PI/2 + 2*Math.PI/3*optTargRegion) * r ,
-            y + Math.sin(Math.PI/2 + 2*Math.PI/3*optTargRegion) * r,
+            x + Math.cos(Math.PI / 2 + 2 * Math.PI / 3 * optTargRegion) * r,
+            y + Math.sin(Math.PI / 2 + 2 * Math.PI / 3 * optTargRegion) * r,
             color,
             sw
         ));
+
+        return result;
+    }
+
+
+    /**
+     * 
+     * @param {number} optTargEcc : 1-3
+     * @param {number} nonOptTargEcc : 1-3
+     * @param {number} optTargDigit : 2-5
+     * @param {number} nonOptTargDigit : 2-5
+     * @param {number} optTargRegion : 1-5
+     * @param {number} nonOptTargRegion : 1-5
+     */
+    _make_trial_logic(optTargEcc, nonOptTargEcc, optTargDigit, nonOptTargDigit,
+        optTargRegion, nonOptTargRegion) {
+        return {
+            optTargEcc: optTargEcc,
+            nonOptTargEcc: nonOptTargEcc,
+            optTargDigit: optTargDigit,
+            nonOptTargDigit: nonOptTargDigit,
+            optTargRegion: optTargRegion,
+            nonOptTargRegion: nonOptTargRegion
+        };
     }
 
     /**
@@ -271,17 +277,23 @@ exp.SpatialCueTrialDataGenerator = class extends exp.TrialDataGenerator {
      * 
      * @param {Array<number>} trialConds 
      */
-    _make_block_dataset( trialConds ) {
+    _make_block_dataset(trialConds) {
         let trial_conditions = trialConds.slice();  // make a copy
         let result = [];
         let currentTrialCond;
-        while( trial_conditions.length > 0 ) {
+        while (trial_conditions.length > 0) {
             currentTrialCond = trial_conditions.pop();
-            result.push([
-                this._make_cue_display( ...currentTrialCond ), 
-                this._make_stimuli_display( ...currentTrialCond )
-            ])
+            let currentTrialDisplays = this._make_trial_dataset(...currentTrialCond);
+            let currentTrialLogic = this._make_trial_logic(...currentTrialCond);
+            result.push(
+                {
+                    logic: currentTrialLogic,
+                    cue: currentTrialDisplays.cue,
+                    stimuli: currentTrialDisplays.stimuli
+                }
+            )
         }
+        if (this._is_practice) result = result.slice(0, 10);
         return result;
     }
 
