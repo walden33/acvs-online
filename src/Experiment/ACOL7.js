@@ -1,7 +1,7 @@
 /**
  * 
  */
-exp.ACOL6 = class extends exp.ExperimentKernel {
+exp.ACOL7 = class extends exp.ExperimentKernel {
 
     constructor() {
 
@@ -9,7 +9,7 @@ exp.ACOL6 = class extends exp.ExperimentKernel {
         //
         // Set up the database
         //
-        this._db.experiment_type = "ACOL-5";
+        this._db.experiment_type = "ACOL-6";
 
         this._db.add_new_table("EventsTable");
         this._db.EventsTable.add_new_column("Event");
