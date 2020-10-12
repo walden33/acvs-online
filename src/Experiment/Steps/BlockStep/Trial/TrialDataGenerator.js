@@ -117,6 +117,35 @@ exp.TrialDataGenerator = class {
 
     }
 
+
+    /**
+     * 
+     * @param {number} num_total_trials 
+     * @requires num_total_trials % 12 === 0
+     */
+    _generate_trial_digits(num_total_trials) {
+
+        let result = [];
+
+        // All possible combinations of target digits
+        // Every row is a choice of optimal target digit
+        const digit_combs = [
+            [[2, 3], [2, 4], [2, 5]],   // opt digit == 2
+            [[3, 2], [3, 4], [3, 5]],   // opt digit == 3
+            [[4, 2], [4, 3], [4, 5]],
+            [[5, 2], [5, 3], [5, 4]]
+        ]
+        const digitRows = util.Util.generate_random_array([0, 1, 2, 3], num_total_trials, 3);
+        const digitColumns = util.Util.generate_random_array([0, 1, 2], num_total_trials, 3);
+
+        for( let i = 0; i < num_total_trials; i++ ) {
+            result.push( digit_combs[digitRows.pop()][digitColumns.pop()] );
+        }
+
+        return result;
+
+    }
+
     /**
      * Returns the next array of <DisplayDataset> with a trial condition
      * logic array in this block.  When exhausted this method will return null.
