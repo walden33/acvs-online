@@ -29,19 +29,19 @@ exp.SpatialLetterCueDisplayGenerator = class extends exp.TrialDataGenerator {
         let result = [];
 
         // Determine target eccentricity
-        let ecc1 = util.Util.generate_random_array([1, 2, 3], this._numTotalTrials, 3);
-        let ecc2 = util.Util.generate_random_array([1, 2, 3], this._numTotalTrials, 3);
+        let ecc1 = util.Util.generate_random_array([1, 2, 3], this._num_total_trials, 3);
+        let ecc2 = util.Util.generate_random_array([1, 2, 3], this._num_total_trials, 3);
 
-        for (let i = 0; i < this._numTotalTrials; i++) {
+        for (let i = 0; i < this._num_total_trials; i++) {
             result.push([ecc1.pop(), ecc2.pop()]);
         }
         util.Util.fisher_yates_shuffle(result);    // shuffle the combination
 
         // Generate digits
-        let digits = this._generate_trial_digits(this._numTotalTrials);
+        let digits = this._generate_trial_digits(this._num_total_trials);
 
         // Then add optimal target regions
-        let optRegions = util.Util.generate_random_array([1, 2, 3], this._numTotalTrials, 3);
+        let optRegions = util.Util.generate_random_array([1, 2, 3], this._num_total_trials, 3);
         for (let i = 0; i < result.length; i++) {
             let optRegion = optRegions.pop();
             let nonOptRegion = util.Util.choose_from([1, 2, 3], [optRegion]);
