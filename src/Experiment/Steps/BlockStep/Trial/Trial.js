@@ -24,16 +24,16 @@ exp.Trial = class extends exp.AbstractTrial {
         this.trial_data = { "trialCreatedAt": performance.now() };
         // this is the amount of time a message is shown to the user after hitting
         // a response key
-        this.length_of_time_debreifing_is_shown = 1000; //ms
+        this.duration_feedback = util.Util.is_test_mode() ? 0 : 1000;
         // this is the amount of time a fixation cross is shown to the user before
         // the graphic is shown
 
         //TODO: blank screen 500ms
 
-        //TODO: cue for 1000ms
-        this.length_of_time_cue_is_shown = 1000;
+        // //TODO: cue for 1000ms
+        // this.length_of_time_cue_is_shown = 1000;
 
-        this.length_of_time_cross_is_shown = 1500 // ms
+        // this.length_of_time_cross_is_shown = 1500 // ms
         // this maps the answer keys to the target numbers
         this.answer_keys = new Map([["v", 2], ["b", 3], ["n", 4], ["m", 5]]);
         // this is a counter for the total number of keys the user presses during
@@ -85,6 +85,10 @@ exp.Trial = class extends exp.AbstractTrial {
             result = true;
         } else {
             util.Util.play_beep_sound();
+            exp.HtmlGui.show_message("Please use: 'v' for 2, 'b' for 3, 'n' for 4, and 'm' for 5", "red");
+            setTimeout(function () {
+                exp.HtmlGui.show_message(".", "black");
+            }, 2000);
         }
 
         this.trial_data.blockTrial = this._trial_number_in_block;
@@ -151,13 +155,13 @@ exp.Trial = class extends exp.AbstractTrial {
         }
 
         if (window._secret_speed != undefined) {
-            this.length_of_time_debreifing_is_shown = window._secret_speed;
+            this.duration_feedback = window._secret_speed;
         }
 
         setTimeout((function () {
             this.display_widget = this.display_widget.destroy();
             this.trial_completed_signal.emit(this.trial_data);
-        }).bind(this), this.length_of_time_debreifing_is_shown);
+        }).bind(this), this.duration_feedback);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
