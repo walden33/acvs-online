@@ -13,6 +13,35 @@ disp.DisplayGeneratorKernel = class {
         this._block_data = [];
     }
 
+    _get_grid_pos() {
+        let result = new Map();
+        const r = this._setting.ring_radius;
+        const cx = this._setting.screen_center_x;
+        const cy = this._setting.screen_center_y;
+        const sz = this._setting.square_size;
+        const p = this._setting.subring_radius_proportion;
+        let i = 1;  // grid number, to be set as the key of the output <Map>
+        for (let j = 0; j < 3; j++) {   // three rings, from inner to outer
+            let n = this._setting.ring_square_numbers[j];    // get # of squares in this ring
+            for (let k = 0; k < n; k++ ) {
+                // Create an Object to store grid info
+                let grid = {};
+                let angle = 2 * Math.PI / n;
+                grid.x = Math.cos(angle * k + Math.PI / 2) * r * p[j] + cx;
+                grid.y = Math.sin(angle * k + Math.PI / 2) * r * p[j] + cy;
+                grid.rect_x = grid.x - sz/2;
+                grid.rect_y = grid.y - sz/2;
+                grid.ecc = j+1;     // eccentricity
+                grid.alpha = angle*k;
+                // Set the Object as the value of the key (grid number)
+                result.set(i, grid);
+                i++;
+            }
+
+        }
+        return result;
+    }
+
     /**
      * Given display grid position info, the optimal target eccentricity, and
      * the non-optimal target eccentricity, return a js object with three items:
@@ -111,7 +140,7 @@ disp.DisplayGeneratorKernel = class {
      * Returns the next array of <Display> with a trial condition logic array
      * in this block.  When exhausted this method will return null.
      */
-    yield_trial_dataset() {
+    yield_trial_display() {
         if ( this._block_data.length > 0 ) {
             return this._block_data.pop();
         } else {

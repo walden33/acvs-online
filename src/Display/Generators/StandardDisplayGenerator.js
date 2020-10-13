@@ -12,12 +12,12 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGeneratorKernel {
 
     /**
      * 
-     * @param {boolean} has_preview If the displays has a preview frame before
+     * @param {boolean} has_preview : If the displays has a preview frame before
      *   stimuli array appears.
-     * @param {number} num_trials The number of trials specified for generating
-     *   the block trial conditions.
-     * @param {number} num_trials_to_slice The number of actual trials needed in
-     *   this block, if defined.
+     * @param {number} num_trials : The number of trials specified for
+     *   generating the block trial conditions.
+     * @param {number} num_trials_to_slice : The number of actual trials needed
+     *   in this block, if defined.
      * @requires
      *   (num_trials_to_slice <= num_trials && num_trials_to_slice % 3 === 0)
      *   if (num_trials_to_slice !== undefined)
@@ -31,8 +31,8 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGeneratorKernel {
             throw ( "LogicError: Number of total block trials must be an " +
             "integer multiple of 3.");
         }
-        this._num_sliced_trials = num_slice;
-        if (num_slice !== undefined && num_slice > num_trials) {
+        this._num_trials_to_slice = num_trials_to_slice;
+        if (num_trials_to_slice !== undefined && num_trials_to_slice > num_trials) {
             throw ( "LogicError: Number of sliced trials must not exceed " +
             "number of total trials." );
         }
@@ -71,7 +71,7 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGeneratorKernel {
         let preview = new disp.DisplayDataset();
         let stimuli = new disp.DisplayDataset();
 
-        const gridPos = this._setting.get_grid_pos();
+        const gridPos = this._get_grid_pos();
 
         const targPosInfo = this._generate_target_pools_by_ecc(gridPos, optTargEcc, nonOptTargEcc);
         const optTargPos = targPosInfo.optTargPos;
@@ -140,7 +140,8 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGeneratorKernel {
 
             // 2.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
-                util.Util.select_rand_from_array(this._targetDigits.concat(this._distractorDigits)) + '',
+                util.Util.select_rand_from_array(this._target_digits.concat(
+                    this._distractor_digits)) + '',
                 grid.x + this._setting.digit_shift_x + '',
                 grid.y + this._setting.digit_shift_y + '',
                 this._setting.digit_color,
@@ -168,7 +169,7 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGeneratorKernel {
 
             // 3.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
-                util.Util.select_rand_from_array(this._distractorDigits) + '',
+                util.Util.select_rand_from_array(this._distractor_digits) + '',
                 grid.x + this._setting.digit_shift_x + '',
                 grid.y + this._setting.digit_shift_y + '',
                 this._setting.digit_color,
@@ -196,7 +197,7 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGeneratorKernel {
 
             // 4.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
-                util.Util.select_rand_from_array(this._distractorDigits) + '',
+                util.Util.select_rand_from_array(this._distractor_digits) + '',
                 grid.x + this._setting.digit_shift_x + '',
                 grid.y + this._setting.digit_shift_y + '',
                 this._setting.digit_color,
@@ -225,7 +226,7 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGeneratorKernel {
 
             // 5.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
-                util.Util.select_rand_from_array(this._distractorDigits) + '',
+                util.Util.select_rand_from_array(this._distractor_digits) + '',
                 grid.x + this._setting.digit_shift_x + '',
                 grid.y + this._setting.digit_shift_y + '',
                 this._setting.digit_color,
@@ -263,19 +264,19 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGeneratorKernel {
         let result = [];
 
         // Determine target eccentricity
-        let ecc1 = util.Util.generate_random_array([1, 2, 3], this._numTotalTrials, 3);
-        let ecc2 = util.Util.generate_random_array([1, 2, 3], this._numTotalTrials, 3);
+        let ecc1 = util.Util.generate_random_array([1, 2, 3], this._num_total_trials, 3);
+        let ecc2 = util.Util.generate_random_array([1, 2, 3], this._num_total_trials, 3);
 
-        for (let i = 0; i < this._numTotalTrials; i++) {
+        for (let i = 0; i < this._num_total_trials; i++) {
             result.push([ecc1.pop(), ecc2.pop()]);
         }
         util.Util.fisher_yates_shuffle(result);    // shuffle the combination
         
         // Generate digits
-        let digits = this._generate_trial_digits(this._numTotalTrials);
+        let digits = this._generate_trial_digits(this._num_total_trials);
 
         // Generate optimal target colors
-        let optColors = util.Util.generate_random_array([1,2], this._numTotalTrials, 3);
+        let optColors = util.Util.generate_random_array([1,2], this._num_total_trials, 3);
         // Add everything to the output
         for( let i = 0; i < result.length; i++ ) {
             let optColor = optColors.pop();
@@ -307,7 +308,7 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGeneratorKernel {
         let currentTrialCond;
         while (trial_conditions.length > 0) {
             currentTrialCond = trial_conditions.pop();
-            let currentTrialDisplays = this._make_trial_dataset(...currentTrialCond);
+            let currentTrialDisplays = this._make_trial_display(...currentTrialCond);
             let currentTrialLogic = this._make_trial_logic(...currentTrialCond);
             result.push(
                 {
@@ -319,8 +320,8 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGeneratorKernel {
         }
         // If number of block trials is less than 20, this is a practice trial,
         // and because the trial condition array 
-        if (this._num_total_trials===10) {
-            result = result.slice(0, 10);
+        if (this._num_trials_to_slice !== undefined) {
+            result = result.slice(0, this._num_trials_to_slice);
         }
         return result;
     }
