@@ -7,14 +7,14 @@ exp.SpatialLetterCueDisplayGenerator = class extends exp.TrialDataGenerator {
         super();
         this._is_practice = is_practice;
         this._num_total_trials = 84;
-        this._square_color = "rgb(97, 97, 97)";
         this._cue_letters = ['L', 'U', 'R'];
 
         // Set task-specific display settings
-        this._display.cue_letter_size = 12;
-        this._display.cue_letter_shift_x = -2.7;
-        this._display.cue_letter_shift_y = 2.5;
-        this._display.cue_letter_color = "white";
+        this._display.square_color = "rgb(97, 97, 97)";
+        this._display.cue_letter_size = this._display.digit_size;
+        this._display.cue_letter_shift_x = -0.75;
+        this._display.cue_letter_shift_y = 0.75;
+        this._display.cue_letter_color = this._display.square_color;
 
         this._trialConds = this._generate_trial_conditions();
         this._blockData = this._make_block_dataset(this._trialConds);
@@ -131,14 +131,14 @@ exp.SpatialLetterCueDisplayGenerator = class extends exp.TrialDataGenerator {
             optTargGrid.rect_y + '',
             sz + '',
             sz + '',
-            this._square_color
+            this._display.square_color
         );
         let nonOptRect = new disp.Rect(
             nonOptTargGrid.rect_x + '',
             nonOptTargGrid.rect_y + '',
             sz + '',
             sz + '',
-            this._square_color
+            this._display.square_color
         );
 
         stimuli.add_rects([optRect, nonOptRect]);
@@ -172,7 +172,7 @@ exp.SpatialLetterCueDisplayGenerator = class extends exp.TrialDataGenerator {
                 grid.rect_y + '',
                 sz + '',
                 sz + '',
-                this._square_color
+                this._display.square_color
             ));
 
             // 2.2 Add distractor digits
@@ -186,14 +186,22 @@ exp.SpatialLetterCueDisplayGenerator = class extends exp.TrialDataGenerator {
             ));
         }
 
-        // Add the cue to all cue, preview, and stimuli displays
+        // Add cue to the stimuli frame
         const the_cue = this._make_a_cue( optTargRegion );
-        cue_display.merge( the_cue );
         stimuli.merge( the_cue );
+        let fixation = new disp.DisplayDataset();
+        fixation.add_a_text(new disp.Text(
+            '+',
+            this._display.screen_center_x,
+            this._display.screen_center_y,
+            'white',
+            this._display.fixation_cross_size,
+            this._display.fixation_cross_class_name
+        ));
 
         // Return displays
         return {
-            cue: [ cue_display ],
+            cue: [ fixation ],
             stimuli: [ stimuli ]
         };
 
