@@ -3,8 +3,9 @@
  * 
  * @package acvs-online
  * @author Walden Li
- * @version 1.5 (10/2/2020)
+ * @version 1.6 (10/12/2020)
  * 
+ * @update 1.6 : changed display generator class
  * @update 1.5 : added timeline parameter to the constructor
  */
 exp.Block = class extends util.AbstractStep {
@@ -12,16 +13,16 @@ exp.Block = class extends util.AbstractStep {
     /**
      * 
      * @param {util.Database} db 
-     * @param {number} blockNo 
-     * @param {exp.TrialDataGenerator} dataGenerator 
+     * @param {number} block_no 
+     * @param {disp.DisplayGeneratorKernel} display_generator 
      * @param {Array<number>} timeline
      */
-    constructor(db, blockNo, dataGenerator, timeline) {
+    constructor(db, block_no, display_generator, timeline) {
         super();
 
         this._db = db;
 
-        this._blockNo = blockNo;
+        this._block_no = block_no;
 
         if (util.Util.is_test_mode()) {
             this._trial_timeline = util.Util.zeros(timeline.length);
@@ -29,7 +30,7 @@ exp.Block = class extends util.AbstractStep {
             this._trial_timeline = timeline;
         }
 
-        this._display_dataset_generator = dataGenerator;
+        this._display_generator = display_generator;
 
         // array of 1s & 0s for "correct" & "incorrect" for each trial
         this._accuracy_data = [];
@@ -49,18 +50,6 @@ exp.Block = class extends util.AbstractStep {
      * @param {Array<disp.DisplayDataset>} stimuli : array (also usually one element) that contains the stimuli <DisplayDataset>(s) for the trial
      */
     _construct_trial(logic, cue, stimuli) {
-        // switch (this._blockType) {
-        //     case "Standard":
-        //         if(util.Util.is_test_mode()) return new exp.Trial(logic, cue, stimuli, [0, 0, 0]);
-        //         return new exp.Trial(logic, cue, stimuli, [0, 400, 1400]);
-        //         // return new exp.Trial(logic, cue, stimuli, [0, 0, 0]);
-        //     case "ColorCue":
-        //         if(util.Util.is_test_mode()) return new exp.Trial(logic, cue, stimuli, [0, 0, 0]);
-        //         return new exp.Trial(logic, cue, stimuli, [0, 400, 1400]);
-        //     case "SpatialCue":
-        //         if(util.Util.is_test_mode()) return new exp.Trial(logic, cue, stimuli, [0, 0]);
-        //         return new exp.Trial(logic, cue, stimuli, [0, 400]);
-        // }
         return new exp.Trial(logic, cue, stimuli, this._trial_timeline);
     }
 
@@ -70,14 +59,14 @@ exp.Block = class extends util.AbstractStep {
             this._all_trials_data.push(previous_results);
         }
 
-        let datasets = this._display_dataset_generator.yield_trial_dataset();
+        let datasets = this._display_generator.yield_trial_display();
 
         if (datasets != null) {
             // create a new trial
             let trial = this._construct_trial(datasets.logic, datasets.cue, datasets.stimuli);
             trial._trial_number_in_block = this._trial_num;
             this._trial_num++;
-            trial._block_number = this._blockNo;
+            trial._block_number = this._block_no;
 
             // when the trial is completed call the next trial (~recursive)
             trial.trial_completed_signal.connect(this._run_next_trial.bind(this));
@@ -92,7 +81,7 @@ exp.Block = class extends util.AbstractStep {
     }
 
     _save_data() {
-        this._db.ExperimentTable.add_new_row(this._blockNo, this._all_trials_data);
+        this._db.ExperimentTable.add_new_row(this._block_no, this._all_trials_data);
         console.log(this._db);
         localStorage.setItem(window._acvs_guid, btoa(JSON.stringify(this._db)));
     }
@@ -100,13 +89,14 @@ exp.Block = class extends util.AbstractStep {
     _show_summary() {
         // Show cursor
         util.Workspace.show_cursor();
-
+        // Calculate accuracy (%)
+        const accuracy = (Math.round(util.Util.mean(this._accuracy_data) * 1000) / 10);
         let paragraph = [];
         paragraph.push("<br><br><br>");
-        if(this._blockNo === 0) {
+        if(this._block_no === 0) {
             paragraph.push("<b>You complete the practice block!</b>");
         } else {
-            paragraph.push("<b>You Completed Block #" + this._blockNo + "!</b>");
+            paragraph.push("<b>You Completed Block #" + this._block_no + "!</b>");
         }
         paragraph.push("<hr>");
         paragraph.push("Your Accuracy: " + accuracy + "%");
@@ -125,7 +115,7 @@ exp.Block = class extends util.AbstractStep {
         util.Workspace.hide_cursor();
         exp.HtmlGui.clear_header();
         exp.HtmlGui.clear_workspace();
-        this._db.EventsTable.add_new_row("beginning block step #" + this._blockNo);
+        this._db.EventsTable.add_new_row("beginning block step #" + this._block_no);
         this._run_next_trial();
         exp.HtmlGui.show_message(".", "black");
     }
