@@ -28,12 +28,12 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGenerator {
         this._has_preview = has_preview;
         this._num_total_trials = num_trials;
         if (num_trials % 3 !== 0) {
-            throw ( "LogicError: Number of total block trials must be an " +
+            throw RangeError( "Number of total block trials must be an " +
             "integer multiple of 3.");
         }
         this._num_trials_to_slice = num_trials_to_slice;
         if (num_trials_to_slice !== undefined && num_trials_to_slice > num_trials) {
-            throw ( "LogicError: Number of sliced trials must not exceed " +
+            throw RangeError( "Number of sliced trials must not exceed " +
             "number of total trials." );
         }
         // Set paradigm-specific settings
