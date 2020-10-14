@@ -8,7 +8,7 @@
  * @author Walden Y. Li
  * @version 1.6 (updated 10/12/2020)
  */
-disp.StandardDisplayGenerator = class extends disp.DisplayGeneratorKernel {
+disp.StandardDisplayGenerator = class extends disp.DisplayGenerator {
 
     /**
      * 

@@ -5,7 +5,7 @@
  * @author Walden Y. Li
  * @version 1.6
  */
-disp.DisplayGeneratorKernel = class {
+disp.DisplayGenerator = class {
     constructor() {
         this._target_digits = [2, 3, 4, 5];
         this._distractor_digits = [6, 7, 8, 9];
