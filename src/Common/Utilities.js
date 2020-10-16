@@ -150,6 +150,10 @@ util.Util = class Util {
         return d3.select("#hidden-sub-id").html();
     }
 
+    static is_alt_server_mode() {
+        return d3.select("#hidden-alt").html() === "true";
+    }
+
     /**
      * Generate a randomized array of objects chosen from a given array of
      * unique items, with a maximum number of repititions of the same item
@@ -162,7 +166,7 @@ util.Util = class Util {
      */
     static generate_random_array(items, length, max_rep=0) {
         if (length % items.length !== 0) {
-            throw ("Output array length has to be a multiple of number of items")
+            throw RangeError("Output array length has to be a multiple of number of items")
         }
         const reps = length / items.length;
         let result = [];
