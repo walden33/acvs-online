@@ -10,32 +10,18 @@
  */
 disp.StandardDisplayGenerator = class extends disp.DisplayGenerator {
 
-    /**
-     * 
-     * @param {boolean} has_preview : If the displays has a preview frame before
-     *   stimuli array appears.
-     * @param {number} num_trials : The number of trials specified for
-     *   generating the block trial conditions.
-     * @param {number} num_trials_to_slice : The number of actual trials needed
-     *   in this block, if defined.
-     * @requires
-     *   (num_trials_to_slice <= num_trials && num_trials_to_slice % 3 === 0)
-     *   if (num_trials_to_slice !== undefined)
-     */
-    constructor(has_preview = false, num_trials, num_trials_to_slice=undefined)
+    constructor(num_trials, num_trials_to_slice=undefined, has_preview=false)
     {
-        super();
-        this._has_preview = has_preview;
-        this._num_total_trials = num_trials;
-        if (num_trials % 3 !== 0) {
+        super(num_trials, num_trials_to_slice);
+        if (num_trials % 12 !== 0) {
             throw RangeError( "Number of total block trials must be an " +
-            "integer multiple of 3.");
+            "integer multiple of 12.");
         }
-        this._num_trials_to_slice = num_trials_to_slice;
         if (num_trials_to_slice !== undefined && num_trials_to_slice > num_trials) {
             throw RangeError( "Number of sliced trials must not exceed " +
             "number of total trials." );
         }
+        this._has_preview = has_preview;
         // Set paradigm-specific settings
         this._colors = [
             "rgb(255, 0, 0)",
@@ -270,17 +256,16 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGenerator {
         for (let i = 0; i < this._num_total_trials; i++) {
             result.push([ecc1.pop(), ecc2.pop()]);
         }
-        util.Util.fisher_yates_shuffle(result);    // shuffle the combination
         
         // Generate digits
         let digits = this._generate_trial_digits(this._num_total_trials);
 
         // Generate optimal target colors
-        let optColors = util.Util.generate_random_array([1,2], this._num_total_trials, 3);
+        let optColors = util.Util.generate_random_array([0,1], this._num_total_trials, 3);
         // Add everything to the output
         for( let i = 0; i < result.length; i++ ) {
             let optColor = optColors.pop();
-            let nonOptColor = util.Util.choose_from([1,2], [optColor]);
+            let nonOptColor = optColor === 1 ? 0 : 1;
             result[i] = result[i].concat(digits.pop().concat([optColor, nonOptColor]));
         }
 
