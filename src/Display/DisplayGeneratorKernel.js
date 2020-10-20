@@ -2,15 +2,31 @@
  * The kernel for a display generator class that has basic settings and methods
  * for creating abstract trial logic.
  * 
+ * Update (10/16/2020): has_preview, num_trials, and num_trials_to_slice were
+ *   extracted to this base class constructor.
+ * 
  * @author Walden Y. Li
  * @version 1.6
  */
 disp.DisplayGenerator = class {
-    constructor() {
+
+    /**
+     * 
+     * @param {number} num_trials : The number of trials specified for
+     *   generating the block trial conditions.
+     * @param {number} num_trials_to_slice : The number of actual trials needed
+     *   in this block, if defined.
+     * @requires
+     *   (num_trials_to_slice <= num_trials && num_trials_to_slice % 3 === 0)
+     *   if (num_trials_to_slice !== undefined)
+     */
+    constructor(num_trials, num_trials_to_slice) {
+        this._num_total_trials = num_trials;
+        this._num_trials_to_slice = num_trials_to_slice;
         this._target_digits = [2, 3, 4, 5];
         this._distractor_digits = [6, 7, 8, 9];
         this._setting = new disp.DisplaySetting();
-        this._block_data = [];
+        this._block_data = null;
     }
 
     _get_grid_pos() {
@@ -23,16 +39,16 @@ disp.DisplayGenerator = class {
         let i = 1;  // grid number, to be set as the key of the output <Map>
         for (let j = 0; j < 3; j++) {   // three rings, from inner to outer
             let n = this._setting.ring_square_numbers[j];    // get # of squares in this ring
-            for (let k = 0; k < n; k++ ) {
+            for (let k = 0; k < n; k++) {
                 // Create an Object to store grid info
                 let grid = {};
                 let angle = 2 * Math.PI / n;
                 grid.x = Math.cos(angle * k + Math.PI / 2) * r * p[j] + cx;
                 grid.y = Math.sin(angle * k + Math.PI / 2) * r * p[j] + cy;
-                grid.rect_x = grid.x - sz/2;
-                grid.rect_y = grid.y - sz/2;
-                grid.ecc = j+1;     // eccentricity
-                grid.alpha = angle*k;
+                grid.rect_x = grid.x - sz / 2;
+                grid.rect_y = grid.y - sz / 2;
+                grid.ecc = j + 1;     // eccentricity
+                grid.alpha = angle * k;
                 // Set the Object as the value of the key (grid number)
                 result.set(i, grid);
                 i++;
@@ -41,6 +57,17 @@ disp.DisplayGenerator = class {
         }
         return result;
     }
+
+    /**
+     * Helper function to get the distance between to grid positions
+     * @param {Object} grid1 
+     * @param {Object} grid2 
+     */
+    _get_grid_dist(grid1, grid2) {
+        return Math.sqrt((grid1.x - grid2.x) * (grid1.x - grid2.x) +
+            (grid1.y - grid2.y) * (grid1.y - grid2.y));
+    }
+
 
     /**
      * Given display grid position info, the optimal target eccentricity, and
@@ -54,7 +81,7 @@ disp.DisplayGenerator = class {
      * @param {number} optTargEcc 
      * @param {number} nonOptTargEcc 
      */
-    _generate_target_pools_by_ecc( gridPos, optTargEcc, nonOptTargEcc ) {
+    _generate_target_pools_by_ecc(gridPos, optTargEcc, nonOptTargEcc) {
 
         // Add potential targets to pools according to required eccentricity
         let optTargPool = [];
@@ -83,15 +110,31 @@ disp.DisplayGenerator = class {
                 }
             }
             // find a rough center of the targPool
-            let n = Math.floor(targPool.length/2);
+            let n = Math.floor(targPool.length / 2);
             // give each half of targPool items to optTargPool and nonOptTargPool
-            optTargPool = targPool.slice( 0, n );
-            nonOptTargPool = targPool.slice( n );
+            optTargPool = targPool.slice(0, n);
+            nonOptTargPool = targPool.slice(n);
         }
 
         // Randomly select targets
-        const optTargPos = util.Util.select_rand_from_array(optTargPool, null, false);
-        const nonOptTargPos = util.Util.select_rand_from_array(nonOptTargPool, null, false);
+        // const optTargPos = util.Util.select_rand_from_array(optTargPool, null, false);
+        // const nonOptTargPos = util.Util.select_rand_from_array(nonOptTargPool, null, false);
+        // Randomly select target grids (and make sure they are not close to
+        // each other)
+        let optTargPos, nonOptTargPos;
+        let selected = false;
+        while (!selected) {
+            optTargPos = util.Util.choose_from(optTargPool);
+            nonOptTargPos = util.Util.choose_from(nonOptTargPool, [optTargPos]);
+            if (this._get_grid_dist(gridPos.get(optTargPos),gridPos.get(
+                nonOptTargPos)) >= this._setting.min_targ_dist) {
+                selected = true;
+            }
+        }
+
+        // Remove target positions from the pool
+        optTargPool.splice(optTargPool.indexOf(optTargPos),1);
+        nonOptTargPool.splice(nonOptTargPool.indexOf(nonOptTargPos),1);
 
         // Add the rest to non-target pool
         nonTargPool = nonTargPool.concat(optTargPool).concat(nonOptTargPool);
@@ -128,12 +171,20 @@ disp.DisplayGenerator = class {
         const digitRows = util.Util.generate_random_array([0, 1, 2, 3], num_total_trials, 3);
         const digitColumns = util.Util.generate_random_array([0, 1, 2], num_total_trials, 3);
 
-        for( let i = 0; i < num_total_trials; i++ ) {
-            result.push( digit_combs[digitRows.pop()][digitColumns.pop()] );
+        for (let i = 0; i < num_total_trials; i++) {
+            result.push(digit_combs[digitRows.pop()][digitColumns.pop()]);
         }
 
         return result;
 
+    }
+
+    _generate_trial_conditions() {
+        throw ReferenceError("Abstract method called");
+    }
+
+    _make_block_displays() {
+        throw ReferenceError("Abstract method called");
     }
 
     /**
@@ -141,7 +192,7 @@ disp.DisplayGenerator = class {
      * in this block.  When exhausted this method will return null.
      */
     yield_trial_display() {
-        if ( this._block_data.length > 0 ) {
+        if (this._block_data.length > 0) {
             return this._block_data.pop();
         } else {
             return null;

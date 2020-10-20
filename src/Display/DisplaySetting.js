@@ -7,6 +7,8 @@ disp.DisplaySetting = class {
         // screen center coordinates
         this.screen_center_x = 50;
         this.screen_center_y = 50;
+        // Minimum distance between two targets
+        this.min_targ_dist = 30;
         // ACVS rings
         this.ring_radius = 45;
         this.square_size = 4;
