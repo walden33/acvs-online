@@ -59,11 +59,11 @@ exp.Block = class extends util.AbstractStep {
             this._all_trials_data.push(previous_results);
         }
 
-        let datasets = this._display_generator.yield_trial_display();
+        let display = this._display_generator.yield_trial_display();
 
-        if (datasets != null) {
+        if (display != null) {
             // create a new trial
-            let trial = this._construct_trial(datasets.logic, datasets.cue, datasets.stimuli);
+            let trial = this._construct_trial(display.logic, display.cue, display.stimuli);
             trial._trial_number_in_block = this._trial_num;
             this._trial_num++;
             trial._block_number = this._block_no;
