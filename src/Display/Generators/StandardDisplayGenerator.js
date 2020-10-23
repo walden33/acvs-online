@@ -10,7 +10,7 @@
  */
 disp.StandardDisplayGenerator = class extends disp.DisplayGenerator {
 
-    constructor(num_trials, num_trials_to_slice=undefined, has_preview=false)
+    constructor(num_trials, num_trials_to_slice=undefined, has_preview=true)
     {
         super(num_trials, num_trials_to_slice);
         if (num_trials % 12 !== 0) {

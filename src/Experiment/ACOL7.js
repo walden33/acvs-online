@@ -1,5 +1,6 @@
 /**
- * 
+ * The experiment that correlates Standard ACVS with Color Cue ACVS, where
+ * participants do 3 blocks of Standard, followed by 3 blocks of Color Cue.
  */
 exp.ACOL7 = class extends exp.ExperimentKernel {
 
@@ -9,7 +10,7 @@ exp.ACOL7 = class extends exp.ExperimentKernel {
         //
         // Set up the database
         //
-        this._db.experiment_type = "ACOL-6";
+        this._db.experiment_type = "ACOL-7";
 
         this._db.add_new_table("EventsTable");
         this._db.EventsTable.add_new_column("Event");
@@ -22,13 +23,12 @@ exp.ACOL7 = class extends exp.ExperimentKernel {
 
         this.add_new_step(new exp.ConsentStep(this._db));
         this.add_new_step(new exp.CheckBrowserStep(this._db));
-        // this.add_new_step(new exp.PreparationStep(this._db));
 
         // local variables
         const NUM_TASK1_INSTR_SLIDES = 10;
-        const NUM_TASK2_INSTR_SLIDES = 11;
-        const INSTR_ROOT = "https://psy-ccl.asc.ohio-state.edu/files/instr/acol-5/";
-        const INSTR_FILE_EXT = "JPG";
+        const NUM_TASK2_INSTR_SLIDES = 10;
+        const INSTR_ROOT = "https://psy-ccl.asc.ohio-state.edu/files/instr/acol-7/";
+        const INSTR_FILE_EXT = "jpeg";
         const NUM_TASK1_BLOCK = 3;
         const NUM_TASK2_BLOCK = 3;
 
@@ -41,7 +41,7 @@ exp.ACOL7 = class extends exp.ExperimentKernel {
         this.add_new_step(new exp.Block(
             this._db,
             0,  // block number
-            new exp.StandardTrialDataGenerator(true, true),    // is practice block; has preview
+            new disp.StandardDisplayGenerator(12, 10),    // is practice block; has preview
             [0, 400, 1400]  // timing
         ));
 
@@ -50,7 +50,7 @@ exp.ACOL7 = class extends exp.ExperimentKernel {
             this.add_new_step(new exp.Block(
                 this._db,
                 i,  // block number
-                new exp.StandardTrialDataGenerator(false, true),    // is not practice block; has preview
+                new disp.StandardDisplayGenerator(84),    // is not practice block; has preview
                 [0, 400, 1400]  // timing
             ));
         }
@@ -67,7 +67,7 @@ exp.ACOL7 = class extends exp.ExperimentKernel {
         this.add_new_step(new exp.Block(
             this._db,
             0,  // block number
-            new exp.ColorCueTrialDataGenerator(true, true),    // is practice block; has preview
+            new disp.ColorCueDisplayGenerator(12, 10),    // is practice block; has preview
             [0, 400, 1400]  // timing
         ));
 
@@ -76,7 +76,7 @@ exp.ACOL7 = class extends exp.ExperimentKernel {
             this.add_new_step(new exp.Block(
                 this._db,
                 i,  // block number
-                new exp.ColorCueTrialDataGenerator(false, true),    // is not practice block; has preview
+                new disp.ColorCueDisplayGenerator(84),    // is not practice block; has preview
                 [0, 400, 1400]  // timing
             ));
         }

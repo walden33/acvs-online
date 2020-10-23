@@ -8,7 +8,7 @@
  */
 disp.ColorCueDisplayGenerator = class extends disp.DisplayGenerator {
 
-    constructor(num_trials, num_trials_to_slice = undefined, has_preview = false) {
+    constructor(num_trials, num_trials_to_slice = undefined, has_preview = true) {
         super(num_trials, num_trials_to_slice);
         if (num_trials % 12 !== 0) {
             throw RangeError("Number of total block trials must be an " +
@@ -169,16 +169,16 @@ disp.ColorCueDisplayGenerator = class extends disp.DisplayGenerator {
         stimuli.merge(the_cue);
 
         // Return displays
-        let returnObject = {};
+        let displays = {};
         if (this._has_preview) {
             // If task has preview, include it
-            returnObject.cue = [cue_display, preview];
+            displays.cue = [cue_display, preview];
         } else {
-            returnObject.cue = [cue_display];
+            displays.cue = [cue_display];
         }
-        returnObject.stimuli = [stimuli];
+        displays.stimuli = [stimuli];
 
-        return returnObject;
+        return displays;
 
     }
 
