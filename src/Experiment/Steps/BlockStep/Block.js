@@ -14,7 +14,7 @@ exp.Block = class extends util.AbstractStep {
      * 
      * @param {util.Database} db 
      * @param {number} block_no 
-     * @param {disp.DisplayGeneratorKernel} display_generator 
+     * @param {disp.DisplayGenerator} display_generator 
      * @param {Array<number>} timeline
      */
     constructor(db, block_no, display_generator, timeline) {
