@@ -76,12 +76,13 @@ disp.Text = class {
      * @param {String} fontSize : <svg> -> <text> attr "font-size"
      * @param {String} className : <svg> -> <text> attr "class"
      */
-    constructor(text, x, y, fill, fontSize, className) {
+    constructor(text, x, y, fill, fontSize, className=undefined, fontFamily=undefined) {
         this.text = text;
         this.x = x;
         this.y = y;
         this.fill = fill;
         this.fontSize = fontSize;
         this.className = className;
+        this.fontFamily = fontFamily;
     }
 }

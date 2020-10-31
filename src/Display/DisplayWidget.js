@@ -121,7 +121,8 @@ disp.DisplayWidget = class {
             .attr("y", d => d.y )
             .attr("fill", d => d.fill )
             .attr("font-size", d => d.fontSize )
-            .attr("class", d => d.className );
+            .attr("class", d => d.className )
+            .style("font-family", d => d.fontFamily)
         texts.exit().remove();
 
 
