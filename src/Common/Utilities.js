@@ -205,4 +205,34 @@ util.Util = class Util {
         return result;
     }
 
+    static range(n) {
+        let result = new Array(n);
+        for (let i = 0; i < result.length; i++) {
+            result[i] = i;
+        }
+    }
+
+
+    /**
+     * Create a multi-dimensional array with a specific size and initial value.
+     * 
+     * @param {Array<number>} size : size of each dimension
+     * @param {number} init : initial values of the whole ndarray
+     */
+    static ndarray(size, init) {
+        let result = new Array(size[0]);
+        if(size.length === 1) {
+            for(let i = 0; i < size[0]; i++) {
+                result[i] = init;
+            }
+        } else {
+            let subsize = size.splice(1);   // size of the next dimension
+            for(let i = 0; i < result.length; i++) {
+                let arr = Util.ndarray(subsize, init);
+                result[i] = arr;
+            }
+        }
+        return result;
+    }
+
 }
