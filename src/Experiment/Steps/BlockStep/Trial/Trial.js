@@ -6,7 +6,7 @@ exp.Trial = class extends exp.AbstractTrial {
     constructor(logic, cue, stimuli, timing) {
         super();
         // Check if enough time stamps are provided
-        if ((timing.length - 1) !== cue.length) throw ("ERROR: Mismatch in cue frames and number of time stamps");
+        // if ((timing.length - 1) !== cue.length) throw ("ERROR: Mismatch in cue frames and number of time stamps");
         this.logic = logic;
         this.timing = timing;
         this.cue = cue;
@@ -164,16 +164,11 @@ exp.Trial = class extends exp.AbstractTrial {
         }).bind(this), this.duration_feedback);
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
-    ///
-    /// Executes this trial of the block.
-    ///
+
     run_trial() {
-        // this.initialize_chart_settings();
+
         this.initialize_keyboard();
 
-        // show the fixation cross
-        // this.chart_widget.show_cross_only();
         this.display_widget.clear();
 
         if(window._test) {
@@ -186,15 +181,38 @@ exp.Trial = class extends exp.AbstractTrial {
             }).bind(this), this.timing[i]);
         }
 
-        for (let i = 0; i < this.stimuli.length; i++) {
-            setTimeout((() => {
-                this.display_widget.draw(this.stimuli[i]);
-                // turn on keyboard at the first iteration
-                if (i == 0) {
+        if(this.timing.length - this.cue.length === 1) {
+            // if stimuli only has one frame (the normal circumstance)
+            for (let i = 0; i < this.stimuli.length; i++) {
+                setTimeout((() => {
+                    this.display_widget.draw(this.stimuli[i]);
+                    // turn on keyboard at the first iteration
+                    if (i == 0) {
+                        this.keyboard.turn_on();
+                        this.trial_data.stimuli_shown_at = performance.now();
+                    }
+                }).bind(this), this.timing[this.cue.length + i]);
+            }
+        } else {
+            // if stimuli has more than one frame (so far this only happens when
+            // the stimuli is an RSVP stream)
+            // calculate the inter-frame interval
+            const isi = this.timing[this.timing.length-1] - this.timing[this.timing.length-2];
+            // when the first frame is shown, open keyboard and record a timestamp
+            setTimeout((()=> {
+                this.display_widget.draw(this.stimuli[0]);
+                this.keyboard.turn_on();
+                this.trial_data.stimuli_shown_at = performance.now();
+            }).bind(this), this.timing[this.cue.length + 1]);
+            // draw the rest of the frames
+            for (let i = 1; i < this.stimuli.length; i++) {
+                setTimeout((() => {
+                    this.display_widget.draw(this.stimuli[i]);
+                    // turn on keyboard at the first iteration
                     this.keyboard.turn_on();
                     this.trial_data.stimuli_shown_at = performance.now();
-                }
-            }).bind(this), this.timing[this.cue.length + i]);
+                }).bind(this), this.timing[this.cue.length] + isi * i );
+            }
         }
 
     }
