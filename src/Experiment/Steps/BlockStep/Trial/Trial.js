@@ -86,8 +86,8 @@ exp.Trial = class extends exp.AbstractTrial {
         } else {
             util.Util.play_beep_sound();
             exp.HtmlGui.show_message("Please use: 'v' for 2, 'b' for 3, 'n' for 4, and 'm' for 5", "red");
-            setTimeout(function () {
-                exp.HtmlGui.show_message(".", "black");
+            setTimeout(() => {
+                util.Workspace.clear_message();
             }, 2000);
         }
 
@@ -95,18 +95,6 @@ exp.Trial = class extends exp.AbstractTrial {
         this.trial_data.blockNumber = this._block_number;
 
         this.trial_data.logic = this.logic;
-
-        // this.trial_data.optTargIndex = this.logic.optTargIndex;
-        // this.trial_data.nonOptTargIndex = this.logic.nonOptTargIndex;
-
-        // this.trial_data.optTargDigit = this.logic.optTargDigit;
-        // this.trial_data.nonOptTargDigit = this.logic.nonOptTargDigit;
-
-        // this.trial_data.optTargEcc = this.logic.optTargEcc;
-        // this.trial_data.nonOptTargEcc = this.logic.nonOptTargEcc;
-
-        // this.trial_data.optTargRegion = this.logic.optTargRegion;
-        // this.trial_data.nonOptTargRegion = this.logic.nonOptTargRegion;
 
         this.trial_data.response = this.answer_keys.get(the_key_the_user_pressed);
         this.trial_data.targChoice = this.trial_data.response == this.trial_data.optTargDigit ? 1 :
@@ -120,9 +108,11 @@ exp.Trial = class extends exp.AbstractTrial {
         this.trial_data.numberOfKeysPressed = this.num_keys_pressed;
         this.trial_data.answerRecievedAt = time_stamp;
         this.trial_data.result = result ? "correct" : "incorrect";
-        // this.trial_data.chart_dataset = this.chart_dataset;
 
         this.keyboard = this.keyboard.destroy();
+
+        util.Util.clear_timeouts();
+
         this.show_debriefing();
     }
 
@@ -136,8 +126,8 @@ exp.Trial = class extends exp.AbstractTrial {
 
         util.Util.play_beep_sound();
 
-        setTimeout(function () {
-            exp.HtmlGui.show_message(".", "black");
+        setTimeout(() => {
+            util.Workspace.clear_message();
         }, 2000);
     }
 
@@ -170,6 +160,7 @@ exp.Trial = class extends exp.AbstractTrial {
         this.initialize_keyboard();
 
         this.display_widget.clear();
+        util.Workspace.clear_message();
 
         if(window._test) {
             this.keyboard.turn_on();
@@ -198,6 +189,8 @@ exp.Trial = class extends exp.AbstractTrial {
             // the stimuli is an RSVP stream)
             // calculate the inter-frame interval
             const isi = this.timing[this.timing.length-1] - this.timing[this.timing.length-2];
+            // calculate timeout
+            const timeout = this.timing[this.cue.length] + this.stimuli.length * isi + 1000;
             // when the first frame is shown, open keyboard and record a timestamp
             setTimeout((()=> {
                 this.display_widget.draw(this.stimuli[0]);
@@ -205,14 +198,16 @@ exp.Trial = class extends exp.AbstractTrial {
                 this.trial_data.stimuli_shown_at = performance.now();
             }).bind(this), this.timing[this.cue.length + 1]);
             // draw the rest of the frames
-            for (let i = 1; i < this.stimuli.length; i++) {
+            for (let i = 1; i < this.stimuli.length-1; i++) {
                 setTimeout((() => {
                     this.display_widget.draw(this.stimuli[i]);
-                    // turn on keyboard at the first iteration
-                    this.keyboard.turn_on();
-                    this.trial_data.stimuli_shown_at = performance.now();
                 }).bind(this), this.timing[this.cue.length] + isi * i );
             }
+
+            // timeout
+            setTimeout((() => {
+                this.respond_to_valid_user_keyboard_input('trial_timed_out', performance.now());
+            }).bind(this), timeout);
         }
 
     }
