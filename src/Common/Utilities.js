@@ -210,6 +210,7 @@ util.Util = class Util {
         for (let i = 0; i < result.length; i++) {
             result[i] = i;
         }
+        return result;
     }
 
 
