@@ -171,14 +171,7 @@ disp.TemporalDisplayGenerator = class extends disp.DisplayGenerator {
         }
         
         let cue = new disp.DisplayDataset();
-        cue.add_a_text(new disp.Text(
-            optTargColor === 0 ? 'R' : 'B',
-            x,
-            y,
-            'white',
-            this._setting.fixation_cross_size,
-            this._setting.fixation_cross_class_name
-        ));
+        this._add_a_cue(cue, optTargColor, nonOptTargColor);
         const blank = new disp.DisplayDataset();
 
         // Create the RSVP stream
@@ -194,6 +187,39 @@ disp.TemporalDisplayGenerator = class extends disp.DisplayGenerator {
             cue: [cue, blank],
             stimuli: rsvp
         }
+    }
+
+    _add_a_cue(display, optTargColor, nonOptTargColor) {
+        // R & B letter as a cue
+        // display.add_a_text(new disp.Text(
+        //     optTargColor === 0 ? 'R' : 'B',
+        //     this._setting.screen_center_x,
+        //     this._setting.screen_center_y,
+        //     'white',
+        //     this._setting.fixation_cross_size,
+        //     this._setting.fixation_cross_class_name
+        // ));
+        // Colored dots as a cue
+        const dotSize = .8;
+        const horizShift = 1.4;
+        // First add the optimal color dot
+        display.add_a_circle(new disp.Circle(
+            this._setting.screen_center_x - horizShift,
+            this._setting.screen_center_y,
+            dotSize,
+            this._colors[optTargColor],
+            null,
+            null
+        ));
+        // Then add the non-optimal color dot
+        display.add_a_circle(new disp.Circle(
+            this._setting.screen_center_x + horizShift,
+            this._setting.screen_center_y,
+            dotSize,
+            this._colors[nonOptTargColor],
+            null,
+            null
+        ));
     }
 
     _make_trial_logic(optTargDigit, nonOptTargDigit, optTargColor,
