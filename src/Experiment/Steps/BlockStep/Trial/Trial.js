@@ -96,7 +96,9 @@ exp.Trial = class extends exp.AbstractTrial {
 
         this.trial_data.logic = this.logic;
 
-        this.trial_data.response = this.answer_keys.get(the_key_the_user_pressed);
+        let response = this.answer_keys.get(the_key_the_user_pressed);
+        if (response === undefined) response = -1;
+        this.trial_data.response = response;
         this.trial_data.targChoice = this.trial_data.response == this.trial_data.optTargDigit ? 1 :
             this.trial_data.response == this.trial_data.nonOptTargDigit ? 2 :
                 0;

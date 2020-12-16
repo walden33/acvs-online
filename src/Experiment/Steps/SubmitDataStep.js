@@ -23,22 +23,22 @@ exp.SubmitDataStep = class extends util.AbstractStep {
         exp.HtmlGui.workspace().append("p").attr("class", "debriefing-title")
             .html("Submitting data ...");
 
+        // Submit data
         $.ajax({
             type: "POST",
-            // url: "receive.php",
-            url: "https://tuiqiang.org/ac/acol3/receive.php",
+            url: "https://exp.leberatory.org/experiments/acol-12/receive.php",
             data: {
                 "full": JSON.stringify(this._db)
             },
-            success: function () {
+            success: () => {
                 exp.HtmlGui.workspace().select(".debriefing-title")
-                    .html("-- END OF EXPERIMENT");
+                    .html("-- END OF EXPERIMENT --");
                 alert("Data submitted!");
             },
-            failure: function (errMsg) {
+            failure: (errMsg) => {
                 alert(errMsg);
             }
-        });
+        })
 
         // Debriefing message
         exp.HtmlGui.workspace().append("p").attr("class", "debriefing-msg")
@@ -50,7 +50,7 @@ exp.SubmitDataStep = class extends util.AbstractStep {
                 "If you do not get your credit within 24 hours, or if you " +
                 "have any questions or concerns, " +
                 "please email us at the following address:</br>" +
-                "li.6942@osu.edu (Walden Li)," +
+                "li.6942@osu.edu (Walden Li)" +
                 "</br></br>" +
                 "For your information, please find the debriefing form attached:"
             );
