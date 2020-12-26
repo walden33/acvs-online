@@ -32,8 +32,12 @@
   <div id="overlay">
     <div id="overlay-text">To optimize your experience in this experiment, click anywhere to enter full-screen mode.</div>
   </div>
-  <div id="hidden-sub-id"><?php echo $_GET['id'] ?></div>
-  <div id="hidden-test"><?php echo $_GET['test'] ?></div>
+  <div id="hidden-sub-id" style="display: none;"><?php echo $_GET['id'] ?></div>
+  <div id="hidden-test" style="display: none;"><?php echo $_GET['test'] ?></div>
+  <div id="hidden-alt" style="display: none;"><?php echo $_GET['alt'] ?></div>
+  <div id="prolific-id" style="display: none;"><?php echo $_GET['PROLIFIC_PID'] ?></div>
+  <div id="study-id" style="display: none;"><?php echo $_GET['STUDY_ID'] ?></div>
+  <div id="session-id" style="display: none;"><?php echo $_GET['SESSION_ID'] ?></div>
 
 
   <script>
