@@ -9,7 +9,6 @@
  * Detect full-screen:
  * https://developer.mozilla.org/en-US/docs/Web/API/DocumentOrShadowRoot/fullscreenElement
  * 
- * @package ac-spatial-cue-1
  * @version 1.1 (08/04/2020)
  * @author Walden Li
  */
