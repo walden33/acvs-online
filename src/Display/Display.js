@@ -23,6 +23,7 @@ disp.Display = class {
         this.digit_shift_y = this.digit_size * 0.35;
         // fixation cross (as text "+")
         this.fixation_cross_class_name = "fixation-cross-center";
+        this.fixation_cross_size = this.digit_size;
         this.ring_square_numbers = [ 12, 18, 24 ];
         this.subring_radius_proportion = [ 0.5, 0.75, 1 ];
         this.square_color = "rgb(128, 128, 128)";

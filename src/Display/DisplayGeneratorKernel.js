@@ -71,7 +71,7 @@ disp.DisplayGenerator = class {
 
     /**
      * Given display grid position info, the optimal target eccentricity, and
-     * the non-optimal target eccentricity, return a js object with three items:
+     * the non-optimal target eccentricity, return an object with three items:
      * 0. "optTargPos" : the position (indexed between 0 - 53) of the opt targ
      * 1. "nonOptTargPos" : same as above, of the non opt targ
      * 2. "nonTargPool" : an array of randomized grid position indexes without
@@ -81,7 +81,10 @@ disp.DisplayGenerator = class {
      * @param {number} optTargEcc 
      * @param {number} nonOptTargEcc 
      */
-    _generate_target_pools_by_ecc(gridPos, optTargEcc, nonOptTargEcc) {
+    _generate_target_pools_by_ecc(gridPos, optTargEcc, nonOptTargEcc,
+        nOptTarg = 1, nNonOptTarg = 1) {
+
+        let result = {};
 
         // Add potential targets to pools according to required eccentricity
         let optTargPool = [];
@@ -121,32 +124,37 @@ disp.DisplayGenerator = class {
         // const nonOptTargPos = util.Util.select_rand_from_array(nonOptTargPool, null, false);
         // Randomly select target grids (and make sure they are not close to
         // each other)
-        let optTargPos, nonOptTargPos;
-        let selected = false;
-        while (!selected) {
-            optTargPos = util.Util.choose_from(optTargPool);
-            nonOptTargPos = util.Util.choose_from(nonOptTargPool, [optTargPos]);
-            if (this._get_grid_dist(gridPos.get(optTargPos),gridPos.get(
-                nonOptTargPos)) >= this._setting.min_targ_dist) {
-                selected = true;
+        if (nOptTarg === 1 && nNonOptTarg === 1) {
+            let optTargPos, nonOptTargPos;
+            let selected = false;
+            while (!selected) {
+                optTargPos = util.Util.choose_from(optTargPool);
+                nonOptTargPos = util.Util.choose_from(nonOptTargPool, [optTargPos]);
+                if (this._get_grid_dist(gridPos.get(optTargPos), gridPos.get(
+                    nonOptTargPos)) >= this._setting.min_targ_dist) {
+                    selected = true;
+                }
             }
+            result.optTargPos = optTargPos;
+            result.nonOptTargPos = nonOptTargPos;
+            // Remove target positions from the pool
+            optTargPool.splice(optTargPool.indexOf(optTargPos), 1);
+            nonOptTargPool.splice(nonOptTargPool.indexOf(nonOptTargPos), 1);
+        } else {
+            let optTargPos = [];
+            let nonOptTargPos = [];
+
         }
 
-        // Remove target positions from the pool
-        optTargPool.splice(optTargPool.indexOf(optTargPos),1);
-        nonOptTargPool.splice(nonOptTargPool.indexOf(nonOptTargPos),1);
 
         // Add the rest to non-target pool
         nonTargPool = nonTargPool.concat(optTargPool).concat(nonOptTargPool);
         // Shuffle the non-target pool
         util.Util.fisher_yates_shuffle(nonTargPool);
+        result.nonTargPool = nonTargPool;
 
         // Return three things with an object
-        return {
-            optTargPos: optTargPos,
-            nonOptTargPos: nonOptTargPos,
-            nonTargPool: nonTargPool
-        };
+        return result;
 
     }
 
