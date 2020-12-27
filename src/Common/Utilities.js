@@ -170,6 +170,10 @@ util.Util = class Util {
         return document.getElementById("session-id").innerText;
     }
 
+    static get_cb_id() {
+        return document.getElementById("cb-id").innerText;
+    }
+
     /**
      * Generate a randomized array of objects chosen from a given array of
      * unique items, with a maximum number of repititions of the same item
