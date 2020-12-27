@@ -28,12 +28,17 @@ exp.ACIT = class extends exp.ExperimentKernel {
         const NUM_TASK1_BLOCK = 2;
         const NUM_TASK2_BLOCK = 2;
 
-        if (Math.random() < 0.5) {
+        // Get determine version based on counterbalance id
+        const version_id = parseInt(util.Util.get_cb_id()) % 4;
+
+        // if (Math.random() < 0.5) {
+        if (version_id === 1 || version_id === 3) {
             // If first task is Standard ACVS (ACIT 1 & 3)
             let instr_root = "";
             let num_task1_instr_slides = 0;
             let num_task2_instr_slides = 0;
-            if (Math.random() < 0.5) {
+            // if (Math.random() < 0.5) {
+            if (version_id === 1) {
                 // If first task is informed
                 this._db.experiment_type = "ACIT-1";
                 num_task1_instr_slides = 10;
@@ -96,7 +101,8 @@ exp.ACIT = class extends exp.ExperimentKernel {
             let instr_root = "";
             let num_task1_instr_slides = 0;
             let num_task2_instr_slides = 0;
-            if (Math.random() < 0.5) {
+            // if (Math.random() < 0.5) {
+            if (version_id === 2) {
                 // If first task is informed
                 this._db.experiment_type = "ACIT-2";
                 num_task1_instr_slides = 12;
