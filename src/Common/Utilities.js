@@ -268,4 +268,14 @@ util.Util = class Util {
         }
     }
 
+    static redirect(url, timeout=0) {
+        if(timeout > 0) {
+            setTimeout(()=>{
+                window.location.replace(url);
+            }, timeout);
+        } else {
+            window.location.replace(url);
+        }
+    }
+
 }
