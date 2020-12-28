@@ -41,7 +41,7 @@ exp.ACIT = class extends exp.ExperimentKernel {
             this._db.experiment_type = "ACIT-1-Info-Standard+Cue";
             const INSTR_ROOT = "https://exp.leberatory.org/files/instr/acit-1/";
             // 1. Instructions for Standard ACVS
-            for (let i = 1; i <= NUM_STANDARD_INSTR_PAGES; i++) {
+            for (let i = 1; i <= 1+NUM_STANDARD_INSTR_PAGES; i++) {
                 this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
             }
             // 2. Practice trials for Standard ACVS
@@ -52,7 +52,7 @@ exp.ACIT = class extends exp.ExperimentKernel {
                 [0, 400, 1400]  // timing
             ));
             // 3. Optimal strategy info for Standard ACVS
-            for (let i = NUM_STANDARD_INSTR_PAGES+1; i <= NUM_STANDARD_INSTR_PAGES + NUM_STANDARD_INFO_PAGES; i++) {
+            for (let i = 1+NUM_STANDARD_INSTR_PAGES+1; i <= 1+NUM_STANDARD_INSTR_PAGES+NUM_STANDARD_INFO_PAGES; i++) {
                 this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
             }
             // 4. Experimental blocks for Standard ACVS
@@ -65,9 +65,9 @@ exp.ACIT = class extends exp.ExperimentKernel {
                 ));
             }
             // 5. Task interval
-            this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${NUM_STANDARD_INSTR_PAGES + NUM_STANDARD_INFO_PAGES + 1}.${INSTR_FILE_EXT}>`], " "));
+            this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${1+NUM_STANDARD_INSTR_PAGES+NUM_STANDARD_INFO_PAGES + 1}.${INSTR_FILE_EXT}>`], " "));
             // 6. Instructions for Color Cue ACVS
-            for (let i = NUM_STANDARD_INSTR_PAGES + NUM_STANDARD_INFO_PAGES + 1 + 1; i <= NUM_STANDARD_INSTR_PAGES + NUM_STANDARD_INFO_PAGES + 1 + NUM_COLORCUE_INSTR_PAGES; i++) {
+            for (let i = 1+NUM_STANDARD_INSTR_PAGES+NUM_STANDARD_INFO_PAGES+1 + 1; i <= 1+NUM_STANDARD_INSTR_PAGES+NUM_STANDARD_INFO_PAGES+1 + NUM_COLORCUE_INSTR_PAGES; i++) {
                 this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
             }
             // 7. Practice trials for Color Cue ACVS
@@ -91,7 +91,7 @@ exp.ACIT = class extends exp.ExperimentKernel {
             this._db.experiment_type = "ACIT-2-Info-Cue+Standard";
             const INSTR_ROOT = "https://exp.leberatory.org/files/instr/acit-2/";
             // 1. Instructions for Color Cue ACVS
-            for (let i = 1; i <= NUM_COLORCUE_INSTR_PAGES; i++) {
+            for (let i = 1; i <= 1+NUM_COLORCUE_INSTR_PAGES; i++) {
                 this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
             }
             // 2. Practice trials for Color Cue ACVS
@@ -102,7 +102,7 @@ exp.ACIT = class extends exp.ExperimentKernel {
                 [0, 400, 1400]  // timing
             ));
             // 3. Optimal strategy info for Color Cue ACVS
-            for (let i = NUM_COLORCUE_INSTR_PAGES+1; i <= NUM_COLORCUE_INSTR_PAGES + NUM_COLORCUE_INFO_PAGES; i++) {
+            for (let i = 1+NUM_COLORCUE_INSTR_PAGES + 1; i <= 1+NUM_COLORCUE_INSTR_PAGES+NUM_COLORCUE_INFO_PAGES; i++) {
                 this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
             }
             // 4. Experimental blocks for Color Cue ACVS
@@ -115,9 +115,9 @@ exp.ACIT = class extends exp.ExperimentKernel {
                 ));
             }
             // 5. Task interval
-            this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${NUM_COLORCUE_INSTR_PAGES + NUM_COLORCUE_INFO_PAGES + 1}.${INSTR_FILE_EXT}>`], " "));
+            this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${1+NUM_COLORCUE_INSTR_PAGES+NUM_COLORCUE_INFO_PAGES + 1}.${INSTR_FILE_EXT}>`], " "));
             // 6. Instructions for Standard ACVS
-            for (let i = NUM_COLORCUE_INSTR_PAGES + NUM_COLORCUE_INFO_PAGES + 1 + 1; i <= NUM_COLORCUE_INSTR_PAGES + NUM_COLORCUE_INFO_PAGES + 1 + NUM_STANDARD_INSTR_PAGES; i++) {
+            for (let i = 1+NUM_COLORCUE_INSTR_PAGES+NUM_COLORCUE_INFO_PAGES+1 + 1; i <= 1+NUM_COLORCUE_INSTR_PAGES+NUM_COLORCUE_INFO_PAGES+1 + NUM_STANDARD_INSTR_PAGES; i++) {
                 this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
             }
             // 7. Practice trials for Standard ACVS
@@ -141,7 +141,7 @@ exp.ACIT = class extends exp.ExperimentKernel {
             this._db.experiment_type = "ACIT-3-Ctrl-Standard+Cue";
             const INSTR_ROOT = "https://exp.leberatory.org/files/instr/acit-3/";
             // 1. Instructions for Standard ACVS
-            for (let i = 1; i <= NUM_STANDARD_INSTR_PAGES; i++) {
+            for (let i = 1; i <= 1+NUM_STANDARD_INSTR_PAGES; i++) {
                 this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
             }
             // 2. Practice trials for Standard ACVS
@@ -161,9 +161,9 @@ exp.ACIT = class extends exp.ExperimentKernel {
                 ));
             }
             // 4. Task interval
-            this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${NUM_STANDARD_INSTR_PAGES + 1}.${INSTR_FILE_EXT}>`], " "));
+            this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${1+NUM_STANDARD_INSTR_PAGES + 1}.${INSTR_FILE_EXT}>`], " "));
             // 5. Instructions for Color Cue ACVS
-            for (let i = NUM_STANDARD_INSTR_PAGES + 1 + 1; i <= NUM_STANDARD_INSTR_PAGES + 1 + NUM_COLORCUE_INSTR_PAGES; i++) {
+            for (let i = 1+NUM_STANDARD_INSTR_PAGES+1 + 1; i <= 1+NUM_STANDARD_INSTR_PAGES+1 + NUM_COLORCUE_INSTR_PAGES; i++) {
                 this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
             }
             // 6. Practice trials for Color Cue ACVS
@@ -182,12 +182,12 @@ exp.ACIT = class extends exp.ExperimentKernel {
                     [0, 400, 1400]  // timing
                 ));
             }
-        } else if (version_id === 4) {
+        } else if (version_id === 0) {
             // Color Cue ACVS + Standard ACVS
             this._db.experiment_type = "ACIT-4-Ctrl-Cue+Standard";
             const INSTR_ROOT = "https://exp.leberatory.org/files/instr/acit-4/";
             // 1. Instructions for Color Cue ACVS
-            for (let i = 1; i <= NUM_COLORCUE_INSTR_PAGES; i++) {
+            for (let i = 1; i <= 1+NUM_COLORCUE_INSTR_PAGES; i++) {
                 this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
             }
             // 2. Practice trials for Color Cue ACVS
@@ -207,9 +207,9 @@ exp.ACIT = class extends exp.ExperimentKernel {
                 ));
             }
             // 4. Task interval
-            this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${NUM_COLORCUE_INSTR_PAGES + 1}.${INSTR_FILE_EXT}>`], " "));
+            this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${1+NUM_COLORCUE_INSTR_PAGES + 1}.${INSTR_FILE_EXT}>`], " "));
             // 5. Instructions for Standard ACVS
-            for (let i = NUM_COLORCUE_INSTR_PAGES + 1 + 1; i <= NUM_COLORCUE_INSTR_PAGES + 1 + NUM_STANDARD_INSTR_PAGES; i++) {
+            for (let i = 1+NUM_COLORCUE_INSTR_PAGES+1 + 1; i <= 1+NUM_COLORCUE_INSTR_PAGES+1 + NUM_STANDARD_INSTR_PAGES; i++) {
                 this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
             }
             // 6. Practice trials for Standard ACVS
@@ -230,6 +230,8 @@ exp.ACIT = class extends exp.ExperimentKernel {
             }
         }
 
-        this.add_new_step(new exp.SubmitDataStep(this._db));
+        this.add_new_step(new exp.SubmitDataStep(this._db,
+            "https://exp.leberatory.org/experiments/acit/receive.php",
+            "https://prolific.co"));
     }
 }
