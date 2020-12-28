@@ -10,17 +10,15 @@
         $handle = fopen($fname, "w");
         fwrite($handle, "");
         fclose($handle);
-        // Creating the experiment link
+        // Create the experiment link
         $exp_link = "exp.php?PROLIFIC_PID=".$_GET['PROLIFIC_PID'].
             "&STUDY_ID=".$_GET['STUDY_ID']."&SESSION_ID=".$_GET['SESSION_ID'].
             "&CB_ID=".count(glob("cb/*"));
-        // Creating manual redirect link
+        // Create manual redirect link
         echo "<p>Redirecting you to the experiment page ...</p>";
         echo "<p>If page is not redirected after 3 seconds, you can click on ";
         echo "<a href=\"".$exp_link."\">this</a> to manually open the ";
         echo "experiment page.</p>";
-        // Send a redirect to the experiment page
-        header( "refresh:3; url=".$exp_link );
     } else {
         echo "<p>One or more Prolific URL parameters are missing.</p>";
         echo "<p>For testing purposes, add this to :</p>";
@@ -28,3 +26,18 @@
     }
 
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launch</title>
+</head>
+<body>
+    <script>
+        setTimeout(()=>{
+            window.location.replace("<?php echo $exp_link ?>");
+        }, 3000);
+    </script>
+</body>
+</html>
