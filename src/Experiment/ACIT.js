@@ -25,46 +25,38 @@ exp.ACIT = class extends exp.ExperimentKernel {
         this.add_new_step(new exp.CheckBrowserStep(this._db));
 
         const INSTR_FILE_EXT = "jpeg";
-        const NUM_TASK1_BLOCK = 2;
-        const NUM_TASK2_BLOCK = 2;
+        const NUM_TASK1_BLOCK = 1;
+        const NUM_TASK2_BLOCK = 1;
+        const NUM_STANDARD_INSTR_PAGES = 0;
+        const NUM_COLORCUE_INSTR_PAGES = 0;
+        const NUM_STANDARD_INFO_PAGES = 1;
+        const NUM_COLORCUE_INFO_PAGES = 1;
 
         // Get determine version based on counterbalance id
+        // Possible values for version_id: 1, 2, 3, 0
         const version_id = parseInt(util.Util.get_cb_id()) % 4;
 
-        // if (Math.random() < 0.5) {
-        if (version_id === 1 || version_id === 3) {
-            // If first task is Standard ACVS (ACIT 1 & 3)
-            let instr_root = "";
-            let num_task1_instr_slides = 0;
-            let num_task2_instr_slides = 0;
-            // if (Math.random() < 0.5) {
-            if (version_id === 1) {
-                // If first task is informed
-                this._db.experiment_type = "ACIT-1";
-                num_task1_instr_slides = 10;
-                num_task2_instr_slides = 10;
-                instr_root = "https://exp.leberatory.org/files/instr/acit-1/";
-            } else {
-                // If first task is control
-                this._db.experiment_type = "ACIT-3";
-                num_task1_instr_slides = 9;
-                num_task2_instr_slides = 10;
-                instr_root = "https://exp.leberatory.org/files/instr/acit-3/";
+        if (version_id === 1) {
+            // Standard ACVS informed + Color Cue ACVS
+            this._db.experiment_type = "ACIT-1-Info-Standard+Cue";
+            const INSTR_ROOT = "https://exp.leberatory.org/files/instr/acit-1/";
+            // 1. Instructions for Standard ACVS
+            for (let i = 1; i <= NUM_STANDARD_INSTR_PAGES; i++) {
+                this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
             }
-
-            // Instructions for Standard ACVS
-            for (let i = 1; i <= num_task1_instr_slides; i++) {
-                this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${instr_root}${i}.${INSTR_FILE_EXT}>`], " "));
-            }
-            // Practice block for Standard ACVS
+            // 2. Practice trials for Standard ACVS
             this.add_new_step(new exp.Block(
                 this._db,
                 0,  // block number
                 new disp.StandardDisplayGenerator(12, 10),    // is practice block; has preview
                 [0, 400, 1400]  // timing
             ));
-            // Experimental blocks for Standard ACVS
-            for (let i = 1; i <= num_task1_instr_slides; i++) {
+            // 3. Optimal strategy info for Standard ACVS
+            for (let i = NUM_STANDARD_INSTR_PAGES+1; i <= NUM_STANDARD_INSTR_PAGES + NUM_STANDARD_INFO_PAGES; i++) {
+                this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
+            }
+            // 4. Experimental blocks for Standard ACVS
+            for (let i = 1; i <= NUM_TASK1_BLOCK; i++) {
                 this.add_new_step(new exp.Block(
                     this._db,
                     i,  // block number
@@ -72,22 +64,20 @@ exp.ACIT = class extends exp.ExperimentKernel {
                     [0, 400, 1400]  // timing
                 ));
             }
-
-            // Instruction slide for the task interval
-            this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${instr_root}${num_task1_instr_slides + 1}.${INSTR_FILE_EXT}>`], " "));
-
-            // Instructions for Color Cue ACVS
-            for (let i = num_task1_instr_slides + 1 + 1; i <= num_task1_instr_slides + 1 + num_task2_instr_slides; i++) {
-                this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${instr_root}${i}.${INSTR_FILE_EXT}>`], " "));
+            // 5. Task interval
+            this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${NUM_STANDARD_INSTR_PAGES + NUM_STANDARD_INFO_PAGES + 1}.${INSTR_FILE_EXT}>`], " "));
+            // 6. Instructions for Color Cue ACVS
+            for (let i = NUM_STANDARD_INSTR_PAGES + NUM_STANDARD_INFO_PAGES + 1 + 1; i <= NUM_STANDARD_INSTR_PAGES + NUM_STANDARD_INFO_PAGES + 1 + NUM_COLORCUE_INSTR_PAGES; i++) {
+                this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
             }
-            // Practice block for Color Cue ACVS
+            // 7. Practice trials for Color Cue ACVS
             this.add_new_step(new exp.Block(
                 this._db,
                 0,  // block number
                 new disp.ColorCueDisplayGenerator2(12, 10),    // is practice block; has preview
                 [0, 400, 1400]  // timing
             ));
-            // Experimental blocks for Color Cue ACVS
+            // 8. Experimental blocks for Color Cue ACVS
             for (let i = NUM_TASK1_BLOCK + 1; i <= NUM_TASK1_BLOCK + NUM_TASK2_BLOCK; i++) {
                 this.add_new_step(new exp.Block(
                     this._db,
@@ -96,38 +86,26 @@ exp.ACIT = class extends exp.ExperimentKernel {
                     [0, 400, 1400]  // timing
                 ));
             }
-        } else {
-            // If first task is Color Cue ACVS (ACIT 2 & 4)
-            let instr_root = "";
-            let num_task1_instr_slides = 0;
-            let num_task2_instr_slides = 0;
-            // if (Math.random() < 0.5) {
-            if (version_id === 2) {
-                // If first task is informed
-                this._db.experiment_type = "ACIT-2";
-                num_task1_instr_slides = 12;
-                num_task2_instr_slides = 8;
-                instr_root = "https://exp.leberatory.org/files/instr/acit-2/";
-            } else {
-                // If first task is control
-                this._db.experiment_type = "ACIT-4";
-                num_task1_instr_slides = 11;
-                num_task2_instr_slides = 8;
-                instr_root = "https://exp.leberatory.org/files/instr/acit-4/";
+        } else if (version_id === 2) {
+            // Color Cue ACVS informed + Standard ACVS
+            this._db.experiment_type = "ACIT-2-Info-Cue+Standard";
+            const INSTR_ROOT = "https://exp.leberatory.org/files/instr/acit-2/";
+            // 1. Instructions for Color Cue ACVS
+            for (let i = 1; i <= NUM_COLORCUE_INSTR_PAGES; i++) {
+                this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
             }
-
-            // Instructions for Color Cue ACVS
-            for (let i = 1; i <= num_task1_instr_slides; i++) {
-                this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${instr_root}${i}.${INSTR_FILE_EXT}>`], " "));
-            }
-            // Practice block for Color Cue ACVS
+            // 2. Practice trials for Color Cue ACVS
             this.add_new_step(new exp.Block(
                 this._db,
                 0,  // block number
                 new disp.ColorCueDisplayGenerator2(12, 10),    // is practice block; has preview
                 [0, 400, 1400]  // timing
             ));
-            // Experimental blocks for Color Cue ACVS
+            // 3. Optimal strategy info for Color Cue ACVS
+            for (let i = NUM_COLORCUE_INSTR_PAGES+1; i <= NUM_COLORCUE_INSTR_PAGES + NUM_COLORCUE_INFO_PAGES; i++) {
+                this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
+            }
+            // 4. Experimental blocks for Color Cue ACVS
             for (let i = 1; i <= NUM_TASK1_BLOCK; i++) {
                 this.add_new_step(new exp.Block(
                     this._db,
@@ -136,22 +114,112 @@ exp.ACIT = class extends exp.ExperimentKernel {
                     [0, 400, 1400]  // timing
                 ));
             }
-
-            // Instruction slide for the task interval
-            this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${instr_root}${num_task1_instr_slides + 1}.${INSTR_FILE_EXT}>`], " "));
-
-            // Instructions for Standard ACVS
-            for (let i = num_task1_instr_slides + 1 + 1; i <= num_task1_instr_slides + 1 + num_task2_instr_slides; i++) {
-                this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${instr_root}${i}.${INSTR_FILE_EXT}>`], " "));
+            // 5. Task interval
+            this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${NUM_COLORCUE_INSTR_PAGES + NUM_COLORCUE_INFO_PAGES + 1}.${INSTR_FILE_EXT}>`], " "));
+            // 6. Instructions for Standard ACVS
+            for (let i = NUM_COLORCUE_INSTR_PAGES + NUM_COLORCUE_INFO_PAGES + 1 + 1; i <= NUM_COLORCUE_INSTR_PAGES + NUM_COLORCUE_INFO_PAGES + 1 + NUM_STANDARD_INSTR_PAGES; i++) {
+                this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
             }
-            // Practice block for Standard ACVS
+            // 7. Practice trials for Standard ACVS
             this.add_new_step(new exp.Block(
                 this._db,
                 0,  // block number
                 new disp.StandardDisplayGenerator(12, 10),    // is practice block; has preview
                 [0, 400, 1400]  // timing
             ));
-            // Experimental blocks for Standard ACVS
+            // 8. Experimental blocks for Standard ACVS
+            for (let i = NUM_TASK1_BLOCK + 1; i <= NUM_TASK1_BLOCK + NUM_TASK2_BLOCK; i++) {
+                this.add_new_step(new exp.Block(
+                    this._db,
+                    i,  // block number
+                    new disp.StandardDisplayGenerator(84),    // is not practice block; has preview
+                    [0, 400, 1400]  // timing
+                ));
+            }
+        } else if (version_id === 3) {
+            // Standard ACVS + Color Cue ACVS
+            this._db.experiment_type = "ACIT-3-Ctrl-Standard+Cue";
+            const INSTR_ROOT = "https://exp.leberatory.org/files/instr/acit-3/";
+            // 1. Instructions for Standard ACVS
+            for (let i = 1; i <= NUM_STANDARD_INSTR_PAGES; i++) {
+                this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
+            }
+            // 2. Practice trials for Standard ACVS
+            this.add_new_step(new exp.Block(
+                this._db,
+                0,  // block number
+                new disp.StandardDisplayGenerator(12, 10),    // is practice block; has preview
+                [0, 400, 1400]  // timing
+            ));
+            // 3. Experimental blocks for Standard ACVS
+            for (let i = 1; i <= NUM_TASK1_BLOCK; i++) {
+                this.add_new_step(new exp.Block(
+                    this._db,
+                    i,  // block number
+                    new disp.StandardDisplayGenerator(84),    // is not practice block; has preview
+                    [0, 400, 1400]  // timing
+                ));
+            }
+            // 4. Task interval
+            this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${NUM_STANDARD_INSTR_PAGES + 1}.${INSTR_FILE_EXT}>`], " "));
+            // 5. Instructions for Color Cue ACVS
+            for (let i = NUM_STANDARD_INSTR_PAGES + 1 + 1; i <= NUM_STANDARD_INSTR_PAGES + 1 + NUM_COLORCUE_INSTR_PAGES; i++) {
+                this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
+            }
+            // 6. Practice trials for Color Cue ACVS
+            this.add_new_step(new exp.Block(
+                this._db,
+                0,  // block number
+                new disp.ColorCueDisplayGenerator2(12, 10),    // is practice block; has preview
+                [0, 400, 1400]  // timing
+            ));
+            // 7. Experimental blocks for Color Cue ACVS
+            for (let i = NUM_TASK1_BLOCK + 1; i <= NUM_TASK1_BLOCK + NUM_TASK2_BLOCK; i++) {
+                this.add_new_step(new exp.Block(
+                    this._db,
+                    i,  // block number
+                    new disp.ColorCueDisplayGenerator2(84),    // is not practice block; has preview
+                    [0, 400, 1400]  // timing
+                ));
+            }
+        } else if (version_id === 4) {
+            // Color Cue ACVS + Standard ACVS
+            this._db.experiment_type = "ACIT-4-Ctrl-Cue+Standard";
+            const INSTR_ROOT = "https://exp.leberatory.org/files/instr/acit-4/";
+            // 1. Instructions for Color Cue ACVS
+            for (let i = 1; i <= NUM_COLORCUE_INSTR_PAGES; i++) {
+                this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
+            }
+            // 2. Practice trials for Color Cue ACVS
+            this.add_new_step(new exp.Block(
+                this._db,
+                0,  // block number
+                new disp.ColorCueDisplayGenerator2(12, 10),    // is practice block; has preview
+                [0, 400, 1400]  // timing
+            ));
+            // 3. Experimental blocks for Color Cue ACVS
+            for (let i = 1; i <= NUM_TASK1_BLOCK; i++) {
+                this.add_new_step(new exp.Block(
+                    this._db,
+                    i,  // block number
+                    new disp.ColorCueDisplayGenerator2(84),    // is not practice block; has preview
+                    [0, 400, 1400]  // timing
+                ));
+            }
+            // 4. Task interval
+            this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${NUM_COLORCUE_INSTR_PAGES + 1}.${INSTR_FILE_EXT}>`], " "));
+            // 5. Instructions for Standard ACVS
+            for (let i = NUM_COLORCUE_INSTR_PAGES + 1 + 1; i <= NUM_COLORCUE_INSTR_PAGES + 1 + NUM_STANDARD_INSTR_PAGES; i++) {
+                this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
+            }
+            // 6. Practice trials for Standard ACVS
+            this.add_new_step(new exp.Block(
+                this._db,
+                0,  // block number
+                new disp.StandardDisplayGenerator(12, 10),    // is practice block; has preview
+                [0, 400, 1400]  // timing
+            ));
+            // 7. Experimental blocks for Standard ACVS
             for (let i = NUM_TASK1_BLOCK + 1; i <= NUM_TASK1_BLOCK + NUM_TASK2_BLOCK; i++) {
                 this.add_new_step(new exp.Block(
                     this._db,
@@ -161,8 +229,6 @@ exp.ACIT = class extends exp.ExperimentKernel {
                 ));
             }
         }
-
-
 
         this.add_new_step(new exp.SubmitDataStep(this._db));
     }
