@@ -143,15 +143,15 @@ util.Util = class Util {
     }
 
     static is_test_mode() {
-        return d3.select("#hidden-test").html() === "true";
+        return document.getElementById("hidden-test").innerText === "true";
     }
 
     static get_sub_id() {
-        return d3.select("#hidden-sub-id").html();
+        return document.getElementById("hidden-sub-id").innerText;
     }
 
     static is_alt_server_mode() {
-        return d3.select("#hidden-alt").html() === "true";
+        return document.getElementById("hidden-alt").innerText === "true";
     }
 
     /**
