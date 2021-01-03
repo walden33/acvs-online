@@ -14,7 +14,7 @@ util.Workspace = class Workspace {
 
     static show_header(text) {
         // clear any existing header
-        HtmlGui.clear_header();
+        Workspace.clear_header();
         // add a new header <div>
         d3.select("body")
             .insert("div", ":first-child")
@@ -46,7 +46,7 @@ util.Workspace = class Workspace {
 
 
     static append_paragraphs(html, font_size = 1.5) {
-        HtmlGui.workspace().selectAll("p").data(html)
+        Workspace.workspace().selectAll("p").data(html)
             .enter().append("p")
             .style("font-size", String(font_size) + "em")
             .html(function (d) { return d; });
@@ -55,7 +55,7 @@ util.Workspace = class Workspace {
 
     static append_image(img) {
         img = [img.src];
-        HtmlGui.workspace().selectAll("img").data(img)
+        Workspace.workspace().selectAll("img").data(img)
             .enter().append("img")
             .attr('src', function (d) { return d; })
             .attr('class', "ace_centered_div_content");
@@ -63,7 +63,7 @@ util.Workspace = class Workspace {
 
 
     static append_button(buttonText, onClickCallback) {
-        let button = HtmlGui.workspace().selectAll("button").data([buttonText])
+        let button = Workspace.workspace().selectAll("button").data([buttonText])
             .enter().append("button");
         button.text(function (d) { return d; });
         button.attr("id", function (d) { return d + "_button"; });
@@ -72,7 +72,7 @@ util.Workspace = class Workspace {
 
     static show_message(text, color = "white") {
         // clear any existing header
-        HtmlGui.clear_message();
+        Workspace.clear_message();
         // add a new header <div>
         d3.select("body")
             .insert("div", ":first-child")
