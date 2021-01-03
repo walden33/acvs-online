@@ -53,6 +53,12 @@ util.Workspace = class Workspace {
     }
 
 
+    static append_html(html) {
+        document.getElementById("workspace").innerHTML =
+            document.getElementById("workspace").innerHTML + html;
+    }
+
+
     static append_image(img) {
         img = [img.src];
         Workspace.workspace().selectAll("img").data(img)
