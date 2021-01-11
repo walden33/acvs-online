@@ -53,6 +53,31 @@ util.Workspace = class Workspace {
     }
 
 
+    static append_line(html, font_size=1.5, color="white", life=0) {
+        const id = util.Util.random_string(8);
+        Workspace.workspace().append("div")
+            .attr("id", id)
+            .style("font-size", String(font_size) + "em")
+            .style("color", color)
+            .html(html);
+        if (life > 0) {
+            setTimeout(() => {
+                Workspace.workspace().select("#" + id).remove();
+            }, life);
+        }
+    }
+
+
+    /**
+     * @deprecated
+     * 
+     * This method appends given HTML code to the existing HTML in workspace.
+     * Problems were identified when using this method; it would remove existing
+     * event listeners on elements like <button> in orginal HTML code.
+     * 
+     * @param {string} html : HTML code to append
+     * 
+     */
     static append_html(html) {
         document.getElementById("workspace").innerHTML =
             document.getElementById("workspace").innerHTML + html;

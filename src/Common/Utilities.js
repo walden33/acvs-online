@@ -63,6 +63,14 @@ util.Util = class Util {
         return arr;
     }
 
+    /**
+     * 
+     * @param {number} length : the length of the random string, must be 2 - 8
+     */
+    static random_string(length) {
+        return Math.random().toString(36).slice(-length);
+    }
+
     static window_is_iframe() {
         try {
             return window.self !== window.top;
