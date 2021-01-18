@@ -54,7 +54,7 @@ util.Workspace = class Workspace {
 
 
     static append_line(html, font_size=1.5, color="white", life=0) {
-        const id = util.Util.random_string(8);
+        const id = "s_" + util.Util.random_string(8);
         Workspace.workspace().append("div")
             .attr("id", id)
             .style("font-size", String(font_size) + "em")
