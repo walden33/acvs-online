@@ -8,7 +8,7 @@
  * <DisplayDataset> that contains a number of <disp.Square>, <disp.Digit>,
  * <disp.Circle>, <disp.Line>, etc. for d3 to draw on the screen.
  * 
- * @package ac-spatial-cue-1
+ * @package acvs-online
  * @version 1.4 (07/20/2020)
  * @author Walden Li
  * 
