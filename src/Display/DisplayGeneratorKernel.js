@@ -206,4 +206,38 @@ disp.DisplayGenerator = class {
             return null;
         }
     }
+
+
+    /**
+     * A static version of the method get_grid_pos().
+     */
+    static get_grid_pos() {
+        const setting = new disp.DisplaySetting();
+        let result = new Map();
+        const r = setting.ring_radius;
+        const cx = setting.screen_center_x;
+        const cy = setting.screen_center_y;
+        const sz = setting.square_size;
+        const p = setting.subring_radius_proportion;
+        let i = 1;  // grid number, to be set as the key of the output <Map>
+        for (let j = 0; j < 3; j++) {   // three rings, from inner to outer
+            let n = setting.ring_square_numbers[j];    // get # of squares in this ring
+            for (let k = 0; k < n; k++) {
+                // Create an Object to store grid info
+                let grid = {};
+                let angle = 2 * Math.PI / n;
+                grid.x = Math.cos(angle * k + Math.PI / 2) * r * p[j] + cx;
+                grid.y = Math.sin(angle * k + Math.PI / 2) * r * p[j] + cy;
+                grid.rect_x = grid.x - sz / 2;
+                grid.rect_y = grid.y - sz / 2;
+                grid.ecc = j + 1;     // eccentricity
+                grid.alpha = angle * k;
+                // Set the Object as the value of the key (grid number)
+                result.set(i, grid);
+                i++;
+            }
+
+        }
+        return result;
+    }
 }
