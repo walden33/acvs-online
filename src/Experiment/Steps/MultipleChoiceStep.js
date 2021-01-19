@@ -2,13 +2,14 @@
  * A step class that shows participant a multiple choice question
  * 
  * @author Walden Y. Li
- * @version 1.1 (01/07/2020)
+ * @version 1.1 (01/07/2021)
  */
 exp.MultipleChoice = class extends util.AbstractStep {
 
     constructor(db) {
         super();
         this._db = db;
+        this._db._answer = [];
 
         // View
         // Default values for HTML elements
@@ -56,7 +57,7 @@ exp.MultipleChoice = class extends util.AbstractStep {
 
         // Composing HTML for the multiple choice question
         let html = "";
-        html += "<div style=\"font-size: 2em; color: white;\">";
+        html += "<div style=\"font-size: 1.6em; color: white;\">";
         // Add the question
         html += "<div>" + this._question + "</div>";
         // Randomize the choice options
@@ -75,9 +76,22 @@ exp.MultipleChoice = class extends util.AbstractStep {
         html += "</div>";
         util.Workspace.append_html(html);
 
-        util.Workspace.append_button("Submit", () => {
-            alert(this.check_correctness())
-        });
+        util.Workspace.workspace().append("button")
+            .text("Submit")
+            .attr("class", "btn-wide")
+            .on("click", () => {
+                const result = this.check_correctness();
+                this._db._answer.push(result);
+                console.log(this._db)
+                if (result === true) {
+                    util.Workspace.clear_workspace();
+                    this.step_completed_signal.emit();
+                }
+                else {
+                    let error_msg = "Incorrect. Please try again.";
+                    util.Workspace.append_line(error_msg, 1.6, "red", 1000);
+                }
+            });
 
     }
 }
