@@ -52,6 +52,8 @@ Temporary Items
 /bin
 /doc
 /others
+/test
+/src/Test
 
 # All files that has old_ prefix
 **/old_*
