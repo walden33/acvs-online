@@ -25,7 +25,7 @@ disp.MultipleChoiceWidget = class {
         this._choices = [];
     }
 
-        /**
+    /**
      * 
      * @param {string} str : The question
      */
@@ -76,12 +76,11 @@ disp.MultipleChoiceWidget = class {
     }
 
     show_error_msg(html) {
-        util.Workspace.append_line(error_msg, 1.6, "red", 1000);
         const id = "s_" + util.Util.random_string(8);
         this._main_div.append("div")
             .attr("id", id)
-            .style("font-size", String(font_size) + "em")
-            .style("color", color)
+            // .style("font-size", "1.6em")
+            .style("color", "red")
             .html(html);
         setTimeout(() => {
             this._main_div.select("#" + id).remove()
