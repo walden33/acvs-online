@@ -15,7 +15,7 @@
  * @update 1.5 Added run_rsvp() method.
  */
 disp.DisplayWidget = class {
-    constructor(parent) {
+    constructor(parent, size="0 0 100 100") {
         this.parent = parent;   // the parent HTML element for the widget
         this.cue;
         this.stimuli;
@@ -24,7 +24,7 @@ disp.DisplayWidget = class {
             .attr("class", "svg_container");
         // Create the svg element and selection
         this.svg = this.svg_container.selectAll("svg").data([0]).enter().append("svg")
-            .attr("viewBox", "0 0 100 100")
+            .attr("viewBox", size)
             .attr("preserveAspectRatio", "xMinYMin meet")
             .attr("class", "ace_svg_content_responsive");
         // TODO: a previously included event listener
