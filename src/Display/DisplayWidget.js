@@ -88,7 +88,9 @@ disp.DisplayWidget = class {
             .attr("y", d => d.y )
             .attr("width", d => d.width )
             .attr("height", d => d.height )
-            .attr("fill", d => d.fill );
+            .attr("fill", d => d.fill )
+            .attr("class", d => d.className)
+            .attr("id", d => d.id);
         rects.exit().remove();
 
         // Draw the circles
@@ -99,7 +101,9 @@ disp.DisplayWidget = class {
             .attr("r", d => d.r )
             .attr("fill", d => d.fill )
             .attr("stroke", d => d.stroke )
-            .attr("stroke-width", d => d.strokeWidth );
+            .attr("stroke-width", d => d.strokeWidth )
+            .attr("class", d => d.className)
+            .attr("id", d => d.id);
         circles.exit().remove();
 
         // Draw the lines
@@ -110,7 +114,9 @@ disp.DisplayWidget = class {
             .attr("x2", d => d.x2 )
             .attr("y2", d => d.y2 )
             .attr("stroke", d => d.stroke )
-            .attr("stroke-width", d => d.strokeWidth );
+            .attr("stroke-width", d => d.strokeWidth )
+            .attr("class", d => d.className)
+            .attr("id", d => d.id);
         lines.exit().remove();
 
         // Draw the texts
@@ -122,7 +128,8 @@ disp.DisplayWidget = class {
             .attr("fill", d => d.fill )
             .attr("font-size", d => d.fontSize )
             .attr("class", d => d.className )
-            .style("font-family", d => d.fontFamily)
+            .attr("id", d => d.id)
+            .style("font-family", d => d.fontFamily);
         texts.exit().remove();
 
 
