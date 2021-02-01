@@ -2,7 +2,7 @@
  * A class that encapsulates all the elements that will be used by d3 to draw on
  * the display.
  * 
- * @package ac-spatial-cue-1
+ * @package acvs-online
  * @version 1.4 (07/21/2020)
  * @author Walden Li
  * 
