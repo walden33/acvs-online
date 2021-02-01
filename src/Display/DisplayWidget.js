@@ -15,13 +15,14 @@
  * @update 1.5 Added run_rsvp() method.
  */
 disp.DisplayWidget = class {
-    constructor(parent, size="0 0 100 100") {
+    constructor(parent, size="0 0 100 100", width="90vmin") {
         this.parent = parent;   // the parent HTML element for the widget
         this.cue;
         this.stimuli;
         // Create the svg container element and selection
         this.svg_container = this.parent.selectAll("div").data([0]).enter().append("div")
-            .attr("class", "svg_container");
+            .attr("class", "svg_container")
+            .style("width", width);
         // Create the svg element and selection
         this.svg = this.svg_container.selectAll("svg").data([0]).enter().append("svg")
             .attr("viewBox", size)
@@ -59,13 +60,15 @@ disp.DisplayWidget = class {
      * the display center.
      * 
      * @param {string} text
+     * @param {string} x : x coordinate for the text
+     * @param {string} y : y coordinate for the text
      */
-    show_feedback( text ) {
+    show_feedback( text, x = "50", y = "50" ) {
         this.clear();
         this.svg.append("text")
             .text(text)
-            .attr("x", '50')
-            .attr("y", '50')
+            .attr("x", x)
+            .attr("y", y)
             .attr("class", "acvs-feedback");
     }
 
@@ -163,6 +166,10 @@ disp.DisplayWidget = class {
             setTimeout(()=>{ this.draw( stimuli[i] ) }, isi*i + soa );
         }
 
+    }
+
+    dump(text) {
+        this.parent.insert("div", ":first-child").html(text).style("color", "white");
     }
 
 }
