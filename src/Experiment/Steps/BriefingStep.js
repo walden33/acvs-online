@@ -17,9 +17,9 @@ exp.BriefingStep = class extends(util.AbstractStep) {
   ///
   execute () {
     // show the image on screen
-    exp.HtmlGui.clear_header();
-    exp.HtmlGui.clear_workspace();
-    exp.HtmlGui.append_paragraphs([this._htmlImgTag]);
+    util.Workspace.clear_header();
+    util.Workspace.clear_workspace();
+    util.Workspace.append_paragraphs([this._htmlImgTag]);
 
     // if the user hits the callbackKey, then the step will exit
     let keyboard = new util.KeyFilter( (function (key) {
