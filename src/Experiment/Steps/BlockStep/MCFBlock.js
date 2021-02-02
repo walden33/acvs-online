@@ -22,10 +22,10 @@ exp.MCFBlock = class extends util.AbstractStep {
 
         this._targ_sq_color = "";
         this._targ_cir_color = "";
-        if (cb_no === 0) {
+        if (cb_no === 1) {
             this._targ_sq_color = "red";
             this._targ_cir_color = "green";
-        } else if (cb_no === 1) {
+        } else if (cb_no === 0) {
             this._targ_sq_color = "green";
             this._targ_cir_color = "red";
         }

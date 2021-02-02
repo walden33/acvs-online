@@ -81,11 +81,15 @@ exp.MCFTrial = class extends exp.AbstractTrial {
     }
 
     _end_trial() {
+        // Record trial info
+        this.trial_data.blockTrial = this._trial_number_in_block;
+        this.trial_data.blockNumber = this._block_number;
         // Record trial result
-        this.trial_data.run_length = this._n_run;
+        this.trial_data.run_number = this._n_run;
+        this.trial_data.run_length = 40/this._n_run;
         this.trial_data.n_wrong_attempt = this._n_wrong_attempt;
         this.trial_data.response_sequence = this._response_sequence;
-        this.trial_data.rt = this.trial_data.trial_completed_timestamp - this.trial_data.stimuli_rendered_timestamp;
+        this.trial_data.rt = (this.trial_data.trial_completed_timestamp - this.trial_data.stimuli_rendered_timestamp)/1000;
         console.log(this.trial_data);
         this._display_widget.clear();
         // this._display_widget.show_feedback()
