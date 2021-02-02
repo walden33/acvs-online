@@ -1,5 +1,5 @@
 /**
- * 
+ * A trial class for Mouse Click Foraging task.
  */
 exp.MCFTrial = class extends exp.AbstractTrial {
 
@@ -13,19 +13,19 @@ exp.MCFTrial = class extends exp.AbstractTrial {
 
         this.trial_completed_signal = new util.Signal();
 
-        this._display_widget = new disp.DisplayWidget(util.Workspace.workspace());
+        this._display_widget = new disp.DisplayWidget(util.Workspace.workspace(), "0 0 100 80", "125vmin");
 
         // Create an object to store the data for this Trial
         this.trial_data = { "trial_start_timestamp": performance.now() };
 
         // Trial parameters
-        this._iti = 1000;   // fixation cross duration
+        this._fixation_duration = 1000;   // duration fixation cross is shown
         this._feedback_duration = 1500;
 
         // Trial runtime variables
         this._n_targ_left = 40;
         this._n_run = 1;
-        this._this._response_sequence = [];
+        this._response_sequence = [];
         this._n_wrong_attempt = 0;
 
         // These two parameters are used in blockstep
@@ -50,82 +50,76 @@ exp.MCFTrial = class extends exp.AbstractTrial {
             d3.select("#" + data.id).remove();
         } else {
             // If not, clear the display
-            w.clear();
+            this._display_widget.clear();
             // Play a beep sound
             util.Util.play_beep_sound();
             // Show feedback
-            w.show_feedback(
+            this._display_widget.show_feedback(
                 "Oops, remember the targets are " + this._targ_sq_color + " squares " +
-                "and " + this._targ_cir_color + " circles.", 50, 40);
+                "and " + this._targ_cir_color + " circles. " +
+                "Let's try again!", 50, 40);
             // Increment wrong attempt count
             this._n_wrong_attempt++;
-            // Clear response sequence array
-            this._response_sequence = [];
+            // Reset trial parameters
+            this._reset_trial();
             // After 3 seconds, show the display again
             setTimeout(() => {
-                render();
+                this._render();
             }, 3000);
         }
         // Check if there is any target left
         if (this._n_targ_left === 0) {
+            this.trial_data.trial_completed_timestamp = performance.now();
             this._end_trial();
         }
     }
 
+    _reset_trial() {
+        this._response_sequence = [];
+        this._n_targ_left = 40;
+        this._n_run = 1;
+    }
+
     _end_trial() {
+        // Record trial result
+        this.trial_data.run_length = this._n_run;
+        this.trial_data.n_wrong_attempt = this._n_wrong_attempt;
+        this.trial_data.response_sequence = this._response_sequence;
+        this.trial_data.rt = this.trial_data.trial_completed_timestamp - this.trial_data.stimuli_rendered_timestamp;
+        console.log(this.trial_data);
+        this._display_widget.clear();
+        // this._display_widget.show_feedback()
         setTimeout((() => {
             this._display_widget = this._display_widget.destroy();
             this.trial_completed_signal.emit(this.trial_data);
         }).bind(this), this._feedback_duration);
     }
 
+    /**
+     * Render a trial display. Called at the beginning of a trial or when
+     * a non-target is clicked and the display needs resetting.
+     */
+    _render() {
+        const fixation = new disp.DisplayDataset();
+        fixation.add_a_text(new disp.Text(
+            '+', 50, 40, 'white', 3, undefined, "fixation-cross-center"
+        ));
+        this._display_widget.clear();
+        this._display_widget.draw(fixation);
+        setTimeout(() => {
+            this._display_widget.clear();
+            this._display_widget.draw(this._stimuli);
+            d3.selectAll("rect, circle").on("click", d => this._process_click(d));
+            this.trial_data.stimuli_rendered_timestamp = performance.now();
+        }, this._fixation_duration);
+    }
 
     run_trial() {
 
-        this.display_widget.clear();
+        this._display_widget.clear();
         util.Workspace.clear_message();
 
-        this._display_widget.draw(this._stimuli);
-
-
-        if (this.timing.length - this.cue.length === 1) {
-            // if stimuli only has one frame (the normal circumstance)
-            for (let i = 0; i < this.stimuli.length; i++) {
-                setTimeout((() => {
-                    this.display_widget.draw(this.stimuli[i]);
-                    // turn on keyboard at the first iteration
-                    if (i == 0) {
-                        this.keyboard.turn_on();
-                        this.trial_data.stimuli_shown_at = performance.now();
-                    }
-                }).bind(this), this.timing[this.cue.length + i]);
-            }
-        } else {
-            // if stimuli has more than one frame (so far this only happens when
-            // the stimuli is an RSVP stream)
-            // calculate the inter-frame interval
-            const isi = this.timing[this.timing.length - 1] - this.timing[this.timing.length - 2];
-            // calculate timeout
-            const timeout = this.timing[this.cue.length] + this.stimuli.length * isi + 1000;
-            // when the first frame is shown, open keyboard and record a timestamp
-            setTimeout((() => {
-                this.display_widget.draw(this.stimuli[0]);
-                this.keyboard.turn_on();
-                this.trial_data.stimuli_shown_at = performance.now();
-            }).bind(this), this.timing[this.cue.length + 1]);
-            // draw the rest of the frames
-            for (let i = 1; i < this.stimuli.length - 1; i++) {
-                setTimeout((() => {
-                    this.display_widget.draw(this.stimuli[i]);
-                }).bind(this), this.timing[this.cue.length] + isi * i);
-            }
-
-            // timeout
-            setTimeout((() => {
-                this.respond_to_valid_user_keyboard_input('trial_timed_out', performance.now());
-            }).bind(this), timeout);
-        }
-
+        this._render();
     }
 
     set_trial_number(n) {
