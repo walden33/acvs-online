@@ -8,12 +8,15 @@
  */
 exp.SubmitDataStep = class extends util.AbstractStep {
 
-    constructor(db) {
+    constructor(db, sub_link) {
         super();
         this._db = db;
+        this._submission_link = sub_link;
     }
 
     execute() {
+
+        const sub_link = this._submission_link;
 
         exp.HtmlGui.clear_workspace();
         exp.HtmlGui.show_header("Online REP Experiment - Cognitive Control Lab");
@@ -26,7 +29,7 @@ exp.SubmitDataStep = class extends util.AbstractStep {
         // Submit data
         $.ajax({
             type: "POST",
-            url: "https://exp.leberatory.org/experiments/acol-12/receive.php",
+            url: sub_link,
             data: {
                 "full": JSON.stringify(this._db)
             },
