@@ -49,6 +49,10 @@ disp.MCFDisplayGenerator = class {
         return result;
     }
 
+    get_total_displays_count() {
+        return this._block_displays.length;
+    }
+
     /**
      * "Public" method. Returns one <DisplayDataset> of this block if there is
      * any left, returns null otherwise.
