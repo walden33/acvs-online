@@ -11,14 +11,26 @@ exp.MCFBlock = class extends util.AbstractStep {
      * 
      * @param {util.Database} db 
      * @param {number} block_no 
-     * @param {disp.DisplayGenerator} display_generator 
+     * @param {disp.DisplayGenerator} display_generator
+     * @param {number} cb_no : 1 or 0 
+     * @param {number} n_trials : if display_generator has more displays than
+     *  desired, set the trial number needed here 
      */
-    constructor(db, block_no, display_generator, cb_no) {
+    constructor(db, block_no, display_generator, cb_no=undefined, n_max_trials=undefined) {
         super();
 
         this._db = db;
 
         this._block_no = block_no;
+        if (n_max_trials !== undefined) {
+            this._n_max_trials = n_max_trials;
+        } else {
+            this._n_max_trials = display_generator.get_total_displays_count();
+        }
+
+        // Check display generator type: baseline or main task
+        display_generator instanceof disp.MCFBaselineDisplayGenerator ?
+            this._block_type = "baseline" : this._block_type = "main";
 
         this._targ_sq_color = "";
         this._targ_cir_color = "";
@@ -43,33 +55,44 @@ exp.MCFBlock = class extends util.AbstractStep {
     }
 
     _construct_trial(stimuli) {
-        return new exp.MCFTrial(stimuli, this._targ_sq_color, this._targ_cir_color);
+        if (this._block_type === "main") {
+            return new exp.MCFTrial(stimuli, this._targ_sq_color, this._targ_cir_color);
+        } else if (this._block_type === "baseline") {
+            return new exp.MCFBaselineTrial(stimuli);
+        }
     }
 
     _run_next_trial(previous_results = null) {
+
         if (previous_results != null) {
             this._all_trials_data.push(previous_results);
         }
 
-        let display = this._display_generator.yield_trial_display();
-
-        if (display != null) {
-            // Create a new trial
-            let trial = this._construct_trial(display);
-            trial.set_block_number(this._block_no);
-            trial.set_trial_number(this._trial_num);
-            this._trial_num++;
-
-            // When the trial is completed call the next trial (~recursive)
-            trial.trial_completed_signal.connect(this._run_next_trial.bind(this));
-
-            // start the trial
-            trial.run_trial();
+        if (this._trial_num <= this._n_max_trials) {
+            let display = this._display_generator.yield_trial_display();
+            if (display !== null) {
+                // Create a new trial
+                let trial = this._construct_trial(display);
+                trial.set_block_number(this._block_no);
+                trial.set_trial_number(this._trial_num);
+                this._trial_num++;
+    
+                // When the trial is completed call the next trial (~recursive)
+                trial.get_trial_completed_signal().connect(this._run_next_trial.bind(this));
+    
+                // start the trial
+                trial.run_trial();
+            } else {
+                // all trials have been completed so tell the user how they did.
+                this._save_data();
+                this._show_summary();
+            }
         } else {
-            // all trials have been completed so tell the user how they did.
+            // Trial about to create exceeds max number of trials in the block
             this._save_data();
             this._show_summary();
         }
+
     }
 
     _save_data() {
@@ -82,9 +105,7 @@ exp.MCFBlock = class extends util.AbstractStep {
         let paragraph = [];
         paragraph.push("<br><br><br>");
         if(this._block_no === 0) {
-            paragraph.push("<b>You complete the first practice block!</b>");
-        } else if (this._block_no === 0.5) {
-            paragraph.push("<b>You completed the second practice block!")
+            paragraph.push("<b>You complete the practice block!</b>");
         } else {
             paragraph.push("<b>You Completed Block #" + this._block_no + "!</b>");
         }
