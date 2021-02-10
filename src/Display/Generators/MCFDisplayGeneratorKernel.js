@@ -27,6 +27,7 @@ disp.MCFDisplayGenerator = class {
         this._n_dist_cir = 20;
         this._circle_radius = 0.7;
         this._square_size = 2;
+        this._background_rect_size = 3;
 
         // An array of all displays in this generator
         this._block_displays = null;
