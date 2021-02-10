@@ -11,12 +11,12 @@ exp.MCFTrial = class extends exp.AbstractTrial {
         this._targ_sq_color = targ_sq_color;
         this._targ_cir_color = targ_cir_color;
 
-        this.trial_completed_signal = new util.Signal();
+        this._trial_completed_signal = new util.Signal();
 
         this._display_widget = new disp.DisplayWidget(util.Workspace.workspace(), "0 0 100 80", "125vmin");
 
         // Create an object to store the data for this Trial
-        this.trial_data = { "trial_start_timestamp": performance.now() };
+        this._trial_data = { "trial_start_timestamp": performance.now() };
 
         // Trial parameters
         this._fixation_duration = 1000;   // duration fixation cross is shown
@@ -69,7 +69,7 @@ exp.MCFTrial = class extends exp.AbstractTrial {
         }
         // Check if there is any target left
         if (this._n_targ_left === 0) {
-            this.trial_data.trial_completed_timestamp = performance.now();
+            this._trial_data.trial_completed_timestamp = performance.now();
             this._end_trial();
         }
     }
@@ -82,20 +82,20 @@ exp.MCFTrial = class extends exp.AbstractTrial {
 
     _end_trial() {
         // Record trial info
-        this.trial_data.blockTrial = this._trial_number_in_block;
-        this.trial_data.blockNumber = this._block_number;
+        this._trial_data.blockTrial = this._trial_number_in_block;
+        this._trial_data.blockNumber = this._block_number;
         // Record trial result
-        this.trial_data.run_number = this._n_run;
-        this.trial_data.run_length = 40/this._n_run;
-        this.trial_data.n_wrong_attempt = this._n_wrong_attempt;
-        this.trial_data.response_sequence = this._response_sequence;
-        this.trial_data.rt = (this.trial_data.trial_completed_timestamp - this.trial_data.stimuli_rendered_timestamp)/1000;
-        console.log(this.trial_data);
+        this._trial_data.run_number = this._n_run;
+        this._trial_data.run_length = 40/this._n_run;
+        this._trial_data.n_wrong_attempt = this._n_wrong_attempt;
+        this._trial_data.response_sequence = this._response_sequence;
+        this._trial_data.rt = (this._trial_data.trial_completed_timestamp - this._trial_data.stimuli_rendered_timestamp)/1000;
+        console.log(this._trial_data);
         this._display_widget.clear();
         // this._display_widget.show_feedback()
         setTimeout((() => {
             this._display_widget = this._display_widget.destroy();
-            this.trial_completed_signal.emit(this.trial_data);
+            this._trial_completed_signal.emit(this._trial_data);
         }).bind(this), this._feedback_duration);
     }
 
@@ -114,7 +114,7 @@ exp.MCFTrial = class extends exp.AbstractTrial {
             this._display_widget.clear();
             this._display_widget.draw(this._stimuli);
             d3.selectAll("rect, circle").on("click", d => this._process_click(d));
-            this.trial_data.stimuli_rendered_timestamp = performance.now();
+            this._trial_data.stimuli_rendered_timestamp = performance.now();
         }, this._fixation_duration);
     }
 
@@ -127,11 +127,15 @@ exp.MCFTrial = class extends exp.AbstractTrial {
     }
 
     set_trial_number(n) {
-        this._trial_number_in_block = n;
+        this._trial_data.blockTrial = n;
     }
 
     set_block_number(n) {
-        this._block_number = n;
+        this._trial_data.blockNumber = n;
+    }
+
+    get_trial_completed_signal() {
+        return this._trial_completed_signal;
     }
 
 }
