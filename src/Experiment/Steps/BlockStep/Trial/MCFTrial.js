@@ -46,8 +46,15 @@ exp.MCFTrial = class extends exp.AbstractTrial {
             this._response_sequence.push(data.className + "_" + data.id);
             // Decrement remaining target count
             this._n_targ_left--;
-            // Remove the object
-            d3.select("#" + data.id).remove();
+            // Remove the object and its background object
+            d3.select(`#${data.id}`).remove();
+            if (data.id[data.id.length-1] !== 'g') {
+                d3.select(`#${data.id}_bg`).remove();
+            } else {
+                d3.select(`#${data.id.slice(0, data.id.length-3)}`).remove();
+            }
+            // Play sound
+            util.Util.play_mario_sound();
         } else {
             // If not, clear the display
             this._display_widget.clear();
