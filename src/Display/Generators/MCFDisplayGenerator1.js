@@ -56,8 +56,8 @@ disp.MCFDisplayGenerator1 = class extends disp.MCFDisplayGenerator {
                 this._square_size,
                 this._square_size,
                 this._targ_sq_color,
-                "targ_sq_" + this._targ_sq_color,
-                "pos_" + String(grid_no)
+                `targ_sq_${this._targ_sq_color}`,
+                `x_${x.toFixed(2)}_y_${y.toFixed(2)}`
             ));
             // Add transparent ground shapes
             result.add_a_rect(new disp.Rect(
@@ -66,8 +66,8 @@ disp.MCFDisplayGenerator1 = class extends disp.MCFDisplayGenerator {
                 this._background_rect_size,
                 this._background_rect_size,
                 "transparent",
-                "targ_sq_" + this._targ_sq_color,
-                "pos_" + String(grid_no) + "_bg"
+                `targ_sq_${this._targ_sq_color}`,
+                `x_${x.toFixed(2)}_y_${y.toFixed(2)}_bg`
             ));
         }
 
@@ -85,8 +85,8 @@ disp.MCFDisplayGenerator1 = class extends disp.MCFDisplayGenerator {
                 this._square_size,
                 this._square_size,
                 this._dist_sq_color,
-                "dist_sq_" + this._dist_sq_color,
-                "pos_" + String(grid_no)
+                `dist_sq_${this._dist_sq_color}`,
+                `x_${x.toFixed(2)}_y_${y.toFixed(2)}`
             ));
             // Add transparent ground shapes
             result.add_a_rect(new disp.Rect(
@@ -95,8 +95,8 @@ disp.MCFDisplayGenerator1 = class extends disp.MCFDisplayGenerator {
                 this._background_rect_size,
                 this._background_rect_size,
                 "transparent",
-                "dist_sq_" + this._dist_sq_color,
-                "pos_" + String(grid_no) + "_bg"
+                `dist_sq_${this._dist_sq_color}`,
+                `x_${x.toFixed(2)}_y_${y.toFixed(2)}_bg`
             ));
         }
 
@@ -115,8 +115,8 @@ disp.MCFDisplayGenerator1 = class extends disp.MCFDisplayGenerator {
                 this._targ_cir_color,
                 this._targ_cir_color,
                 null,
-                "targ_cir_" + this._targ_cir_color,
-                "pos_" + String(grid_no)
+                `targ_cir_${this._targ_cir_color}`,
+                `x_${x.toFixed(2)}_y_${y.toFixed(2)}`
             ));
             // Add transparent ground shapes
             result.add_a_rect(new disp.Rect(
@@ -125,8 +125,8 @@ disp.MCFDisplayGenerator1 = class extends disp.MCFDisplayGenerator {
                 this._background_rect_size,
                 this._background_rect_size,
                 "transparent",
-                "targ_cir_" + this._targ_cir_color,
-                "pos_" + String(grid_no) + "_bg"
+                `targ_cir_${this._targ_cir_color}`,
+                `x_${x.toFixed(2)}_y_${y.toFixed(2)}_bg`
             ));
         }
 
@@ -145,8 +145,8 @@ disp.MCFDisplayGenerator1 = class extends disp.MCFDisplayGenerator {
                 this._dist_cir_color,
                 this._dist_cir_color,
                 null,
-                "dist_cir_" + this._dist_cir_color,
-                "pos_" + String(grid_no)
+                `dist_cir_${this._dist_cir_color}`,
+                `x_${x.toFixed(2)}_y_${y.toFixed(2)}`
             ));
             // Add transparent ground shapes
             result.add_a_rect(new disp.Rect(
@@ -155,8 +155,8 @@ disp.MCFDisplayGenerator1 = class extends disp.MCFDisplayGenerator {
                 this._background_rect_size,
                 this._background_rect_size,
                 "transparent",
-                "dist_cir_" + this._dist_cir_color,
-                "pos_" + String(grid_no) + "_bg"
+                `dist_cir_${this._dist_cir_color}`,
+                `x_${x.toFixed(2)}_y_${y.toFixed(2)}_bg`
             ));
         }        
 
