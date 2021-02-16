@@ -53,8 +53,9 @@ exp.MCFBaselineTrial = class extends exp.AbstractTrial {
         this._trial_data.trial_completed_timestamp = performance.now();
         // Record trial result
         this._trial_data.targ_info = data.id;
+        // Record target position
+        this._trial_data.targ_pos = [parseFloat(data.x).toFixed(2), parseFloat(data.y).toFixed(2)];
         this._trial_data.rt = (this._trial_data.trial_completed_timestamp - this._trial_data.stimuli_rendered_timestamp)/1000;
-        util.Util.play_mario_sound();
         this._display_widget.clear();
         setTimeout((() => {
             this._display_widget = this._display_widget.destroy();
