@@ -48,6 +48,7 @@ exp.MCFTrial = class extends exp.AbstractTrial {
             } else {
                 this._response_locations.push([parseFloat(data.cx).toFixed(2), parseFloat(data.cy).toFixed(2)]);
             }
+            console.log(this._response_locations.length)
             // Determine if this is a switch of target type (only when this is not the first target in the trial)
             if (this._response_sequence.length > 0 &&
                 data.className.slice(5, 7) !== this._response_sequence[this._response_sequence.length - 1].slice(5, 7)) {
@@ -90,6 +91,7 @@ exp.MCFTrial = class extends exp.AbstractTrial {
 
     _reset_trial_params() {
         this._response_sequence = [];
+        this._response_locations = [];
         this._response_timestamps = [];
         this._n_targ_left = 40;
         this._n_run = 1;
