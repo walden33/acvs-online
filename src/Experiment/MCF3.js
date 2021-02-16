@@ -1,7 +1,9 @@
 /**
- * Mouse Click Foraging task with a baseline task for mouse speed.
+ * MCF3 is otherwise identical to MCF2 except for several minor changes in trial
+ * procedure and data collection.
+ * In this new version, 
  */
-exp.MCF2 = class extends exp.ExperimentKernel {
+exp.MCF3 = class extends exp.ExperimentKernel {
     constructor() {
 
         super();
@@ -22,7 +24,7 @@ exp.MCF2 = class extends exp.ExperimentKernel {
         this.add_new_step(new exp.ConsentStep(this._db));
         this.add_new_step(new exp.CheckBrowserStep(this._db));
 
-        const INSTR_ROOT = "https://exp.leberatory.org/files/instr/mcf-2/";
+        const INSTR_ROOT = "https://exp.leberatory.org/files/instr/mcf-3/";
         const INSTR_FILE_EXT = "jpeg";
 
         // Get determine version based on counterbalance id
@@ -52,7 +54,7 @@ exp.MCF2 = class extends exp.ExperimentKernel {
         }
 
             this.add_new_step(new exp.SubmitDataStep(this._db,
-                "https://exp.leberatory.org/experiments/mcf-2/receive.php"));
+                "https://exp.leberatory.org/experiments/mcf-3/receive.php"));
 
     }
 }
