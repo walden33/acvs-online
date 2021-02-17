@@ -27,8 +27,8 @@ exp.MCF3 = class extends exp.ExperimentKernel {
         const INSTR_ROOT = "https://exp.leberatory.org/files/instr/mcf-3/";
         const INSTR_FILE_EXT = "jpeg";
 
-        // Get determine version based on counterbalance id
-        // Possible values for version_id: 1, 0
+        // // Get determine version based on counterbalance id
+        // // Possible values for version_id: 1, 0
         const version_id = parseInt(util.Util.get_cb_id()) % 2;
 
         if (version_id === 1) {

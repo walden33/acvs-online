@@ -36,12 +36,12 @@ exp.MCFTrial = class extends exp.AbstractTrial {
 
 
     _process_click(data) {
-        // Clear existing timeouts
-        util.Util.clear_timeouts();
         // Determine if this object is a target
         if (data.className.slice(0, 4) === "targ") {
             // If it is, record the timestamp of this target click
             this._response_timestamps.push(performance.now());
+            // Clear existing timeouts
+            util.Util.clear_timeouts();
             // Record target position (x & y or cx & cy, depending on the shape)
             if (data.x !== undefined) {
                 this._response_locations.push([parseFloat(data.x).toFixed(2), parseFloat(data.y).toFixed(2)]);
@@ -59,16 +59,18 @@ exp.MCFTrial = class extends exp.AbstractTrial {
             this._n_targ_left--;
             // Remove the object and its background object
             d3.select(`#${data.id}`).remove();
-            if (data.id[data.id.length-1] !== 'g') {
+            if (data.id[data.id.length - 1] !== 'g') {
                 d3.select(`#${data.id}_bg`).remove();
             } else {
-                d3.select(`#${data.id.slice(0, data.id.length-3)}`).remove();
+                d3.select(`#${data.id.slice(0, data.id.length - 3)}`).remove();
             }
             // Create a timeout for next object
             this._create_trial_timeout(this._max_targ_click_interval);
         } else {
             // If the clicked object is not a target, clear the display
             this._display_widget.clear();
+            // Clear existing timeouts
+            util.Util.clear_timeouts();
             // Play a beep sound
             util.Util.play_beep_sound();
             // Show feedback
@@ -109,19 +111,19 @@ exp.MCFTrial = class extends exp.AbstractTrial {
     }
 
     _end_trial() {
+        util.Util.clear_timeouts();
         // Record trial result
         this._trial_data.run_number = this._n_run;
-        this._trial_data.run_length = 40/this._n_run;
+        this._trial_data.run_length = 40 / this._n_run;
         this._trial_data.n_wrong_attempt = this._n_wrong_attempt;
         this._trial_data.response_sequence = this._response_sequence;
         this._trial_data.response_timestamps = this._response_timestamps;
         this._trial_data.response_locations = this._response_locations;
-        this._trial_data.rt = (this._trial_data.trial_completed_timestamp - this._trial_data.stimuli_rendered_timestamp)/1000;
+        this._trial_data.rt = (this._trial_data.trial_completed_timestamp - this._trial_data.stimuli_rendered_timestamp) / 1000;
         this._display_widget.clear();
         setTimeout((() => {
             this._display_widget = this._display_widget.destroy();
             this._trial_completed_signal.emit(this._trial_data);
-            util.Util.clear_timeouts();
         }).bind(this), this._feedback_duration);
     }
 
