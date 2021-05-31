@@ -1,9 +1,8 @@
 /**
- * Just a namespace.
+ * A name space for disp
  * 
- * @package ac-spatial-cue-1
+ * @package acvs-online
  * @version 1.1
  * @author Walden Li
  */
-'use strict'
 const disp = {};
