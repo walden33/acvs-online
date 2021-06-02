@@ -32,6 +32,7 @@ disp.TLDisplayGenerator = class extends disp.DisplayGenerator {
         this._num_blue_dist = 12;
         this._num_var_dist = 14;    // variable distractor is either red or blue
         this._setting.TL_stroke_width = 0.5;
+        this._setting.TL_stroke_color = "white";
         this._setting.T_tail_length = 4;
         this._setting.T_head_width = 2;
         // Create default trial conditions 
@@ -42,15 +43,15 @@ disp.TLDisplayGenerator = class extends disp.DisplayGenerator {
 
     /**
      * 
-     * @param {number} optTargColor : 0, 1
-     * @param {number} nonOptTargColor : 0, 1
-     * @param {number} optTargEcc : 1-3
-     * @param {number} nonOptTargEcc : 1-3
-     * @param {number} optTargDigit : 2-5
-     * @param {number} nonOptTargDigit : 2-5
+     * @param {number} optTargEcc : 1 - 3
+     * @param {number} nonOptTargEcc : 1 - 3
+     * @param {number} optTargOri : 0 - 3 for right, up, left, down
+     * @param {number} nonOptOri : same as above
+     * @param {number} optTargColor : 0 - 1 for red and blue
+     * @param {number} nonOptTargColor : 0 - 1 for red and blue
      */
-    _make_trial_display(optTargEcc, nonOptTargEcc, optTargDigit,
-        nonOptTargDigit, optTargColor, nonOptTargColor) {
+    _make_trial_display(optTargEcc, nonOptTargEcc, optTargOri,
+        nonOptOri, optTargColor, nonOptTargColor) {
         const x = this._setting.screen_center_x;
         const y = this._setting.screen_center_y;
         const sz = this._setting.square_size;
@@ -289,7 +290,7 @@ disp.TLDisplayGenerator = class extends disp.DisplayGenerator {
             y,
             x + this._setting.T_tail_length/2,
             y,
-            "white",
+            this._setting.TL_stroke_color,
             this._setting.TL_stroke_width,
             undefined,
             undefined,
@@ -301,7 +302,7 @@ disp.TLDisplayGenerator = class extends disp.DisplayGenerator {
             y - this._setting.T_head_width/2,
             x - this._setting.T_tail_length/2,
             y + this._setting.T_head_width/2,
-            "white",
+            this._setting.TL_stroke_color,
             this._setting.TL_stroke_width,
             undefined,
             undefined,
