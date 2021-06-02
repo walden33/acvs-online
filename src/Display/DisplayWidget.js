@@ -9,9 +9,10 @@
  * <disp.Circle>, <disp.Line>, etc. for d3 to draw on the screen.
  * 
  * @package acvs-online
- * @version 1.4 (07/20/2020)
+ * @version 1.6 (06/02/2021)
  * @author Walden Li
  * 
+ * @update 1.6 Added "transform" property for all shapes
  * @update 1.5 Added run_rsvp() method.
  */
 disp.DisplayWidget = class {
@@ -93,7 +94,8 @@ disp.DisplayWidget = class {
             .attr("height", d => d.height )
             .attr("fill", d => d.fill )
             .attr("class", d => d.className)
-            .attr("id", d => d.id);
+            .attr("id", d => d.id)
+            .attr("transform", d => d.transform);
         rects.exit().remove();
 
         // Draw the circles
@@ -106,7 +108,8 @@ disp.DisplayWidget = class {
             .attr("stroke", d => d.stroke )
             .attr("stroke-width", d => d.strokeWidth )
             .attr("class", d => d.className)
-            .attr("id", d => d.id);
+            .attr("id", d => d.id)
+            .attr("transform", d => d.transform);
         circles.exit().remove();
 
         // Draw the lines
@@ -119,7 +122,8 @@ disp.DisplayWidget = class {
             .attr("stroke", d => d.stroke )
             .attr("stroke-width", d => d.strokeWidth )
             .attr("class", d => d.className)
-            .attr("id", d => d.id);
+            .attr("id", d => d.id)
+            .attr("transform", d => d.transform);
         lines.exit().remove();
 
         // Draw the texts
@@ -132,6 +136,7 @@ disp.DisplayWidget = class {
             .attr("font-size", d => d.fontSize )
             .attr("class", d => d.className )
             .attr("id", d => d.id)
+            .attr("transform", d => d.transform)
             .style("font-family", d => d.fontFamily);
         texts.exit().remove();
 
