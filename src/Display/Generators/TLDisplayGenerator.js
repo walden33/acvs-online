@@ -31,11 +31,11 @@ disp.TLDisplayGenerator = class extends disp.DisplayGenerator {
         this._num_red_dist = 12;
         this._num_blue_dist = 12;
         this._num_var_dist = 14;    // variable distractor is either red or blue
-        this._setting.TL_stroke_width = 0.2;
+        this._setting.TL_stroke_width = 0.35;
         this._setting.TL_stroke_color = "white";
         this._setting.T_tail_length = 2.6;
         this._setting.T_head_width = 2.4;
-        this._setting.TL_offset = this._setting.T_head_width/2 * 0.5;
+        this._setting.TL_offset = this._setting.T_head_width/2 * 0.9;
         // Create default trial conditions 
         this._trial_conds = this._generate_trial_conditions();
         // Create block data according to trial conditions
@@ -126,7 +126,13 @@ disp.TLDisplayGenerator = class extends disp.DisplayGenerator {
                     )
                 );
             } else {    // L
-
+                stimuli.merge(
+                    this._generate_L_shape(
+                        grid.x,
+                        grid.y,
+                        util.Util.gen_random_int(0, 3, true)
+                    )
+                );
             }
         }
 
@@ -295,6 +301,46 @@ disp.TLDisplayGenerator = class extends disp.DisplayGenerator {
             y,
             x + this._setting.T_tail_length/2,
             y,
+            this._setting.TL_stroke_color,
+            this._setting.TL_stroke_width,
+            undefined,
+            undefined,
+            `rotate(${orientation * -90}, ${x}, ${y})`) // counter-clockwise rotation
+        );
+        // Draw the head
+        result.add_a_line(new disp.Line(
+            x - this._setting.T_tail_length/2,
+            y - this._setting.T_head_width/2,
+            x - this._setting.T_tail_length/2,
+            y + this._setting.T_head_width/2,
+            this._setting.TL_stroke_color,
+            this._setting.TL_stroke_width,
+            undefined,
+            undefined,
+            `rotate(${orientation * -90}, ${x}, ${y})`)
+        );
+        return result;
+    }
+
+    /**
+     * 
+     * @param {number} x : x coordinate of the center of the shape
+     * @param {number} y : y coordinate of the center of the shape
+     * @param {number} orientation : 0, 1, 2, 3 for right, up, left, down
+     */
+    _generate_L_shape(x, y, orientation) {
+        let result = new disp.DisplayDataset();
+        // Draw the tail
+        // Determine the offset direction (randomly choose between two)
+        let offset = this._setting.TL_offset
+        if (Math.random() < 0.5) {
+            offset = offset * -1;
+        }
+        result.add_a_line(new disp.Line(
+            x - this._setting.T_tail_length/2,
+            y + offset,
+            x + this._setting.T_tail_length/2,
+            y + offset,
             this._setting.TL_stroke_color,
             this._setting.TL_stroke_width,
             undefined,
