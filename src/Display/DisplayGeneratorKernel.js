@@ -195,6 +195,14 @@ disp.DisplayGenerator = class {
         throw ReferenceError("Abstract method called");
     }
 
+
+    /**
+     * Returns the display settings object
+     */
+    get_setting() {
+        return this._setting;
+    }
+
     /**
      * Returns the next array of <Display> with a trial condition logic array
      * in this block.  When exhausted this method will return null.
