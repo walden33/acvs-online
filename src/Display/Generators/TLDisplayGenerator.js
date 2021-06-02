@@ -34,8 +34,8 @@ disp.TLDisplayGenerator = class extends disp.DisplayGenerator {
         this._setting.TL_stroke_width = 0.35;
         this._setting.TL_stroke_color = "white";
         this._setting.T_tail_length = 2.6;
-        this._setting.T_head_width = 2.4;
-        this._setting.TL_offset = this._setting.T_head_width/2 * 0.9;
+        this._setting.T_head_width = 2.6;
+        this._setting.TL_offset = this._setting.T_head_width/2 * 0.4;
         // Create default trial conditions 
         this._trial_conds = this._generate_trial_conditions();
         // Create block data according to trial conditions
@@ -116,7 +116,7 @@ disp.TLDisplayGenerator = class extends disp.DisplayGenerator {
             stimuli.add_a_rect(currentRect);
             if (this._has_preview) preview.add_a_rect(currentRect);
 
-            // 2.2 add T shapes (50% chance)
+            // 2.2 add T or L shapes (either 50% chance)
             if (Math.random() < 0.5) {  // T
                 stimuli.merge(
                     this._generate_T_shape(
@@ -136,7 +136,7 @@ disp.TLDisplayGenerator = class extends disp.DisplayGenerator {
             }
         }
 
-        // 3. Add RED distractor rects and digits. Digits must be 6-9.
+        // 3. Add RED distractor rects and Ls.
         for (let i = 0; i < this._num_red_dist; i++) {
 
             let j = nonTargPool.pop();  // grid position number
@@ -153,18 +153,17 @@ disp.TLDisplayGenerator = class extends disp.DisplayGenerator {
             stimuli.add_a_rect(currentRect);
             if (this._has_preview) preview.add_a_rect(currentRect);
 
-            // 3.2 add digits to only stimuli
-            stimuli.add_a_text(new disp.Text(
-                util.Util.select_rand_from_array(this._distractor_digits) + '',
-                grid.x + this._setting.digit_shift_x + '',
-                grid.y + this._setting.digit_shift_y + '',
-                this._setting.digit_color,
-                this._setting.digit_size,
-                this._setting.digit_class_name
-            ));
+            // 3.2 add Ls to only stimuli
+            stimuli.merge(
+                this._generate_L_shape(
+                    grid.x,
+                    grid.y,
+                    util.Util.gen_random_int(0, 3, true)
+                )
+            );
         }
 
-        // 4. Add BLUE distractor rects and digits. Digits must be 6-9.
+        // 4. Add BLUE distractor rects and Ls.
         for (let i = 0; i < this._num_blue_dist; i++) {
 
             let j = nonTargPool.pop();  // grid position number
@@ -181,18 +180,17 @@ disp.TLDisplayGenerator = class extends disp.DisplayGenerator {
             stimuli.add_a_rect(currentRect);
             if (this._has_preview) preview.add_a_rect(currentRect);
 
-            // 4.2 add digits to only stimuli
-            stimuli.add_a_text(new disp.Text(
-                util.Util.select_rand_from_array(this._distractor_digits) + '',
-                grid.x + this._setting.digit_shift_x + '',
-                grid.y + this._setting.digit_shift_y + '',
-                this._setting.digit_color,
-                this._setting.digit_size,
-                this._setting.digit_class_name
-            ));
+            // 4.2 add Ls to only stimuli
+            stimuli.merge(
+                this._generate_L_shape(
+                    grid.x,
+                    grid.y,
+                    util.Util.gen_random_int(0, 3, true)
+                )
+            );
         }
 
-        // 5. Add variable distractor rects and digits
+        // 5. Add variable distractor rects and Ls
         for (let i = 0; i < this._num_var_dist; i++) {
 
             let j = nonTargPool.pop();  // grid position number
@@ -210,15 +208,14 @@ disp.TLDisplayGenerator = class extends disp.DisplayGenerator {
             stimuli.add_a_rect(currentRect);
             if (this._has_preview) preview.add_a_rect(currentRect);
 
-            // 5.2 add digits to only stimuli
-            stimuli.add_a_text(new disp.Text(
-                util.Util.select_rand_from_array(this._distractor_digits) + '',
-                grid.x + this._setting.digit_shift_x + '',
-                grid.y + this._setting.digit_shift_y + '',
-                this._setting.digit_color,
-                this._setting.digit_size,
-                this._setting.digit_class_name
-            ));
+            // 5.2 add Ls to only stimuli
+            stimuli.merge(
+                this._generate_L_shape(
+                    grid.x,
+                    grid.y,
+                    util.Util.gen_random_int(0, 3, true)
+                )
+            );
         }
 
         // Finally, generate a fixation cross to everything
@@ -297,9 +294,9 @@ disp.TLDisplayGenerator = class extends disp.DisplayGenerator {
         let result = new disp.DisplayDataset();
         // Draw the tail
         result.add_a_line(new disp.Line(
-            x - this._setting.T_tail_length/2,
+            x - (this._setting.T_tail_length+this._setting.TL_stroke_width)/2,
             y,
-            x + this._setting.T_tail_length/2,
+            x + (this._setting.T_tail_length+this._setting.TL_stroke_width)/2,
             y,
             this._setting.TL_stroke_color,
             this._setting.TL_stroke_width,
@@ -337,9 +334,9 @@ disp.TLDisplayGenerator = class extends disp.DisplayGenerator {
             offset = offset * -1;
         }
         result.add_a_line(new disp.Line(
-            x - this._setting.T_tail_length/2,
+            x - (this._setting.T_tail_length+this._setting.TL_stroke_width)/2,
             y + offset,
-            x + this._setting.T_tail_length/2,
+            x + (this._setting.T_tail_length+this._setting.TL_stroke_width)/2,
             y + offset,
             this._setting.TL_stroke_color,
             this._setting.TL_stroke_width,
