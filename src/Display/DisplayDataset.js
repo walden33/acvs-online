@@ -54,13 +54,15 @@ disp.DisplayDataset = class {
     /**
      * Merge the current <DisplayDataset> with another one.
      * 
-     * @param {disp.DisplayDataset} dispDataset 
+     * @param {disp.DisplayDataset} dispDataset : the <DisplayDataset> to be merged in
+     * @param {boolean} remove : if dispDataset should be deleted after being merged in
      */
-    merge( dispDataset ) {
+    merge( dispDataset, remove = true ) {
         this.add_lines( dispDataset.lines );
         this.add_texts( dispDataset.texts );
         this.add_rects( dispDataset.rects );
         this.add_circles( dispDataset.circles );
+        if (remove) { dispDataset = null }
     }
 
 }

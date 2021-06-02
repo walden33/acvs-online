@@ -197,7 +197,7 @@ disp.DisplayGenerator = class {
 
 
     /**
-     * Returns the display settings object
+     * Returns the reference to the display settings object
      */
     get_setting() {
         return this._setting;
