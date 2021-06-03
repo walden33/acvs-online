@@ -162,19 +162,21 @@ disp.DisplayGenerator = class {
     /**
      * 
      * @param {number} num_total_trials 
+     * @param {number} min : the minimum number of the digits set (e.g., in most
+     *      classic ACVS paradigms this number is 2)
      * @requires num_total_trials % 12 === 0
      */
-    _generate_trial_digits(num_total_trials) {
+    _generate_trial_digits(num_total_trials, min=2) {
 
         let result = [];
 
         // All possible combinations of target digits
         // Every row is a choice of optimal target digit
         const digit_combs = [
-            [[2, 3], [2, 4], [2, 5]],   // opt digit == 2
-            [[3, 2], [3, 4], [3, 5]],   // opt digit == 3
-            [[4, 2], [4, 3], [4, 5]],
-            [[5, 2], [5, 3], [5, 4]]
+            [[min, min+1], [min, min+2], [min, min+3]],   // opt digit == 2
+            [[min+1, min], [min+1, min+2], [min+1, min+3]],   // opt digit == 3
+            [[min+2, min], [min+2, min+1], [min+2, min+3]],
+            [[min+3, min], [min+3, min+1], [min+3, min+2]]
         ]
         const digitRows = util.Util.generate_random_array([0, 1, 2, 3], num_total_trials, 3);
         const digitColumns = util.Util.generate_random_array([0, 1, 2], num_total_trials, 3);
