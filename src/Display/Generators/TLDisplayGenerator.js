@@ -35,7 +35,7 @@ disp.TLDisplayGenerator = class extends disp.DisplayGenerator {
         this._setting.TL_stroke_color = "white";
         this._setting.T_tail_length = 2.6;
         this._setting.T_head_width = 2.6;
-        this._setting.TL_offset = this._setting.T_head_width/2 * 0.4;
+        this._setting.TL_offset = this._setting.T_head_width/2 * 0.5;
         // Create default trial conditions 
         this._trial_conds = this._generate_trial_conditions();
         // Create block data according to trial conditions
@@ -254,8 +254,8 @@ disp.TLDisplayGenerator = class extends disp.DisplayGenerator {
             result.push([ecc1.pop(), ecc2.pop()]);
         }
         
-        // Generate digits
-        let digits = this._generate_trial_digits(this._num_total_trials);
+        // Generate T orientations (using previous trial digits logic)
+        let digits = this._generate_trial_digits(this._num_total_trials, 0);
 
         // Generate optimal target colors
         let optColors = util.Util.generate_random_array([0,1], this._num_total_trials, 3);
@@ -270,14 +270,14 @@ disp.TLDisplayGenerator = class extends disp.DisplayGenerator {
 
     }
 
-    _make_trial_logic(optTargEcc, nonOptTargEcc, optTargDigit,
-        nonOptTargDigit, optTargColor, nonOptTargColor) {
+    _make_trial_logic(optTargEcc, nonOptTargEcc, optTargOrientation,
+        nonOptTargOrientation, optTargColor, nonOptTargColor) {
         return (
         {
             optTargEcc: optTargEcc,
             nonOptTargEcc: nonOptTargEcc,
-            optTargDigit: optTargDigit,
-            nonOptTargDigit: nonOptTargDigit,
+            optTargOrientation: optTargOrientation,
+            nonOptTargOrientation: nonOptTargOrientation,
             optTargColor: optTargColor,
             nonOptTargColor: nonOptTargColor
         }
