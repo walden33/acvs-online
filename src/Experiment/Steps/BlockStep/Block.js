@@ -94,16 +94,16 @@ exp.Block = class extends util.AbstractStep {
         let paragraph = [];
         paragraph.push("<br><br><br>");
         if(this._block_no === 0) {
-            paragraph.push("<b>You complete the practice block!</b>");
+            paragraph.push("<b>You complete the first practice block!</b>");
+        } else if (this._block_no === 0.5) {
+            paragraph.push("<b>You completed the second practice block!")
         } else {
             paragraph.push("<b>You Completed Block #" + this._block_no + "!</b>");
         }
         paragraph.push("<hr>");
         paragraph.push("Your Accuracy: " + accuracy + "%");
         paragraph.push("<hr>");
-        accuracy >= 70 ?
-            paragraph.push("<b>Ready to continue?</b>") :
-            paragraph.push("<b>Ready to continue?</b>");
+        paragraph.push("<b>Ready to continue?</b>");
         exp.HtmlGui.append_paragraphs(paragraph);
 
         // create a button for the user to press to acknowledge
