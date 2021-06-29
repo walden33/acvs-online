@@ -35,35 +35,6 @@ disp.ColorCueDisplayGenerator2 = class extends disp.DisplayGenerator {
             this._generate_trial_conditions());
     }
 
-    _generate_trial_conditions() {
-
-        let result = [];
-
-        // Determine target eccentricity
-        let ecc1 = util.Util.generate_random_array([1, 2, 3], this._num_total_trials, 3);
-        let ecc2 = util.Util.generate_random_array([1, 2, 3], this._num_total_trials, 3);
-
-        for (let i = 0; i < this._num_total_trials; i++) {
-            result.push([ecc1.pop(), ecc2.pop()]);
-        }
-        util.Util.fisher_yates_shuffle(result);    // shuffle the combination
-
-        // Generate digits
-        let digits = this._generate_trial_digits(this._num_total_trials);
-
-        // Generate optimal target colors
-        let optColors = util.Util.generate_random_array([1, 2], this._num_total_trials, 3);
-        // Add everything to the output
-        for (let i = 0; i < result.length; i++) {
-            let optColor = optColors.pop();
-            let nonOptColor = util.Util.choose_from([1, 2], [optColor]);
-            result[i] = result[i].concat(digits.pop().concat([optColor, nonOptColor]));
-        }
-
-        return result;
-
-    }
-
     /**
      * 
      * @param {number} optTargColor : 0, 1
