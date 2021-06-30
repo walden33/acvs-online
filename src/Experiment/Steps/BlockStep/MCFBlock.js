@@ -12,7 +12,6 @@ exp.MCFBlock = class extends util.AbstractStep {
      * @param {util.Database} db 
      * @param {number} block_no 
      * @param {disp.DisplayGenerator} display_generator
-     * @param {number} cb_no : 1 or 0 
      * @param {number} n_trials : if display_generator has more displays than
      *  desired, set the trial number needed here 
      */
@@ -32,15 +31,15 @@ exp.MCFBlock = class extends util.AbstractStep {
         display_generator instanceof disp.MCFBaselineDisplayGenerator ?
             this._block_type = "baseline" : this._block_type = "main";
 
-        this._targ_sq_color = "";
-        this._targ_cir_color = "";
-        if (cb_no === 1) {
-            this._targ_sq_color = "red";
-            this._targ_cir_color = "green";
-        } else if (cb_no === 0) {
-            this._targ_sq_color = "green";
-            this._targ_cir_color = "red";
-        }
+        // this._targ_sq_color = "";
+        // this._targ_cir_color = "";
+        // if (cb_no === 1) {
+        //     this._targ_sq_color = "red";
+        //     this._targ_cir_color = "green";
+        // } else if (cb_no === 0) {
+        //     this._targ_sq_color = "green";
+        //     this._targ_cir_color = "red";
+        // }
 
         if (util.Util.is_test_mode()) {
         }
@@ -54,9 +53,9 @@ exp.MCFBlock = class extends util.AbstractStep {
 
     }
 
-    _construct_trial(stimuli) {
+    _construct_trial(stimuli, logic) {
         if (this._block_type === "main") {
-            return new exp.MCFTrial(stimuli, this._targ_sq_color, this._targ_cir_color);
+            return new exp.MCFTrial(stimuli, logic.targ_sq_color, logic.targ_cir_color, logic.opt_targ_color);
         } else if (this._block_type === "baseline") {
             return new exp.MCFBaselineTrial(stimuli);
         }
