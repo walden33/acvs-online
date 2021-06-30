@@ -15,7 +15,6 @@ disp.MCFDisplayGenerator2 = class extends disp.MCFDisplayGenerator {
      * @param {number} n_trials 
      * @param {string} targ_sq_color 
      * @param {string} targ_cir_color 
-     * @param {string} opt_targ_color : the color that is less abundant in the display
      */
     constructor(n_trials, targ_sq_color, targ_cir_color) {
 
@@ -66,12 +65,12 @@ disp.MCFDisplayGenerator2 = class extends disp.MCFDisplayGenerator {
     }
 
     _make_trial_logic(optTargColor, nonOptTargColor) {
-        return (
-        {
+        return ({
+            targ_sq_color: this._targ_sq_color,
+            targ_cir_color: this._targ_cir_color,
             optTargColor: optTargColor,
             nonOptTargColor: nonOptTargColor
-        }
-        );
+        });
     }
 
     _make_block_displays(trial_conds) {
