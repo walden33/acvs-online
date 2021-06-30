@@ -5,6 +5,8 @@
  * @author Walden Y. Li
  * @version 1.1 (06/29/2021)
  * 
+ * @update 1.2 (06/30/2021) added trial logic maker
+ * 
  */
 disp.MCFDisplayGenerator2 = class extends disp.MCFDisplayGenerator {
 
@@ -63,11 +65,23 @@ disp.MCFDisplayGenerator2 = class extends disp.MCFDisplayGenerator {
 
     }
 
+    _make_trial_logic(optTargColor, nonOptTargColor) {
+        return (
+        {
+            optTargColor: optTargColor,
+            nonOptTargColor: nonOptTargColor
+        }
+        );
+    }
+
     _make_block_displays(trial_conds) {
         let result = [];
         for (let i = 0; i < this._n_total_trials; i++) {
             let trial_cond = trial_conds.pop(); // [optTargColor, nonOptTargColor]
-            result.push(this._make_trial_display(trial_cond[0]));
+            result.push({
+                "logic": this._make_trial_logic(...trial_cond),
+                "stimuli": this._make_trial_display(trial_cond[0])
+            });
         }
         return result;
     }
