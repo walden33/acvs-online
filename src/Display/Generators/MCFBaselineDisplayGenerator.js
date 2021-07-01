@@ -5,10 +5,10 @@
  * For a display generator class, a total of 40 different 
  * 
  * @author Walden Y. Li
- * @version 1.2 (01/31/2021)
+ * @version 1.2 (06/30/2021)
  * 
- * @update 1.2 Added a black object to the back of each display object to allow
- *  some degree of deviation in mouse clicking.
+ * @update 1.2 (06/30/21) Changed return object for block dataset
+ * @created 01/31/2021
  */
 disp.MCFBaselineDisplayGenerator = class extends disp.MCFDisplayGenerator {
 
@@ -53,7 +53,10 @@ disp.MCFBaselineDisplayGenerator = class extends disp.MCFDisplayGenerator {
         util.Util.fisher_yates_shuffle(this._targ_pos_pool);
         // For each position, generate a trial
         this._targ_pos_pool.forEach((pos) => {
-            result.push(this._make_trial_display(pos));
+            result.push({
+                logic: null,
+                stimuli: this._make_trial_display(pos)
+            });
         });
         return result;
     }
