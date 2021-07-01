@@ -92,8 +92,6 @@ disp.MCFDisplayGenerator2 = class extends disp.MCFDisplayGenerator {
 
     _make_trial_display(opt_targ_color) {
 
-        console.log(opt_targ_color)
-
         let result = new disp.DisplayDataset();
 
         const gridPos = this._get_grid_pos();
