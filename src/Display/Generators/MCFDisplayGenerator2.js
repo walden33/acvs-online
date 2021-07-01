@@ -20,7 +20,7 @@ disp.MCFDisplayGenerator2 = class extends disp.MCFDisplayGenerator {
 
         super();
 
-        if (num_trials % 2 !== 0) {
+        if (n_trials % 2 !== 0) {
             throw RangeError( "Number of total block trials must be an " +
             "integer multiple of 2.");
         }
