@@ -20,6 +20,11 @@ disp.MCFDisplayGenerator2 = class extends disp.MCFDisplayGenerator {
 
         super();
 
+        if (num_trials % 2 !== 0) {
+            throw RangeError( "Number of total block trials must be an " +
+            "integer multiple of 2.");
+        }
+
         // Generator parameters
         this._n_total_trials = n_trials;
         this._targ_sq_color = targ_sq_color;
