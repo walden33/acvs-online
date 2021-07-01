@@ -1,15 +1,27 @@
 /**
- * A trial class for Mouse Click Foraging task.
+ * A trial class for Mouse Click Foraging task, compatible with both equal and
+ * different subset version.
+ * 
+ * @author Walden Y. Li
+ * @version 1.2 (6/30/2021)
+ * 
+ * @update 1.2 (6/30/21) added optimal target element; added trial logic in
+ * trial data to record
+ * @created 1/31/2021
  */
 exp.MCFTrial = class extends exp.AbstractTrial {
 
-    constructor(stimuli, targ_sq_color, targ_cir_color) {
+    constructor(stimuli, targ_sq_color, targ_cir_color, opt_targ_color=undefined) {
 
         super();
 
         this._stimuli = stimuli;
         this._targ_sq_color = targ_sq_color;
         this._targ_cir_color = targ_cir_color;
+        // If display has different subset sizes
+        // Note that this is coded such that 0 = the color of target squares and
+        // 1 = the color of target circes
+        this._opt_targ_color = opt_targ_color;
 
         this._trial_completed_signal = new util.Signal();
 
@@ -25,7 +37,8 @@ exp.MCFTrial = class extends exp.AbstractTrial {
         this._err_msg_duration = 3000;  // duration of error message (wrong targ click or timed out) appears on screen
 
         // Trial runtime variables
-        this._n_targ_left = 40;
+        this._n_total_targs = 30; // 40 = whole, <40 = partial
+        this._n_targ_left = this._n_total_targs;
         this._n_run = 1;
         this._response_sequence = [];
         this._response_timestamps = [];
@@ -94,7 +107,7 @@ exp.MCFTrial = class extends exp.AbstractTrial {
         this._response_sequence = [];
         this._response_locations = [];
         this._response_timestamps = [];
-        this._n_targ_left = 40;
+        this._n_targ_left = this._n_total_targs;
         this._n_run = 1;
     }
 
@@ -112,6 +125,11 @@ exp.MCFTrial = class extends exp.AbstractTrial {
 
     _end_trial() {
         util.Util.clear_timeouts();
+        // Record trial logic
+        this._trial_data.logic = {};
+        this._trial_data.logic.targ_sq_color = this._targ_sq_color;
+        this._trial_data.logic.targ_cir_color = this._targ_cir_color;
+        this._trial_data.logic.opt_targ_color = this._opt_targ_color;
         // Record trial result
         this._trial_data.run_number = this._n_run;
         this._trial_data.run_length = 40 / this._n_run;

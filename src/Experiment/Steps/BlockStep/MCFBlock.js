@@ -2,8 +2,11 @@
  * <MCFBlock> represents a block of Mouse Click Foraging task.
  * 
  * @author Walden Y. Li
- * @version 1.0 (1/31/2021)
+ * @version 1.2 (6/30/2021)
  * 
+ * @update 1.2 (6/30/21) Removed cb_no parameter in constructor. Trial needs to
+ * read relevant information from logic of the display generator.
+ * @created 1/31/2021
  */
 exp.MCFBlock = class extends util.AbstractStep {
 
@@ -12,10 +15,11 @@ exp.MCFBlock = class extends util.AbstractStep {
      * @param {util.Database} db 
      * @param {number} block_no 
      * @param {disp.DisplayGenerator} display_generator
-     * @param {number} n_trials : if display_generator has more displays than
+     * @param {number} n_max_trials : if display_generator has more displays than
      *  desired, set the trial number needed here 
      */
-    constructor(db, block_no, display_generator, cb_no=undefined, n_max_trials=undefined) {
+    constructor(db, block_no, display_generator, n_max_trials=undefined) {
+        
         super();
 
         this._db = db;
@@ -71,7 +75,7 @@ exp.MCFBlock = class extends util.AbstractStep {
             let display = this._display_generator.yield_trial_display();
             if (display !== null) {
                 // Create a new trial
-                let trial = this._construct_trial(display);
+                let trial = this._construct_trial(display.stimuli, display.logic);
                 trial.set_block_number(this._block_no);
                 trial.set_trial_number(this._trial_num);
                 this._trial_num++;
