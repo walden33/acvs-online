@@ -33,9 +33,9 @@ disp.ACFDisplayGenerator = class {
         (function assert() {
             if (this._n_items_x * this._n_items_y !== this._n_opt_targ_1_shapes
                 + this._n_opt_targ_2_shapes + this._n_non_opt_targ_shapes) {
-                throw "Display item numbers mismatch."
+                throw Error("Display item numbers mismatch.")
             }
-        })();
+        }).bind(this)();
 
         // Stimulus shape settings
         this._circle_radius = 0.7;
