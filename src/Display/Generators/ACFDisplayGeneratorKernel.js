@@ -44,6 +44,12 @@ disp.ACFDisplayGenerator = class {
         this._diamond_cross_axis_len = 2;
         this._background_rect_size = 3;
 
+        // Stimulus color settings
+        this._color_0 = "red";
+        this._color_1 = "green";
+        this._color_2 = "blue";
+        this._colors = [this._color_0, this._color_1, this._color_2];
+
         // An array of all displays in this generator
         this._block_displays = null;
 
