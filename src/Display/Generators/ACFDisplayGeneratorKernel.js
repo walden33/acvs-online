@@ -52,10 +52,17 @@ disp.ACFDisplayGenerator = class {
         this._background_rect_size = 3;
 
         // Stimulus color settings
+        // Exact color string to use in <svg> shapes. Could be a generic name
+        // or an rgb.
         this._color_0 = "red";
         this._color_1 = "green";
         this._color_2 = "blue";
         this._colors = [this._color_0, this._color_1, this._color_2];
+        // Color aliases.
+        this._color_0_alias = "red";
+        this._color_1_alias = "green";
+        this._color_2_alias = "blue";
+        this._color_aliases = [this._color_0_alias, this._color_1_alias, this._color_2_alias];
 
         // An array of all displays in this generator
         this._block_displays = null;
@@ -132,6 +139,88 @@ disp.ACFDisplayGenerator = class {
 
         return this._n_items_color_shape[color_index, shape_index];
 
+    }
+
+    /**
+     * Private helper function for the display generator to set number of
+     * items there should be in the display.
+     * 
+     * @param {*} color 
+     * @param {*} shape 
+     * @param {number} count 
+     */
+    _set_item_count(color, shape, count) {
+
+        (function assert_input_type() {
+            if (typeof color !== "number" && typeof color !== "string") {
+                throw TypeError("Input color type error");
+            }
+            if (typeof shape !== "number" && typeof shape !== "string") {
+                throw TypeError("Input shape type error");
+            }
+            if (count < 0 || !Number.isInteger(count)) {
+                throw RangeError("Number of items should be a positive integer.");
+            }
+        })();
+
+        let color_index;
+        let shape_index;
+        if (typeof color === "string") {
+            color_index = this._colors.indexOf(color);
+            (function assert() {
+                if (color_index < 0) {
+                    throw Error(`Color ${color} not found.`);
+                }
+            })();
+        } else if (typeof color === "number") {
+            (function assert() {
+                if (color >= this._color.length) {
+                    throw Error(`Color index ${color} out of bound.`);
+                }
+            })();
+            color_index = color;
+        }
+
+        if (typeof shape === "string") {
+            shape_index = this._shapes.indexOf(shape);
+            (function assert() {
+                if (shape_index < 0) {
+                    throw Error(`Shape ${shape} not found.`);
+                }
+            })();
+        } else if (typeof shape === "number") {
+            (function assert() {
+                if (shape >= this._shapes.length) {
+                    throw Error(`Shape index ${shape} out of bound.`);
+                }
+            })();
+            shape_index = shape;
+        }
+
+        this._n_items_color_shape[color_index, shape_index] = count;
+
+    }
+
+    /**
+     * Return the exact color name of an alias color name.
+     * For example, if the red color in the display uses a different rgb string
+     * to represent color instead of "red", this function will return the exact
+     * rgb of the red color when getting input "red".
+     * 
+     * @param {string} str color name
+     */
+    _get_color_value(str) {
+        if (this._colors.indexOf(str) > -1) {
+            // if color name matches what is already exact name, return itself
+            return str;
+        } else {
+            // if color name does not match exact name, look up for its alias
+            const index = this._color_aliases.indexOf(str);
+            if (index > -1) {
+                return this._colors[index];
+            }
+        }
+        return null;
     }
 
     get_total_displays_count() {
