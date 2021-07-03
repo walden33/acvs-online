@@ -3,9 +3,10 @@
  * <DisplayDataset>.
  * 
  * @author Walden Y. Li
- * @version 1.4 (01/31/2021)
+ * @version 1.5 (07/03/2021)
  * 
- * @update 1.4 Added class, id to most shape objects
+ * @update 1.5 (07/03/21) Added support for diamond shapes
+ * @update 1.4 (01/31/21) Added class, id to most shape objects
  */
 
 /**
@@ -25,8 +26,8 @@ disp.Rect = class {
      * @param {string} id : id for the <rect> object
      * @param {string} transform
      */
-    constructor(x, y, w, h, fill, className=undefined, id=undefined,
-        transform=undefined) {
+    constructor(x, y, w, h, fill, className = undefined, id = undefined,
+        transform = undefined) {
         this.x = x;
         this.y = y;
         this.width = w;
@@ -52,8 +53,8 @@ disp.Circle = class {
      * @param {string} id : id for the <circle> object
      * @param {string} transform
      */
-    constructor(cx, cy, r, fill, stroke, strokeWidth, className=undefined,
-        id=undefined, transform=undefined) {
+    constructor(cx, cy, r, fill, stroke, strokeWidth, className = undefined,
+        id = undefined, transform = undefined) {
         this.cx = cx;
         this.cy = cy;
         this.r = r;
@@ -80,8 +81,8 @@ disp.Line = class {
      * @param {string} id : id for the <line> object
      * @param {string} transform
      */
-    constructor(x1, y1, x2, y2, stroke, strokeWidth, className=undefined,
-        id=undefined, transform=undefined) {
+    constructor(x1, y1, x2, y2, stroke, strokeWidth, className = undefined,
+        id = undefined, transform = undefined) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
@@ -108,8 +109,8 @@ disp.Text = class {
      * @param {string} id : id for the <text> object
      * @param {string} transform
      */
-    constructor(text, x, y, fill, fontSize, fontFamily=undefined,
-        className=undefined, id=undefined, transform=undefined) {
+    constructor(text, x, y, fill, fontSize, fontFamily = undefined,
+        className = undefined, id = undefined, transform = undefined) {
         this.text = text;
         this.x = x;
         this.y = y;
@@ -120,4 +121,7 @@ disp.Text = class {
         this.id = id;
         this.transform = transform;
     }
+
+
+
 }
