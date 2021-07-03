@@ -223,6 +223,32 @@ disp.ACFDisplayGenerator = class {
         return null;
     }
 
+    /**
+     * Return the alias color name of an exact color name.
+     * For example, if the red color in the display uses a different rgb string
+     * to represent color instead of "red", this function will return "red" if
+     * input is the exact rgb value of the red color.
+     * 
+     * @param {string} str color name
+     */
+    _get_color_value(str) {
+        if (this._color_aliases.indexOf(str) > -1) {
+            // if color name matches what is already alias name, return itself
+            return str;
+        } else {
+            // if color name does not match alias name, look up for its exact
+            const index = this._color.indexOf(str);
+            if (index > -1) {
+                return this._color_aliases[index];
+            }
+        }
+        return null;
+    }
+
+    _colors_are_equal(color1, color2) {
+        return this._get_color_value(color1) === this._get_color_value(color2);
+    }
+
     get_total_displays_count() {
         return this._block_displays.length;
     }
