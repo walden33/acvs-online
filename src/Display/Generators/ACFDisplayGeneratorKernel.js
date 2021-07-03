@@ -231,7 +231,7 @@ disp.ACFDisplayGenerator = class {
      * 
      * @param {string} str color name
      */
-    _get_color_value(str) {
+    _get_color_alias(str) {
         if (this._color_aliases.indexOf(str) > -1) {
             // if color name matches what is already alias name, return itself
             return str;
