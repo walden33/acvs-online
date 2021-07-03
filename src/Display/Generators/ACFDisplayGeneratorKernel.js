@@ -21,23 +21,30 @@ disp.ACFDisplayGenerator = class {
         this._n_items_x = 10;   // number of items on the main axis
         this._n_items_y = 10;    // number of items on the cross axis
         this._n_total_items = this._n_items_x * this._n_items_y;
-        this._n_opt_targ_1_shapes = 25;
-        this._n_opt_targ_1_targs = 15;
-        this._n_opt_targ_1_dist = this._n_opt_targ_1_shapes - this._n_opt_targ_1_targs;
-        this._n_opt_targ_2_shapes = 25;
-        this._n_opt_targ_2_targs = 15;
-        this._n_opt_targ_2_dist = this._n_opt_targ_2_shapes - this._n_opt_targ_2_targs;
-        this._n_non_opt_targ_shapes = 50;
-        this._n_non_opt_targ_targs = 15;
-        this._n_non_opt_targ_dist = this._n_non_opt_targ_shapes - this._n_non_opt_targ_targs;
-        (function assert() {
-            if (this._n_items_x * this._n_items_y !== this._n_opt_targ_1_shapes
-                + this._n_opt_targ_2_shapes + this._n_non_opt_targ_shapes) {
-                throw Error("Display item numbers mismatch.")
-            }
-        }).bind(this)();
+        this._n_opt_targ_1_items = 15;
+        this._n_opt_targ_2_items = 15;
+        // this._n_opt_targ_1_shapes = 25;
+        // this._n_opt_targ_1_targs = 15;
+        // this._n_opt_targ_1_dist = this._n_opt_targ_1_shapes - this._n_opt_targ_1_targs;
+        // this._n_opt_targ_2_shapes = 25;
+        // this._n_opt_targ_2_targs = 15;
+        // this._n_opt_targ_2_dist = this._n_opt_targ_2_shapes - this._n_opt_targ_2_targs;
+        // this._n_non_opt_targ_shapes = 50;
+        // this._n_non_opt_targ_targs = 15;
+        // this._n_non_opt_targ_dist = this._n_non_opt_targ_shapes - this._n_non_opt_targ_targs;
+        // (function assert() {
+        //     if (this._n_items_x * this._n_items_y !== this._n_opt_targ_1_shapes
+        //         + this._n_opt_targ_2_shapes + this._n_non_opt_targ_shapes) {
+        //         throw Error("Display item numbers mismatch.")
+        //     }
+        // }).bind(this)();
+        this._n_items_color_shape = util.Util.ndarray([3,3], 0);
 
         // Stimulus shape settings
+        this._shape_0 = "square";
+        this._shape_1 = "circle";
+        this._shape_2 = "diamond";
+        this._shapes = [this._shape_0, this._shape_1, this._shape_2];
         this._circle_radius = 0.7;
         this._square_size = 2;
         this._diamond_main_axis_len = 2;
@@ -71,6 +78,62 @@ disp.ACFDisplayGenerator = class {
         return result;
     }
 
+    /**
+     * Private helper function for the display generator to look up number of
+     * items there should be in the display.
+     * 
+     * @param {*} color index or name string of the color
+     * @param {*} shape index or name string of the shape
+     */
+    _get_item_count(color, shape) {
+        
+        (function assert_input_type() {
+            if (typeof color !== "number" && typeof color !== "string") {
+                throw TypeError("Input color type error");
+            }
+            if (typeof shape !== "number" && typeof shape !== "string") {
+                throw TypeError("Input shape type error");
+            }
+        })();
+
+        let color_index;
+        let shape_index;
+        if (typeof color === "string") {
+            color_index = this._colors.indexOf(color);
+            (function assert() {
+                if (color_index < 0) {
+                    throw Error(`Color ${color} not found.`);
+                }
+            })();
+        } else if (typeof color === "number") {
+            (function assert() {
+                if (color >= this._color.length) {
+                    throw Error(`Color index ${color} out of bound.`);
+                }
+            })();
+            color_index = color;
+        }
+
+        if (typeof shape === "string") {
+            shape_index = this._shapes.indexOf(shape);
+            (function assert() {
+                if (shape_index < 0) {
+                    throw Error(`Shape ${shape} not found.`);
+                }
+            })();
+        } else if (typeof shape === "number") {
+            (function assert() {
+                if (shape >= this._shapes.length) {
+                    throw Error(`Shape index ${shape} out of bound.`);
+                }
+            })();
+            shape_index = shape;
+        }
+
+        return this._n_items_color_shape[color_index, shape_index];
+
+    }
+
     get_total_displays_count() {
         return this._block_displays.length;
     }
@@ -85,6 +148,14 @@ disp.ACFDisplayGenerator = class {
         } else {
             return null;
         }
+    }
+
+    /**
+     * "Public" method. Generates all displays in this generator and store in
+     * `this._block_displays`.
+     */
+    make_block_displays() {
+
     }
 
 }
