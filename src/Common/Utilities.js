@@ -85,6 +85,11 @@ util.Util = class Util {
         beep.play();
     }
 
+    static play_mario_sound() {
+        const snd = new Audio("https://exp.leberatory.org/files/sounds/Mario-coin-sound.mp3");
+        snd.play();
+    }
+
 
     static today() {
         let today = new Date();
@@ -262,6 +267,21 @@ util.Util = class Util {
             }
         }
         return result;
+    }
+
+    /**
+     * Removes element(s) from an array
+     * 
+     * @param {Array<*>} arr the array
+     * @param {*} args element(s) to remove
+     */
+    static remove_element_from_array(arr, ...args) {
+        args.forEach( (e) => {
+            const index = arr.indexOf(e);
+            if (index > -1) {
+                arr.splice(index, 1);
+            }
+        } );
     }
 
     /**
