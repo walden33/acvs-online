@@ -144,7 +144,7 @@ disp.DisplayWidget = class {
 
         // Draw polygons
         const polygons = this.svg.selectAll("polygon").data(dataset.polygons);
-        diamonds.enter().append("polygon")
+        polygons.enter().append("polygon")
             .attr("points", d => d.points)
             .attr("fill", d => d.fill )
             .attr("class", d => d.className )
