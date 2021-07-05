@@ -3,9 +3,10 @@
  * the display.
  * 
  * @package acvs-online
- * @version 1.4 (07/21/2020)
+ * @version 1.6 (07/04/2021)
  * @author Walden Li
  * 
+ * @update 1.6 (07/04/21) included polygons; updated duplicate()
  * @update 1.5 added a duplicate() method and removed the logic object
  * @update 1.4 added a setter method to logic
  * @update 1.3 added a "logic" object to the constructor
@@ -13,12 +14,12 @@
  */
 disp.DisplayDataset = class {
 
-    constructor( lines=[], texts=[], rects=[], circles=[], diamonds=[] ) {
+    constructor( lines=[], texts=[], rects=[], circles=[], polygons=[] ) {
         this.lines = lines;
         this.texts = texts;
         this.rects = rects;
         this.circles = circles;
-        this.diamonds = diamonds;
+        this.polygons = polygons;
     }
 
     // Setter methods.
@@ -30,7 +31,7 @@ disp.DisplayDataset = class {
 
     set_circles(circles) { this.circles = circles }
 
-    set_diamonds(diamonds) { this.diamonds = diamonds }
+    set_polygons(polygons) { this.polygons = polygons }
 
     // Methods for adding an array of objects to the display.
     add_lines(lines) { this.lines = this.lines.concat(lines) }
@@ -41,7 +42,7 @@ disp.DisplayDataset = class {
 
     add_circles(circles) { this.circles = this.circles.concat(circles) }
 
-    add_diamonds(diamonds) { this.diamonds = this.diamonds.concat(diamonds) }
+    add_polygons(polygons) { this.polygons = this.polygons.concat(polygons) }
 
     // Methods for adding one object to the display.
     add_a_line(line) { this.lines.push(line) }
@@ -52,11 +53,16 @@ disp.DisplayDataset = class {
 
     add_a_circle(circle) { this.circles.push(circle) }
 
-    add_a_diamond(diamond) { this.diamonds.push(diamond) }
+    add_a_polygon(polygon) { this.polygons.push(polygon) }
 
     duplicate() {
-        return new disp.DisplayDataset(this.lines, this.texts, this.rects,
-            this.circles, this.diamonds);
+        return new disp.DisplayDataset(
+            JSON.parse(JSON.stringify(this.lines)),
+            JSON.parse(JSON.stringify(this.texts)),
+            JSON.parse(JSON.stringify(this.rects)),
+            JSON.parse(JSON.stringify(this.circles)),
+            JSON.parse(JSON.stringify(this.polygons))
+        );
     }
 
     /**
@@ -70,7 +76,7 @@ disp.DisplayDataset = class {
         this.add_texts( dispDataset.texts );
         this.add_rects( dispDataset.rects );
         this.add_circles( dispDataset.circles );
-        this.add_diamonds( dispDataset.diamonds );
+        this.add_polygons( dispDataset.polygons );
         if (remove) { dispDataset = null }
     }
 
