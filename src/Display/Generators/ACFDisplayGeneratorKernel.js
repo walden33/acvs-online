@@ -65,7 +65,7 @@ disp.ACFDisplayGenerator = class {
         this._color_aliases = [this._color_0_alias, this._color_1_alias, this._color_2_alias];
 
         // An array of all displays in this generator
-        this._block_displays = null;
+        this._block_displays = [];
 
     }
 
@@ -269,6 +269,18 @@ disp.ACFDisplayGenerator = class {
             .concat(`${x},${y + crossLen / 2}`) // bottom
             .concat(`${x + mainLen / 2},${y}`); // right
         return new disp.Polygon(points, fill, className, id, transform);
+    }
+
+    _generate_trial_conditions() {
+        throw Error("Abstract method called.")
+    }
+
+    _make_trial_logic() {
+        throw Error("Abstract method called.")
+    }
+
+    _make_trial_display() {
+        throw Error("Abstract method called.")
     }
 
     get_total_displays_count() {
