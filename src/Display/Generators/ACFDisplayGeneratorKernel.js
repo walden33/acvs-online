@@ -3,7 +3,7 @@
  * Adaptive Choice Mouse Click Foraging) Task.
  * 
  * @author Walden Y. Li
- * @version 1.1 (07/02/2021)
+ * @version 1.1 (07/05/2021)
  */
 disp.ACFDisplayGenerator = class {
 
@@ -196,8 +196,7 @@ disp.ACFDisplayGenerator = class {
             })();
             shape_index = shape;
         }
-
-        this._n_items_color_shape[color_index, shape_index] = count;
+        this._n_items_color_shape[color_index][shape_index] = count;
 
     }
 
@@ -304,7 +303,16 @@ disp.ACFDisplayGenerator = class {
      * `this._block_displays`.
      */
     make_block_displays() {
-
+        let result = [];
+        const trial_conds = this._generate_trial_conditions();
+        for (let i = 0; i < this._n_total_trials; i++) {
+            const trial_cond = trial_conds.pop(); // [optTargColor, nonOptTargColor]
+            result.push({
+                "logic": this._make_trial_logic(...trial_cond),
+                "stimuli": this._make_trial_display(trial_cond[0])
+            });
+        }
+        this._block_displays = result;
     }
 
 }
