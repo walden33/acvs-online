@@ -137,7 +137,7 @@ disp.ACFDisplayGenerator = class {
             shape_index = shape;
         }
 
-        return this._n_items_color_shape[color_index, shape_index];
+        return this._n_items_color_shape[color_index][shape_index];
 
     }
 
