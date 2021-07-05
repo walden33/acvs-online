@@ -21,8 +21,9 @@ disp.ACFDisplayGenerator = class {
         this._n_items_x = 10;   // number of items on the main axis
         this._n_items_y = 10;    // number of items on the cross axis
         this._n_total_items = this._n_items_x * this._n_items_y;
-        this._n_opt_targ_1_items = 15;
-        this._n_opt_targ_2_items = 15;
+        this._n_opt_color_1_targ = 15;
+        this._n_opt_color_2_targ = 15;
+        this._n_non_opt_color_targ = 15;
         // this._n_opt_targ_1_shapes = 25;
         // this._n_opt_targ_1_targs = 15;
         // this._n_opt_targ_1_dist = this._n_opt_targ_1_shapes - this._n_opt_targ_1_targs;
@@ -271,7 +272,7 @@ disp.ACFDisplayGenerator = class {
         id = undefined, transform = undefined) {
         const points = `${x},${y - crossLen / 2} `  // top
             .concat(`${x - mainLen / 2},${y} `) // left
-            .concat(`${x},${y + crossLen / 2}`) // bottom
+            .concat(`${x},${y + crossLen / 2} `) // bottom
             .concat(`${x + mainLen / 2},${y}`); // right
         return new disp.Polygon(points, fill, className, id, transform);
     }
