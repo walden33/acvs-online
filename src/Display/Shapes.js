@@ -3,9 +3,9 @@
  * <DisplayDataset>.
  * 
  * @author Walden Y. Li
- * @version 1.5 (07/03/2021)
+ * @version 1.5 (07/04/2021)
  * 
- * @update 1.5 (07/03/21) Added support for diamond shapes.
+ * @update 1.5 (07/04/21) Added support for polygons.
  * @update 1.4 (01/31/21) Added class, id to most shape objects
  */
 
@@ -123,24 +123,17 @@ disp.Text = class {
     }
 }
 
-disp.Diamond = class {
+disp.Polygon = class {
     /**
-     * 
-     * @param {string} x center of diamond x
-     * @param {string} y center of diamond y
-     * @param {string} mainLen length of the main axis (horizontal)
-     * @param {string} crossLen length of the cross axis (vertical)
-     * @param {string} fill : the color of the <rect>
-     * @param {string} className : class for the <rect> object
-     * @param {string} id : id for the <rect> object
+     * @param {string} points
+     * @param {string} fill
+     * @param {string} className
+     * @param {string} id
      * @param {string} transform
      */
-    constructor(x, y, mainLen, crossLen, fill, className = undefined,
-        id = undefined, transform = undefined) {
-        this.x = x;
-        this.y = y;
-        this.mainLen = mainLen;
-        this.crossLen = crossLen;
+    constructor(points, fill, className = undefined, id = undefined,
+        transform = undefined) {
+        this.points = points
         this.fill = fill;
         this.className = className;
         this.id = id;
