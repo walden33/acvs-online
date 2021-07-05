@@ -38,7 +38,7 @@ disp.ACFDisplayGenerator = class {
         //         throw Error("Display item numbers mismatch.")
         //     }
         // }).bind(this)();
-        this._n_items_color_shape = util.Util.ndarray([3,3], 0);
+        this._n_items_color_shape = util.Util.ndarray([3, 3], 0);
 
         // Stimulus shape settings
         this._shape_0 = "square";
@@ -93,7 +93,7 @@ disp.ACFDisplayGenerator = class {
      * @param {*} shape index or name string of the shape
      */
     _get_item_count(color, shape) {
-        
+
         (function assert_input_type() {
             if (typeof color !== "number" && typeof color !== "string") {
                 throw TypeError("Input color type error");
@@ -247,6 +247,28 @@ disp.ACFDisplayGenerator = class {
 
     _colors_are_equal(color1, color2) {
         return this._get_color_value(color1) === this._get_color_value(color2);
+    }
+
+    /**
+     * Given center point coordinates, two dimenson lengths, and other info,
+     * return a <Polygon> object of the diamond.
+     * 
+     * @param {number} x center x
+     * @param {number} y center y
+     * @param {number} mainLen length of the main (horizontal) axis
+     * @param {number} crossLen length of the cross (vertical) axis
+     * @param {string} fill color
+     * @param {string} className 
+     * @param {string} id 
+     * @param {string} transform 
+     */
+    _make_a_diamond(x, y, mainLen, crossLen, fill, className = undefined,
+        id = undefined, transform = undefined) {
+        const points = `${x},${y - crossLen / 2} `  // top
+            .concat(`${x - mainLen / 2},${y} `) // left
+            .concat(`${x},${y + crossLen / 2}`) // bottom
+            .concat(`${x + mainLen / 2},${y}`); // right
+        return new disp.Polygon(points, fill, className, id, transform);
     }
 
     get_total_displays_count() {
