@@ -13,11 +13,12 @@
  */
 disp.DisplayDataset = class {
 
-    constructor( lines=[], texts=[], rects=[], circles=[] ) {
+    constructor( lines=[], texts=[], rects=[], circles=[], diamonds=[] ) {
         this.lines = lines;
         this.texts = texts;
         this.rects = rects;
         this.circles = circles;
+        this.diamonds = diamonds;
     }
 
     // Setter methods.
@@ -29,6 +30,8 @@ disp.DisplayDataset = class {
 
     set_circles(circles) { this.circles = circles }
 
+    set_diamonds(diamonds) { this.diamonds = diamonds }
+
     // Methods for adding an array of objects to the display.
     add_lines(lines) { this.lines = this.lines.concat(lines) }
 
@@ -37,6 +40,8 @@ disp.DisplayDataset = class {
     add_rects(rects) { this.rects = this.rects.concat(rects) }
 
     add_circles(circles) { this.circles = this.circles.concat(circles) }
+
+    add_diamonds(diamonds) { this.diamonds = this.diamonds.concat(diamonds) }
 
     // Methods for adding one object to the display.
     add_a_line(line) { this.lines.push(line) }
@@ -47,8 +52,11 @@ disp.DisplayDataset = class {
 
     add_a_circle(circle) { this.circles.push(circle) }
 
+    add_a_diamond(diamond) { this.diamonds.push(diamond) }
+
     duplicate() {
-        return new disp.DisplayDataset(this.lines, this.texts, this.rects, this.circles);
+        return new disp.DisplayDataset(this.lines, this.texts, this.rects,
+            this.circles, this.diamonds);
     }
 
     /**
@@ -62,6 +70,7 @@ disp.DisplayDataset = class {
         this.add_texts( dispDataset.texts );
         this.add_rects( dispDataset.rects );
         this.add_circles( dispDataset.circles );
+        this.add_diamonds( dispDataset.diamonds );
         if (remove) { dispDataset = null }
     }
 
