@@ -9,10 +9,11 @@
  * <disp.Circle>, <disp.Line>, etc. for d3 to draw on the screen.
  * 
  * @package acvs-online
- * @version 1.6 (06/02/2021)
- * @author Walden Li
+ * @version 1.7 (07/04/2021)
+ * @author Walden Y. Li
  * 
- * @update 1.6 Added "transform" property for all shapes
+ * @update 1.7 (07/04/21) Added polygon rendering
+ * @update 1.6 (06/02/21) Added "transform" property for all shapes
  * @update 1.5 Added run_rsvp() method.
  */
 disp.DisplayWidget = class {
@@ -54,6 +55,7 @@ disp.DisplayWidget = class {
         this.parent.selectAll("circle").remove();
         this.parent.selectAll("line").remove();
         this.parent.selectAll("text").remove();
+        this.parent.selectAll("polygon").remove();
     }
 
     /**
@@ -81,11 +83,11 @@ disp.DisplayWidget = class {
      * @param {disp.DisplayDataset} dataset
      */
     draw( dataset ) {
-        // console.log(dataset)
+
         // Clear the display
         this.clear();
 
-        // Draw the rects
+        // Draw rects
         const rects = this.svg.selectAll("rect").data(dataset.rects);
         rects.enter().append("rect")
             .attr("x", d => d.x )
@@ -98,7 +100,7 @@ disp.DisplayWidget = class {
             .attr("transform", d => d.transform);
         rects.exit().remove();
 
-        // Draw the circles
+        // Draw circles
         const circles = this.svg.selectAll("circle").data(dataset.circles);
         circles.enter().append("circle")
             .attr("cx", d => d.cx )
@@ -112,7 +114,7 @@ disp.DisplayWidget = class {
             .attr("transform", d => d.transform);
         circles.exit().remove();
 
-        // Draw the lines
+        // Draw lines
         const lines = this.svg.selectAll("line").data(dataset.lines);
         lines.enter().append("line")
             .attr("x1", d => d.x1 )
@@ -126,7 +128,7 @@ disp.DisplayWidget = class {
             .attr("transform", d => d.transform);
         lines.exit().remove();
 
-        // Draw the texts
+        // Draw texts
         const texts = this.svg.selectAll("text").data(dataset.texts);
         texts.enter().append("text")
             .text( d => d.text )
@@ -140,6 +142,15 @@ disp.DisplayWidget = class {
             .style("font-family", d => d.fontFamily);
         texts.exit().remove();
 
+        // Draw polygons
+        const polygons = this.svg.selectAll("polygon").data(dataset.polygons);
+        diamonds.enter().append("polygon")
+            .attr("points", d => d.points)
+            .attr("fill", d => d.fill )
+            .attr("class", d => d.className )
+            .attr("id", d => d.id)
+            .attr("transform", d => d.transform)
+        polygons.exit().remove();
 
     }
 
