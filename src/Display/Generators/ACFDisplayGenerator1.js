@@ -9,21 +9,18 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
     /**
      * 
      * @param {number} n_trials 
-     * @param {number} targ_sq_color (0, 1, 2) the *index* of target square color
-     * @param {number} targ_cir_color (0, 1, 2) the *index* of target circle color
-     * @param {number} targ_diamond_color (0, 1, 2) the *index* of target diamond color
+     * @param {number} targ_sq_color target square color (exact value or alias)
+     * @param {number} targ_cir_color target circle color (exact value or alias)
+     * @param {number} targ_diamond_color target diamond color (exact value or alias)
      */
     constructor(n_trials, targ_sq_color, targ_cir_color, targ_diamond_color) {
 
         super();
 
         this._n_total_trials = n_trials;
-        this._targ_sq_color_index = targ_sq_color;
-        this._targ_sq_color = this._colors[targ_sq_color];  // the rgb string of target square color
-        this._targ_cir_color_index = targ_cir_color;
-        this._targ_cir_color = this._colors[targ_cir_color];
-        this._targ_diamond_color_index = targ_diamond_color;
-        this._targ_diamond_color = this._colors[targ_diamond_color];
+        this._targ_sq_color = this._get_color_value(targ_sq_color);
+        this._targ_cir_color = this._get_color_value(targ_cir_color);
+        this._targ_diamond_color = this._get_color_value(targ_diamond_color);
 
         // this._block_displays = this._make_block_displays(
         //     this._generate_trial_conditions()
@@ -77,22 +74,11 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
         let items = util.Util.range(this._n_total_items);
         util.Util.fisher_yates_shuffle(items);
 
-        // Determine shape numbers in the display
-        // const n_targ_sq = nonOptTargShape === 0 ? this._n_non_opt_targ_targs :
-        //     this._n_opt_targ_1_targs;
-        // const n_dist_sq = nonOptTargShape === 0 ? this._n_non_opt_targ_dist :
-        //     this._n_opt_targ_1_dist;
-        // const n_targ_cir = nonOptTargShape === 1 ? this._n_non_opt_targ_targs :
-        //     this._n_opt_targ_1_targs;
-        // const n_dist_cir = nonOptTargShape === 1 ? this._n_non_opt_targ_dist :
-        //     this._n_opt_targ_1_dist;
-        // const n_targ_diamond = nonOptTargShape === 2 ? this._n_non_opt_targ_targs :
-        //     this._n_opt_targ_1_targs;
-        // const n_dist_diamond = nonOptTargShape === 2 ? this._n_non_opt_targ_dist :
-        //     this._n_opt_targ_1_dist;
+        // Determine number of each item type in the display
+        this._set_item_count("red", "square", 100);
         
         // 1. Add squares
-        this._colors.forEach(function add_squares(color) {
+        this._colors.forEach( (function add_squares(color) {
 
             for (let i = 0; i < this._get_item_count(color, "square"); i++) {
                 // Get grid info
@@ -127,10 +113,10 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
                 ));
             }
 
-        });
+        }).bind(this) );
 
         // 2. Add circles
-        this._colors.forEach(function add_circles(color) {
+        this._colors.forEach( (function add_circles(color) {
 
             for (let i = 0; i < this._get_item_count(color, "circle"); i++) {
                 // Get grid info
@@ -166,7 +152,7 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
                 ));
             }
 
-        });
+        }).bind(this) );
         
 
         (function assert_display_complete() {
@@ -179,17 +165,6 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
 
     }
 
-    _make_block_displays(trial_conds) {
-        let result = [];
-        for (let i = 0; i < this._n_total_trials; i++) {
-            let trial_cond = trial_conds.pop(); // [optTargColor, nonOptTargColor]
-            result.push({
-                "logic": this._make_trial_logic(...trial_cond),
-                "stimuli": this._make_trial_display(trial_cond[0])
-            });
-        }
-        return result;
-    }
 
 
 }
