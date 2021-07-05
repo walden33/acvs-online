@@ -54,7 +54,7 @@ disp.ACFDisplayGenerator = class {
         // Stimulus color settings
         // Exact color string to use in <svg> shapes. Could be a generic name
         // or an rgb.
-        this._color_0 = "red";
+        this._color_0 = "#FF5733";
         this._color_1 = "green";
         this._color_2 = "blue";
         this._colors = [this._color_0, this._color_1, this._color_2];
@@ -107,6 +107,9 @@ disp.ACFDisplayGenerator = class {
         let shape_index;
         if (typeof color === "string") {
             color_index = this._colors.indexOf(color);
+            if (color_index < 0) {
+                color_index = this._color_aliases.indexOf(color);
+            }
             (function assert() {
                 if (color_index < 0) {
                     throw Error(`Color ${color} not found.`);
@@ -114,10 +117,10 @@ disp.ACFDisplayGenerator = class {
             })();
         } else if (typeof color === "number") {
             (function assert() {
-                if (color >= this._color.length) {
+                if (color >= this._colors.length) {
                     throw Error(`Color index ${color} out of bound.`);
                 }
-            })();
+            }).bind(this)();
             color_index = color;
         }
 
@@ -133,7 +136,7 @@ disp.ACFDisplayGenerator = class {
                 if (shape >= this._shapes.length) {
                     throw Error(`Shape index ${shape} out of bound.`);
                 }
-            })();
+            }).bind(this)();
             shape_index = shape;
         }
 
@@ -167,6 +170,9 @@ disp.ACFDisplayGenerator = class {
         let shape_index;
         if (typeof color === "string") {
             color_index = this._colors.indexOf(color);
+            if (color_index < 0) {
+                color_index = this._color_aliases.indexOf(color);
+            }
             (function assert() {
                 if (color_index < 0) {
                     throw Error(`Color ${color} not found.`);
@@ -174,10 +180,10 @@ disp.ACFDisplayGenerator = class {
             })();
         } else if (typeof color === "number") {
             (function assert() {
-                if (color >= this._color.length) {
+                if (color >= this._colors.length) {
                     throw Error(`Color index ${color} out of bound.`);
                 }
-            })();
+            }).bind(this)();
             color_index = color;
         }
 
@@ -193,7 +199,7 @@ disp.ACFDisplayGenerator = class {
                 if (shape >= this._shapes.length) {
                     throw Error(`Shape index ${shape} out of bound.`);
                 }
-            })();
+            }).bind(this)();
             shape_index = shape;
         }
         this._n_items_color_shape[color_index][shape_index] = count;
@@ -236,7 +242,7 @@ disp.ACFDisplayGenerator = class {
             return str;
         } else {
             // if color name does not match alias name, look up for its exact
-            const index = this._color.indexOf(str);
+            const index = this._colors.indexOf(str);
             if (index > -1) {
                 return this._color_aliases[index];
             }
