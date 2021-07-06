@@ -22,9 +22,10 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
         this._targ_cir_color = this._get_color_value(targ_cir_color);
         this._targ_diamond_color = this._get_color_value(targ_diamond_color);
 
-        // this._block_displays = this._make_block_displays(
-        //     this._generate_trial_conditions()
-        // );
+        // Set target info in the matrix
+        this._is_targ_matrix[this._colors.indexOf(this._get_color_value(targ_sq_color))][0] = 1;
+        this._is_targ_matrix[this._colors.indexOf(this._get_color_value(targ_cir_color))][1] = 1;
+        this._is_targ_matrix[this._colors.indexOf(this._get_color_value(targ_diamond_color))][2] = 1;
 
     }
 
@@ -53,20 +54,22 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
 
     }
 
-    _make_trial_logic(nonOptTargShape) {
+    _make_trial_logic(nonOptTargColor) {
         return ({
             // Between-sub variables
             targ_sq_color: this._targ_sq_color,
             targ_cir_color: this._targ_cir_color,
             targ_diamond_color: this._targ_diamond_color,
             // Trial-specific variables
-            nonOptTargShape: nonOptTargShape,
-            optTarg1Shape: "N/A",    // in this version the two optimal target types are in equal number
-            optTarg2Shape: "N/A"
+            nonOptTargColor: nonOptTargColor
         });
     }
 
-    _make_trial_display(nonOptTargShape) {
+    /**
+     * 
+     * @param {number} nonOptColor *index* of non-optimal target color
+     */
+    _make_trial_display(nonOptColor) {
 
         let result = new disp.DisplayDataset();
 
@@ -75,12 +78,18 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
         util.Util.fisher_yates_shuffle(items);
 
         // Determine number of each item type in the display
-        // this._set_item_count(this._targ_sq_color, "square", this._n_opt_color_1_targ);
-        // this._set_item_count(this._targ_cir_color, "circle", this._n_opt_color_2_targ);
-        // this._set_item_count(this._targ_diamond_color, "diamond", this._n_non_opt_color_targ);
-        this._set_item_count(this._targ_sq_color, "square", 25);
-        this._set_item_count(this._targ_cir_color, "circle", 25);
-        this._set_item_count(this._targ_diamond_color, "diamond", 50);
+        // Targets
+        this._set_item_count(this._targ_sq_color, "square", this._n_targ_per_color);
+        this._set_item_count(this._targ_cir_color, "circle", this._n_targ_per_color);
+        this._set_item_count(this._targ_diamond_color, "diamond", this._n_targ_per_color);
+        // Opt colors distractors
+        let colors = this._colors.splice();
+        util.Util.remove_element_from_array(colors, nonOptColor);
+        colors.forEach(  ((c) => {
+            let temp = util.Util.split_int(this._n_dist_opt_color, 2);
+        }).bind(this));
+        // Non opt color distractors
+        // Get non opt target shape
 
         
         // 1. Add squares
