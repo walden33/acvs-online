@@ -21,24 +21,17 @@ disp.ACFDisplayGenerator = class {
         this._n_items_x = 10;   // number of items on the main axis
         this._n_items_y = 10;    // number of items on the cross axis
         this._n_total_items = this._n_items_x * this._n_items_y;
-        this._n_opt_color_1_targ = 15;
-        this._n_opt_color_2_targ = 15;
-        this._n_non_opt_color_targ = 15;
-        // this._n_opt_targ_1_shapes = 25;
-        // this._n_opt_targ_1_targs = 15;
-        // this._n_opt_targ_1_dist = this._n_opt_targ_1_shapes - this._n_opt_targ_1_targs;
-        // this._n_opt_targ_2_shapes = 25;
-        // this._n_opt_targ_2_targs = 15;
-        // this._n_opt_targ_2_dist = this._n_opt_targ_2_shapes - this._n_opt_targ_2_targs;
-        // this._n_non_opt_targ_shapes = 50;
-        // this._n_non_opt_targ_targs = 15;
-        // this._n_non_opt_targ_dist = this._n_non_opt_targ_shapes - this._n_non_opt_targ_targs;
-        // (function assert() {
-        //     if (this._n_items_x * this._n_items_y !== this._n_opt_targ_1_shapes
-        //         + this._n_opt_targ_2_shapes + this._n_non_opt_targ_shapes) {
-        //         throw Error("Display item numbers mismatch.")
-        //     }
-        // }).bind(this)();
+        this._n_targ_per_color = 15;
+        this._n_dist_opt_color = 10;
+        this._n_items_opt_color = this._n_targ_per_color + this._n_dist_opt_color;
+        this._n_dist_non_opt_color = 35;
+        this._n_items_non_opt_color = this._n_targ_per_color + this._n_dist_non_opt_color;
+        (function assert_total_item_within_bound() {
+            if (this._n_items_opt_color * 2 + this._n_items_non_opt_color >
+                this._n_items_x * this._n_items_y) {
+                throw Error("Number of items in display exceeds maximum.")
+            }
+        }).bind(this)();
         this._n_items_color_shape = util.Util.ndarray([3, 3], 0);
 
         // Stimulus shape settings
@@ -48,8 +41,8 @@ disp.ACFDisplayGenerator = class {
         this._shapes = [this._shape_0, this._shape_1, this._shape_2];
         this._circle_radius = 0.7;
         this._square_size = 2;
-        this._diamond_main_axis_len = 2;
-        this._diamond_cross_axis_len = 2;
+        this._diamond_main_axis_len = 2.8;
+        this._diamond_cross_axis_len = 3;
         this._background_rect_size = 3;
 
         // Stimulus color settings
