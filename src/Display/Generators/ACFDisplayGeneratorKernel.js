@@ -33,7 +33,10 @@ disp.ACFDisplayGenerator = class {
             }
         }).bind(this)();
 
-        /** A 3x3 matrix representing if a particular colored shape is a target. */
+        /**
+         * A 3x3 matrix representing if a particular colored shape is a target.
+         * Rows are colors and columns are shapes.
+         */
         this._is_targ_matrix = util.Util.ndarray([3, 3], 0);
 
         /** A 3x3 matrix representing the number of each type of object. */
