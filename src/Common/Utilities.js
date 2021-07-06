@@ -64,6 +64,30 @@ util.Util = class Util {
     }
 
     /**
+     * Takes in an integer and split it into random integers that sum up as the
+     * original integer.
+     * 
+     * TODO: an issue with min greater than 1
+     * 
+     * @param {number} int the integer to be splited
+     * @param {number} n how many integers to split to
+     * @param {number} min minimum of each resulting integer
+     */
+    static split_int(int, n, min=1) {
+        let result = [];
+        if (n === 1) {
+            if (int >= min) {
+                result.push(int);
+            }
+        } else {
+            let rand = Util.gen_random_int(min, int-n+1, true);
+            result = Util.split_int(int-rand, n-1, min);
+            result.push(rand);
+        }
+        return result;
+    }
+
+    /**
      * 
      * @param {number} length : the length of the random string, must be 2 - 8
      */
