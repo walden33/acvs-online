@@ -32,7 +32,12 @@ disp.ACFDisplayGenerator = class {
                 throw Error("Number of items in display exceeds maximum.")
             }
         }).bind(this)();
-        this._n_items_color_shape = util.Util.ndarray([3, 3], 0);
+
+        /** A 3x3 matrix representing if a particular colored shape is a target. */
+        this._is_targ_matrix = util.Util.ndarray([3, 3], 0);
+
+        /** A 3x3 matrix representing the number of each type of object. */
+        this._item_count_matrix = util.Util.ndarray([3, 3], 0);
 
         // Stimulus shape settings
         this._shape_0 = "square";
@@ -134,7 +139,7 @@ disp.ACFDisplayGenerator = class {
             shape_index = shape;
         }
 
-        return this._n_items_color_shape[color_index][shape_index];
+        return this._item_count_matrix[color_index][shape_index];
 
     }
 
@@ -196,7 +201,7 @@ disp.ACFDisplayGenerator = class {
             }).bind(this)();
             shape_index = shape;
         }
-        this._n_items_color_shape[color_index][shape_index] = count;
+        this._item_count_matrix[color_index][shape_index] = count;
 
     }
 
