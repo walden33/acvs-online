@@ -88,6 +88,16 @@ util.Util = class Util {
     }
 
     /**
+     * Returns the dot product of two matrices.
+     * 
+     * @param {Array<*>} m1 
+     * @param {Array<*>} m2 
+     */
+    static dot_product(m1, m2) {
+        return m1.map((__, i) => m1[i] * m2[i]).reduce((m, n) => m + n);
+    }
+
+    /**
      * 
      * @param {number} length : the length of the random string, must be 2 - 8
      */
