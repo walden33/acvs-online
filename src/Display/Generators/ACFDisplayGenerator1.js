@@ -23,15 +23,15 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
         this._targ_diamond_color = this._get_color_value(targ_diamond_color);
 
         // Set target info in the matrix
-        this._is_targ_matrix[this._colors.indexOf(this._get_color_value(targ_sq_color))][0] = 1;
-        this._is_targ_matrix[this._colors.indexOf(this._get_color_value(targ_cir_color))][1] = 1;
-        this._is_targ_matrix[this._colors.indexOf(this._get_color_value(targ_diamond_color))][2] = 1;
+        this._is_targ[this._colors.indexOf(this._get_color_value(targ_sq_color))][0] = 1;
+        this._is_targ[this._colors.indexOf(this._get_color_value(targ_cir_color))][1] = 1;
+        this._is_targ[this._colors.indexOf(this._get_color_value(targ_diamond_color))][2] = 1;
 
     }
 
     /**
      * Balanced variables within one block:
-     * Non optimal target shape (0, 1, 2) max rep = 3
+     * Non optimal target color (0, 1, 2) max rep = 3
      */
     _generate_trial_conditions() {
 
@@ -43,13 +43,11 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
             }
         }).bind(this)();
 
-        let optColors = util.Util.generate_random_array([0, 1, 2], this._n_total_trials, 3);
+        let nonOptColors = util.Util.generate_random_array([0, 1, 2], this._n_total_trials, 3);
 
         for (let i = 0; i < this._n_total_trials; i++) {
-            let nonOptColor = optColors.pop();
-            result[i] = [nonOptColor];
+            result[i] = [nonOptColors.pop()];
         }
-
         return result;
 
     }
@@ -70,7 +68,6 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
      * @param {number} nonOptColor *index* of non-optimal target color
      */
     _make_trial_display(nonOptColor) {
-
         let result = new disp.DisplayDataset();
 
         const gridPos = this._get_grid_pos();
@@ -82,16 +79,31 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
         this._set_item_count(this._targ_sq_color, "square", this._n_targ_per_color);
         this._set_item_count(this._targ_cir_color, "circle", this._n_targ_per_color);
         this._set_item_count(this._targ_diamond_color, "diamond", this._n_targ_per_color);
-        // Opt colors distractors
-        let colors = this._colors.splice();
+        // Determine non optimal color distractors (more abundant)
+        let temp = util.Util.split_int(this._n_dist_non_opt_color, 2);  // spliting nonoptimal dist items into 2
+        [0, 1, 2].forEach(
+            ((shape) => {
+                if (!this._is_targ[nonOptColor][shape]) {
+                    this._set_item_count(nonOptColor, shape, temp.pop());
+                }
+            }).bind(this)
+        );
+        // Determine optimal colors distractors
+        let colors = [0, 1, 2];
         util.Util.remove_element_from_array(colors, nonOptColor);
-        colors.forEach(  ((c) => {
+        // Now ``colors`` only contain optimal target colors
+        colors.forEach( ((c) => {
             let temp = util.Util.split_int(this._n_dist_opt_color, 2);
+            [0, 1, 2].forEach(
+                ((shape) => {
+                    if (!this._is_targ[c][shape]) {
+                        this._set_item_count(c, shape, temp.pop());
+                    }
+                }).bind(this)
+            );
         }).bind(this));
-        // Non opt color distractors
-        // Get non opt target shape
+        console.log(this._item_count)
 
-        
         // 1. Add squares
         this._colors.forEach( (function add_squares(color) {
 
