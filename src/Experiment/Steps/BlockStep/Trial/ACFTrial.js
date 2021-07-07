@@ -133,7 +133,7 @@ exp.ACFTrial = class extends exp.AbstractTrial {
         this._trial_data.logic.opt_targ_color = this._opt_targ_color;
         // Record trial result
         this._trial_data.run_number = this._n_run;
-        this._trial_data.run_length = 40 / this._n_run;
+        this._trial_data.run_length = this._n_total_targs / this._n_run;
         this._trial_data.n_wrong_attempt = this._n_wrong_attempt;
         this._trial_data.response_sequence = this._response_sequence;
         this._trial_data.response_timestamps = this._response_timestamps;
