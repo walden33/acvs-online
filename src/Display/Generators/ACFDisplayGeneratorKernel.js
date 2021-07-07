@@ -37,10 +37,10 @@ disp.ACFDisplayGenerator = class {
          * A 3x3 matrix representing if a particular colored shape is a target.
          * Rows are colors and columns are shapes.
          */
-        this._is_targ_matrix = util.Util.ndarray([3, 3], 0);
+        this._is_targ = util.Util.ndarray([3, 3], 0);
 
         /** A 3x3 matrix representing the number of each type of object. */
-        this._item_count_matrix = util.Util.ndarray([3, 3], 0);
+        this._item_count = util.Util.ndarray([3, 3], 0);
 
         // Stimulus shape settings
         this._shape_0 = "square";
@@ -56,9 +56,10 @@ disp.ACFDisplayGenerator = class {
         // Stimulus color settings
         // Exact color string to use in <svg> shapes. Could be a generic name
         // or an rgb.
-        this._color_0 = "#FF5733";
-        this._color_1 = "green";
-        this._color_2 = "blue";
+        // this._color_0 = "#FF5733";
+        this._color_0 = "rgb(255,55,55)";
+        this._color_1 = "rgb(38,125,0)";
+        this._color_2 = "rgb(85,85,255)";
         this._colors = [this._color_0, this._color_1, this._color_2];
         // Color aliases.
         this._color_0_alias = "red";
@@ -142,7 +143,7 @@ disp.ACFDisplayGenerator = class {
             shape_index = shape;
         }
 
-        return this._item_count_matrix[color_index][shape_index];
+        return this._item_count[color_index][shape_index];
 
     }
 
@@ -204,7 +205,7 @@ disp.ACFDisplayGenerator = class {
             }).bind(this)();
             shape_index = shape;
         }
-        this._item_count_matrix[color_index][shape_index] = count;
+        this._item_count[color_index][shape_index] = count;
 
     }
 
