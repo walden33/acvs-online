@@ -174,7 +174,7 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
                     y + '',
                     this._circle_radius,
                     this._get_color_value(color),
-                    this._get_color_value(color),
+                    null,
                     null,
                     this._colors_are_equal(color, this._targ_cir_color) ?
                         `targ_cir_${this._get_color_alias(color)}` :
