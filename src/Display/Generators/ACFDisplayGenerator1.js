@@ -9,18 +9,30 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
     /**
      * 
      * @param {number} n_trials 
-     * @param {number} targ_sq_color target square color (exact value or alias)
-     * @param {number} targ_cir_color target circle color (exact value or alias)
-     * @param {number} targ_diamond_color target diamond color (exact value or alias)
+     * @param {*} targ_sq_color target square color (index, exact value, or alias)
+     * @param {*} targ_cir_color target circle color (index, exact value, or alias)
+     * @param {*} targ_diamond_color target diamond color (index, exact value, or alias)
      */
     constructor(n_trials, targ_sq_color, targ_cir_color, targ_diamond_color) {
 
         super();
 
         this._n_total_trials = n_trials;
-        this._targ_sq_color = this._get_color_value(targ_sq_color);
-        this._targ_cir_color = this._get_color_value(targ_cir_color);
-        this._targ_diamond_color = this._get_color_value(targ_diamond_color);
+        if (typeof targ_sq_color === "string") {
+            this._targ_sq_color = this._get_color_value(targ_sq_color);
+        } else if (typeof targ_sq_color === "number"){
+            this._targ_sq_color = this._colors[targ_sq_color];
+        }
+        if (typeof targ_cir_color === "string") {
+            this._targ_cir_color = this._get_color_value(targ_cir_color);
+        } else if (typeof targ_cir_color === "number"){
+            this._targ_cir_color = this._colors[targ_cir_color];
+        }
+        if (typeof targ_diamond_color === "string") {
+            this._targ_diamond_color = this._get_color_value(targ_diamond_color);
+        } else if (typeof targ_diamond_color === "number"){
+            this._targ_diamond_color = this._colors[targ_diamond_color];
+        }
 
         // Set target info in the matrix
         this._is_targ[this._colors.indexOf(this._get_color_value(targ_sq_color))][0] = 1;
