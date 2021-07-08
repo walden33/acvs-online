@@ -59,7 +59,9 @@ exp.ACFBlock = class extends util.AbstractStep {
         }
 
         if (this._trial_num <= this._n_max_trials) {
+            console.log(this._display_generator);
             let display = this._display_generator.yield_trial_display();
+            console.log(display);
             if (display !== null) {
                 // Create a new trial
                 let trial = this._construct_trial(display.stimuli, display.logic);
@@ -87,7 +89,6 @@ exp.ACFBlock = class extends util.AbstractStep {
 
     _save_data() {
         this._db.ExperimentTable.add_new_row(this._block_no, this._all_trials_data);
-        console.log(this._db);
     }
 
     _show_summary() {
