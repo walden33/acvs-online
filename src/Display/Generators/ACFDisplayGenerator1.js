@@ -40,7 +40,7 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
         this._is_targ[this._colors.indexOf(this._get_color_value(targ_diamond_color))][2] = 1;
 
         if (finalize) {
-            this._block_displays = this.make_block_displays(this._generate_trial_conditions());
+            this.make_block_displays(this._generate_trial_conditions());
         }
 
     }
@@ -248,6 +248,17 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
 
     }
 
-
+    make_block_displays() {
+        let result = [];
+        const trial_conds = this._generate_trial_conditions();
+        for (let i = 0; i < this._n_total_trials; i++) {
+            const trial_cond = trial_conds.pop(); // [optTargColor, nonOptTargColor]
+            result.push({
+                "logic": this._make_trial_logic(...trial_cond),
+                "stimuli": this._make_trial_display(trial_cond[0])
+            });
+        }
+        this._block_displays = result;
+    }
 
 }

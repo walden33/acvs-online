@@ -312,16 +312,7 @@ disp.ACFDisplayGenerator = class {
      * `this._block_displays`.
      */
     make_block_displays() {
-        let result = [];
-        const trial_conds = this._generate_trial_conditions();
-        for (let i = 0; i < this._n_total_trials; i++) {
-            const trial_cond = trial_conds.pop(); // [optTargColor, nonOptTargColor]
-            result.push({
-                "logic": this._make_trial_logic(...trial_cond),
-                "stimuli": this._make_trial_display(trial_cond[0])
-            });
-        }
-        this._block_displays = result;
+        throw Error("Abstract method called.")
     }
 
 }
