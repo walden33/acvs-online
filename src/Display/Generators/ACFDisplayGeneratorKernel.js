@@ -49,8 +49,9 @@ disp.ACFDisplayGenerator = class {
         this._shapes = [this._shape_0, this._shape_1, this._shape_2];
         this._circle_radius = 0.7;
         this._square_size = 2;
-        this._diamond_main_axis_len = 2.8;
-        this._diamond_cross_axis_len = 3;
+        this._diamond_diagonal_len = 3;
+        this._diamond_main_axis_len = this._diamond_diagonal_len;
+        this._diamond_cross_axis_len = this._diamond_diagonal_len;
         this._background_rect_size = 3;
 
         // Stimulus color settings
