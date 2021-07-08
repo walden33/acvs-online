@@ -55,11 +55,12 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
     _make_trial_logic(nonOptTargColor) {
         return ({
             // Between-sub variables
-            targ_sq_color: this._targ_sq_color,
-            targ_cir_color: this._targ_cir_color,
-            targ_diamond_color: this._targ_diamond_color,
+            targSquareColor: this._get_color_alias(this._targ_sq_color),
+            targCircleColor: this._get_color_alias(this._targ_cir_color),
+            targDiamondColor: this._get_color_alias(this._targ_diamond_color),
             // Trial-specific variables
-            nonOptTargColor: nonOptTargColor
+            nonOptTargColorIndex: nonOptTargColor,
+            nonOptTargColorName: this._color_aliases[nonOptTargColor]
         });
     }
 
@@ -102,7 +103,6 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
                 }).bind(this)
             );
         }).bind(this));
-        console.log(this._item_count)
 
         // 1. Add squares
         this._colors.forEach( (function add_squares(color) {
