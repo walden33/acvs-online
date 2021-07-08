@@ -39,6 +39,10 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
         this._is_targ[this._colors.indexOf(this._get_color_value(targ_cir_color))][1] = 1;
         this._is_targ[this._colors.indexOf(this._get_color_value(targ_diamond_color))][2] = 1;
 
+        if (finalize) {
+            this._block_displays = this.make_block_displays(this._generate_trial_conditions());
+        }
+
     }
 
     /**
