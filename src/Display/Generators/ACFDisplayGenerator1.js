@@ -13,9 +13,9 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
      * @param {*} targ_cir_color target circle color (index, exact value, or alias)
      * @param {*} targ_diamond_color target diamond color (index, exact value, or alias)
      */
-    constructor(n_trials, targ_sq_color, targ_cir_color, targ_diamond_color) {
+    constructor(n_trials, targ_sq_color, targ_cir_color, targ_diamond_color, finalize=true) {
 
-        super();
+        super(finalize);
 
         this._n_total_trials = n_trials;
         if (typeof targ_sq_color === "string") {

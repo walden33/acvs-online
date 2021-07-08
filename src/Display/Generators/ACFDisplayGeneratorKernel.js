@@ -7,7 +7,7 @@
  */
 disp.ACFDisplayGenerator = class {
 
-    constructor() {
+    constructor(finalize=true) {
 
         // Display settings
         this._screen_x = 100;   // length of the main axis (horizontal)
@@ -69,6 +69,9 @@ disp.ACFDisplayGenerator = class {
 
         // An array of all displays in this generator
         this._block_displays = [];
+        if (finalize) {
+            this._block_displays = this.make_block_displays(this._generate_trial_conditions());
+        }
 
     }
 
