@@ -18,8 +18,8 @@ disp.ACFDisplayGenerator = class {
         this._max_y_jitter = 3.5 / 1.25;
 
         // Display general settings
-        this._n_items_x = 10;   // number of items on the main axis
-        this._n_items_y = 10;    // number of items on the cross axis
+        this._n_items_x = 14;   // number of items on the main axis
+        this._n_items_y = 11;    // number of items on the cross axis
         this._n_total_items = this._n_items_x * this._n_items_y;
         this._n_targ_per_color = 15;
         this._n_dist_opt_color = 10;
@@ -47,9 +47,9 @@ disp.ACFDisplayGenerator = class {
         this._shape_1 = "circle";
         this._shape_2 = "diamond";
         this._shapes = [this._shape_0, this._shape_1, this._shape_2];
-        this._circle_radius = 0.7;
+        this._circle_radius = 1.128379;
         this._square_size = 2;
-        this._diamond_diagonal_len = 3;
+        this._diamond_diagonal_len = 2.828427;
         this._diamond_main_axis_len = this._diamond_diagonal_len;
         this._diamond_cross_axis_len = this._diamond_diagonal_len;
         this._background_rect_size = 3;
