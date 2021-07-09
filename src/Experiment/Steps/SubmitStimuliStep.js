@@ -14,6 +14,7 @@ exp.SubmitStimuliStep = class extends util.AbstractStep {
      * @param  {...disp.DisplayGenerator} args display generators to record
      */
     constructor(link, ...args) {
+        super();
         this._submission_link = link;
         this._data = args;
     }
