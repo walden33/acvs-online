@@ -8,9 +8,14 @@
  */
 exp.SubmitStimuliStep = class extends util.AbstractStep() {
 
-    constructor(link) {
+    /**
+     * 
+     * @param {string} link the submission link
+     * @param  {...disp.DisplayGenerator} args display generators to record
+     */
+    constructor(link, ...args) {
         this._submission_link = link;
-        this._data = [];
+        this._data = args;
     }
 
     execute() {
@@ -34,14 +39,6 @@ exp.SubmitStimuliStep = class extends util.AbstractStep() {
                 alert(errMsg);
             }
         })
-    }
-
-    /**
-     * 
-     * @param  {...disp.DisplayGenerator} args display generator to be recorded
-     */
-    add_display_generator(...args) {
-        this._data.concat(args);
     }
 
 }
