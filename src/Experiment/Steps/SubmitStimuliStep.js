@@ -6,7 +6,7 @@
  * @author Walden Y. Li
  * @created 07/09/2021
  */
-exp.SubmitStimuliStep = class extends util.AbstractStep() {
+exp.SubmitStimuliStep = class extends util.AbstractStep {
 
     /**
      * 
