@@ -30,7 +30,7 @@ exp.SubmitStimuliStep = class extends util.AbstractStep {
         $.ajax({
             type: "POST",
             url: link,
-            data: JSON.stringify(this._data),
+            data: { stimuli: JSON.stringify(this._data) },
             success: () => {
                 util.Workspace.workspace().select(".debriefing-title")
                     .html("-- END OF EXPERIMENT --");
