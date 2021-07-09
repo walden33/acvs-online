@@ -237,12 +237,11 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
 
         }).bind(this) );
         
-
-        (function assert_display_complete() {
-            if (items.length > 0) {
-                throw Error("Display not complete.");
-            }
-        })();
+        // (function assert_display_complete() {
+        //     if (items.length > 0) {
+        //         throw Error("Display not complete.");
+        //     }
+        // })();
 
         return result;
 
