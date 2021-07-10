@@ -23,21 +23,33 @@ exp.SubmitStimuliStep = class extends util.AbstractStep {
 
         // UI
         util.Workspace.workspace().append("p").attr("class", "debriefing-title")
-            .html("Submitting data ...");
+            .html("Preparing experiment ...");
 
         // Send to server
         const link = this._submission_link;
         $.ajax({
             type: "POST",
             url: link,
-            data: { stimuli: JSON.stringify(this._data) },
+            data: {
+                stimuli: {
+                    prolificId: util.Util.get_prolific_id,
+                    sessionId: util.Util.get_session_id,
+                    studyId: util.Util.get_study_id,
+                    stimuliData: JSON.stringify(this._data)
+                }
+            },
             success: () => {
                 util.Workspace.workspace().select(".debriefing-title")
-                    .html("-- END OF EXPERIMENT --");
-                alert("Data submitted!");
+                    .html("Experiment preparation ready.");
+                setTimeout( (()=> {
+                    util.Workspace.workspace().select(".debriefing-title").remove();
+                    this.step_completed_signal.emit();
+                }).bind(this), 100);
+                
             },
             failure: (errMsg) => {
-                alert(errMsg);
+                alert("There is something wrong this your Internet connection" +
+                ". Please refresh and try again. Error message: " + errMsg);
             }
         })
     }
