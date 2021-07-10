@@ -302,7 +302,7 @@ disp.ACFDisplayGenerator = class {
      */
     yield_trial_display() {
         if (this._block_displays.length > 0) {
-            return this._block_displays.pop();
+            return this._block_displays.shift();
         } else {
             return null;
         }
