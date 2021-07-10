@@ -3,10 +3,17 @@
     // header("Content-Type: application/json");
     header("Access-Control-Allow-Origin: *");
 
-    require("functions.php");
+    if (isset($_POST['stimuli'])) {
+        $hash = bin2hex(random_bytes(16));
+        $fname = 'data/stimuli_'.$hash.'.txt';
+        $handle = fopen($fname, "w");
+        fwrite($handle, serialize($_POST));
+        fclose($handle);
+    };
 
-    if (isset($_POST['full'])) {
-        $fname = 'data/data_'.strval(get_num_existing_subs($dir="data")+1).'.txt';
+    if (isset($_POST['data'])) {
+        $hash = bin2hex(random_bytes(16));
+        $fname = 'data/data_'.$hash.'.txt';
         $handle = fopen($fname, "w");
         fwrite($handle, serialize($_POST));
         fclose($handle);
