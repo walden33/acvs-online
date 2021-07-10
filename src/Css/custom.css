@@ -180,14 +180,13 @@ li {
   /* alignment-baseline: central; */ /* Warning: Check browser compatibility. WL 8/22/2020 */
 }
 
-.acvs-feedback {
+/* .acvs-feedback {
   font-family: Arial, Helvetica, sans-serif;
   font-style: italic;
   font-size: 2pt;
   fill: white;
   text-anchor: middle;
-  /* alignment-baseline: central; */
-}
+} */
 
 .fixation-cross-center {
   text-anchor: middle;

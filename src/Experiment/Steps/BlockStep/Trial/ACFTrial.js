@@ -89,9 +89,10 @@ exp.ACFTrial = class extends exp.AbstractTrial {
             util.Util.play_beep_sound();
             // Show feedback
             this._display_widget.show_feedback(
-                "Oops, remember the targets are " + this._targ_sq_color + " squares " +
-                "and " + this._targ_cir_color + " circles. " +
-                "Let's try again!", 50, 40);
+                `Remember the targets are ${this._targ_sq_color} squares, ` +
+                `${this._targ_cir_color} circles, and ` +
+                `${this._targ_diamond_color} diamonds. Let's try again!`,
+                50, 40, "1pt");
             // Increment wrong attempt count
             this._n_wrong_attempt++;
             // After 3 seconds, reset trial parameters show the display again
