@@ -97,11 +97,34 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
         this._set_item_count(this._targ_cir_color, "circle", this._n_targ_per_color);
         this._set_item_count(this._targ_diamond_color, "diamond", this._n_targ_per_color);
         // Determine non optimal color distractors (more abundant)
-        let temp = util.Util.split_int(this._n_dist_non_opt_color, 2);  // spliting nonoptimal dist items into 2
+        // let temp = util.Util.split_int(this._n_dist_non_opt_color, 2);  // spliting nonoptimal dist items into 2
+        // [0, 1, 2].forEach(
+        //     ((shape) => {
+        //         if (!this._is_targ[nonOptColor][shape]) {
+        //             this._set_item_count(nonOptColor, shape, temp.pop());
+        //         }
+        //     }).bind(this)
+        // );
+        // // Determine optimal colors distractors
+        // let colors = [0, 1, 2];
+        // util.Util.remove_element_from_array(colors, nonOptColor);
+        // // Now ``colors`` only contain optimal target colors
+        // colors.forEach( ((c) => {
+        //     let temp = util.Util.split_int(this._n_dist_opt_color, 2);
+        //     [0, 1, 2].forEach(
+        //         ((shape) => {
+        //             if (!this._is_targ[c][shape]) {
+        //                 this._set_item_count(c, shape, temp.pop());
+        //             }
+        //         }).bind(this)
+        //     );
+        // }).bind(this));
+
+        // Determine non optimal color distractors (more abundant)
         [0, 1, 2].forEach(
             ((shape) => {
                 if (!this._is_targ[nonOptColor][shape]) {
-                    this._set_item_count(nonOptColor, shape, temp.pop());
+                    this._set_item_count(nonOptColor, shape, Math.floor(this._n_dist_non_opt_color/2));
                 }
             }).bind(this)
         );
@@ -110,11 +133,10 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
         util.Util.remove_element_from_array(colors, nonOptColor);
         // Now ``colors`` only contain optimal target colors
         colors.forEach( ((c) => {
-            let temp = util.Util.split_int(this._n_dist_opt_color, 2);
             [0, 1, 2].forEach(
                 ((shape) => {
                     if (!this._is_targ[c][shape]) {
-                        this._set_item_count(c, shape, temp.pop());
+                        this._set_item_count(c, shape, Math.floor(this._n_dist_opt_color/2));
                     }
                 }).bind(this)
             );

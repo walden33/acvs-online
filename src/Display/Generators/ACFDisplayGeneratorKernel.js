@@ -21,10 +21,10 @@ disp.ACFDisplayGenerator = class {
         this._n_items_x = 14;   // number of items on the main axis
         this._n_items_y = 11;    // number of items on the cross axis
         this._n_total_items = this._n_items_x * this._n_items_y;
-        this._n_targ_per_color = 15;
-        this._n_dist_opt_color = 10;
+        this._n_targ_per_color = 20;
+        this._n_dist_opt_color = 16;
         this._n_items_opt_color = this._n_targ_per_color + this._n_dist_opt_color;
-        this._n_dist_non_opt_color = 35;
+        this._n_dist_non_opt_color = 52;
         this._n_items_non_opt_color = this._n_targ_per_color + this._n_dist_non_opt_color;
         (function assert_total_item_within_bound() {
             if (this._n_items_opt_color * 2 + this._n_items_non_opt_color >
