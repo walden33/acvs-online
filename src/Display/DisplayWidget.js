@@ -63,16 +63,21 @@ disp.DisplayWidget = class {
      * the display center.
      * 
      * @param {string} text
-     * @param {string} x : x coordinate for the text
-     * @param {string} y : y coordinate for the text
+     * @param {string} x x coordinate for the text
+     * @param {string} y y coordinate for the text
+     * @param {string} size font size
      */
-    show_feedback( text, x = "50", y = "50" ) {
+    show_feedback( text, x = "50", y = "50", size = "2pt" ) {
         this.clear();
         this.svg.append("text")
             .text(text)
             .attr("x", x)
             .attr("y", y)
-            .attr("class", "acvs-feedback");
+            .style("font-family", "Arial, Helvetica, sans-serif")
+            .style("font-style", "italic")
+            .style("font-size", size)
+            .style("fill", "white")
+            .style("text-anchor", "middle");
     }
 
     /**
