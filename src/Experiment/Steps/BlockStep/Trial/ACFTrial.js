@@ -162,7 +162,7 @@ exp.ACFTrial = class extends exp.AbstractTrial {
         setTimeout(() => {
             this._display_widget.clear();
             this._display_widget.draw(this._stimuli);
-            d3.selectAll("rect, circle").on("click", d => this._process_click(d));
+            d3.selectAll("rect, circle", "polygon").on("click", d => this._process_click(d));
             this._trial_data.stimuli_rendered_timestamp = performance.now();
             // Create a timeout that resets the trial after 10s of no response
             this._create_trial_timeout(this._max_targ_click_interval);
