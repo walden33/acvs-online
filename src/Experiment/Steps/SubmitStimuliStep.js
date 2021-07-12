@@ -24,7 +24,7 @@ exp.SubmitStimuliStep = class extends util.AbstractStep {
         // UI
         util.Workspace.workspace().append("p").attr("class", "debriefing-title")
             .style("animation", "blinker 1s linear infinite")
-            .html("Preparing experiment ...");
+            .html("Preparing experiment data...");
 
         // Send to server
         const link = this._submission_link;
