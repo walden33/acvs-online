@@ -15,7 +15,7 @@ exp.Trial = class extends exp.AbstractTrial {
 
         this.trial_completed_signal = new util.Signal();
 
-        this.display_widget = new disp.DisplayWidget(exp.HtmlGui.workspace());
+        this.display_widget = new disp.DisplayWidget(util.Workspace.workspace());
 
         this.display_widget.set_cue(cue);
         this.display_widget.set_stimuli(stimuli);
@@ -51,8 +51,8 @@ exp.Trial = class extends exp.AbstractTrial {
     /// graphic for this trial.
     ///
     initialize_chart_settings() {
-        exp.HtmlGui.clear_header();
-        exp.HtmlGui.clear_workspace();
+        util.Workspace.clear_header();
+        util.Workspace.clear_workspace();
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ exp.Trial = class extends exp.AbstractTrial {
             result = true;
         } else {
             util.Util.play_beep_sound();
-            exp.HtmlGui.show_message("Please use: 'v' for 2, 'b' for 3, 'n' for 4, and 'm' for 5", "red");
+            util.Workspace.show_message("Please use: 'v' for 2, 'b' for 3, 'n' for 4, and 'm' for 5", "red");
             setTimeout(() => {
                 util.Workspace.clear_message();
             }, 2000);
@@ -124,7 +124,7 @@ exp.Trial = class extends exp.AbstractTrial {
     /// invalid key.
     ///
     respond_to_invalid_user_keyboard_input(the_key_the_user_pressed) {
-        exp.HtmlGui.show_message("Key '" + the_key_the_user_pressed + "' not recognized. Please use: 'v' for 2, 'b' for 3, 'n' for 4, and 'm' for 5", "red");
+        util.Workspace.show_message("Key '" + the_key_the_user_pressed + "' not recognized. Please use: 'v' for 2, 'b' for 3, 'n' for 4, and 'm' for 5", "red");
 
         util.Util.play_beep_sound();
 
