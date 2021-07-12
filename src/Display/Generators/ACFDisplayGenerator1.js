@@ -65,7 +65,7 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
         //     result[i] = [nonOptColors.pop()];
         // }
         // return result;
-        return this._rand_trial_seq[util.Util.gen_random_int(0, this._rand_trial_seq.length-1, true)];
+        return this._rand_trial_seq[util.Util.gen_random_int(0, this._rand_trial_seq.length-1, true)].slice();
 
     }
 
@@ -276,8 +276,8 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
         for (let i = 0; i < this._n_total_trials; i++) {
             const trial_cond = trial_conds.pop(); // [optTargColor, nonOptTargColor]
             result.push({
-                "logic": this._make_trial_logic(...trial_cond),
-                "stimuli": this._make_trial_display(trial_cond[0])
+                "logic": this._make_trial_logic(trial_cond),
+                "stimuli": this._make_trial_display(trial_cond)
             });
         }
         this._block_displays = result;
