@@ -45,8 +45,9 @@ exp.ACFBlock = class extends util.AbstractStep {
 
     _construct_trial(stimuli, logic) {
         if (this._block_type === "main") {
-            return new exp.MCFTrial(stimuli, logic["targSquareColor"],
-                logic["targCircleColor"], logic["targDiamondColor"]);
+            return new exp.ACFTrial(stimuli, logic["targSquareColor"],
+                logic["targCircleColor"], logic["targDiamondColor"],
+                logic["nonOptTargColorIndex"]);
         } else if (this._block_type === "baseline") {
             return new exp.MCFBaselineTrial(stimuli);
         }
