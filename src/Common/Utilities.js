@@ -243,11 +243,12 @@ util.Util = class Util {
             }
         }
         Util.fisher_yates_shuffle(result);
-        if ( max_rep===0 ) return result;
+        if ( max_rep===0) return result;
 
         // Check if there are more than MAXREP reps in a run
         let previous = result[0];
-        // rep: current run rep numbers; maxRep: max rep numbers recorded so far
+        // rep: current run rep accumulator
+        // maxRep: max and min rep numbers recorded so far
         let rep = 1, maxRep = 1;
         for (let i = 1; i < result.length; i++) {
             if (result[i] === previous) {
@@ -258,9 +259,11 @@ util.Util = class Util {
             }
             previous = result[i];
         }
-        if (maxRep > max_rep) {
-            return Util.generate_random_array(items, length, max_rep);
-        } else return result;
+        if (max_rep !== 0) {
+            if (maxRep > max_rep) {
+                return Util.generate_random_array(items, length, max_rep);
+            } else return result;
+        }
 
     }
 
