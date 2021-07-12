@@ -14,8 +14,9 @@ exp.ACFTrial = class extends exp.AbstractTrial {
      * @param {string} targ_sq_color 
      * @param {string} targ_cir_color 
      * @param {string} targ_diamond_color 
+     * @param {number} non_opt_targ_color
      */
-    constructor(stimuli, targ_sq_color, targ_cir_color, targ_diamond_color) {
+    constructor(stimuli, targ_sq_color, targ_cir_color, targ_diamond_color, non_opt_targ_color) {
 
         super();
 
@@ -23,6 +24,7 @@ exp.ACFTrial = class extends exp.AbstractTrial {
         this._targ_sq_color = targ_sq_color;
         this._targ_cir_color = targ_cir_color;
         this._targ_diamond_color = targ_diamond_color;
+        this._non_opt_targ_color = non_opt_targ_color;
 
         this._trial_completed_signal = new util.Signal();
 
@@ -38,12 +40,12 @@ exp.ACFTrial = class extends exp.AbstractTrial {
         this._err_msg_duration = 3000;  // duration of error message (wrong targ click or timed out) appears on screen
 
         // Trial runtime variables
-        this._n_total_targs = 20;
+        this._n_total_targs = 30;
         this._n_targ_left = this._n_total_targs;
         this._n_run = 1;
-        this._response_sequence = [];
-        this._response_timestamps = [];
-        this._response_locations = [];
+
+        // User response container
+        this._response = [];
         this._n_wrong_attempt = 0;
 
     }
@@ -52,23 +54,22 @@ exp.ACFTrial = class extends exp.AbstractTrial {
     _process_click(data) {
         // Determine if this object is a target
         if (data.className.slice(0, 4) === "targ") {
+            // Create a response object to store information about this click
+            let response = {};
             // If it is, record the timestamp of this target click
-            this._response_timestamps.push(performance.now());
+            response.timestamp = performance.now();
             // Clear existing timeouts
             util.Util.clear_timeouts();
-            // Record target position (x & y or cx & cy, depending on the shape)
-            if (data.x !== undefined) {
-                this._response_locations.push([parseFloat(data.x).toFixed(2), parseFloat(data.y).toFixed(2)]);
-            } else {
-                this._response_locations.push([parseFloat(data.cx).toFixed(2), parseFloat(data.cy).toFixed(2)]);
-            }
+            // Record svg object info
+            response.objectInfo = data;
             // Determine if this is a switch of target type (only when this is not the first target in the trial)
-            if (this._response_sequence.length > 0 &&
-                data.className.slice(5, 7) !== this._response_sequence[this._response_sequence.length - 1].slice(5, 7)) {
+            if (this._response > 0 &&
+                data.className.slice(5, 7) !== this._response[this._response.length - 1].objectInfo.className.slice(5, 7)) {
                 this._n_run++;
+                console.log(this._n_run);
             }
-            // Record target identity in the response sequence
-            this._response_sequence.push(`${data.className}_${data.id}`);
+            // Add reponse data into the trial response array
+            this._response.push(response);
             // Decrement remaining target count
             this._n_targ_left--;
             // Remove the object and its background object
@@ -92,7 +93,7 @@ exp.ACFTrial = class extends exp.AbstractTrial {
                 `Remember the targets are ${this._targ_sq_color} squares, ` +
                 `${this._targ_cir_color} circles, and ` +
                 `${this._targ_diamond_color} diamonds. Let's try again!`,
-                50, 40, "1pt");
+                50, 40, "1.5pt");
             // Increment wrong attempt count
             this._n_wrong_attempt++;
             // After 3 seconds, reset trial parameters show the display again
@@ -106,9 +107,7 @@ exp.ACFTrial = class extends exp.AbstractTrial {
     }
 
     _reset_trial_params() {
-        this._response_sequence = [];
-        this._response_locations = [];
-        this._response_timestamps = [];
+        this._response = [];
         this._n_targ_left = this._n_total_targs;
         this._n_run = 1;
     }
@@ -131,7 +130,7 @@ exp.ACFTrial = class extends exp.AbstractTrial {
         this._trial_data.logic = {};
         this._trial_data.logic.targ_sq_color = this._targ_sq_color;
         this._trial_data.logic.targ_cir_color = this._targ_cir_color;
-        this._trial_data.logic.opt_targ_color = this._opt_targ_color;
+        this._trial_data.logic.targ_diamond_color = this._targ_diamond_color;
         // Record trial result
         this._trial_data.run_number = this._n_run;
         this._trial_data.run_length = this._n_total_targs / this._n_run;
