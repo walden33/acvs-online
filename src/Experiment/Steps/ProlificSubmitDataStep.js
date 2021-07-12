@@ -16,12 +16,12 @@ exp.SubmitDataStep = class extends util.AbstractStep {
 
     execute() {
 
-        exp.HtmlGui.clear_workspace();
-        exp.HtmlGui.show_header("Online Experiment - Cognitive Control Lab");
+        util.Workspace.clear_workspace();
+        util.Workspace.show_header("Online Experiment - Cognitive Control Lab");
         d3.select("#overlay").remove();
 
         // Tell participants we are submitting data
-        exp.HtmlGui.workspace().append("p").attr("class", "debriefing-title")
+        util.Workspace.workspace().append("p").attr("class", "debriefing-title")
             .html("Submitting data ...");
 
         util.Util.redirect(this._complete_link, 10000);
@@ -34,7 +34,7 @@ exp.SubmitDataStep = class extends util.AbstractStep {
                 "data": JSON.stringify(this._db)
             },
             success: () => {
-                exp.HtmlGui.workspace().select(".debriefing-title")
+                util.Workspace.workspace().select(".debriefing-title")
                     .html("-- END OF EXPERIMENT --");
                 util.Util.clear_timeouts();
                 util.Util.redirect(this._complete_link, 2000);
@@ -45,7 +45,7 @@ exp.SubmitDataStep = class extends util.AbstractStep {
         })
 
         // Debriefing message
-        exp.HtmlGui.workspace().append("p").attr("class", "debriefing-msg")
+        util.Workspace.workspace().append("p").attr("class", "debriefing-msg")
             .html(
                 "<p>You have completed the experiment. Thank you for your " +
                 "participation.</p>" + 
@@ -58,7 +58,7 @@ exp.SubmitDataStep = class extends util.AbstractStep {
             );
 
         // Debriefing form button
-        exp.HtmlGui.workspace().append("button")
+        util.Workspace.workspace().append("button")
             .attr("class", "btn-regular")
             .text("GO BACK TO PROLIFIC")
             .on("click", () => {
