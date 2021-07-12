@@ -22,7 +22,7 @@ exp.ACF1 = class extends exp.ExperimentKernel {
         // this.add_new_step(new exp.ConsentStep(this._db));
         // this.add_new_step(new exp.CheckBrowserStep(this._db));
 
-        const INSTR_ROOT = "https://exp.leberatory.org/files/instr/mcf-4/";
+        const INSTR_ROOT = "https://exp.leberatory.org/files/instr/acf1/";
         const INSTR_FILE_EXT = "jpeg";
 
         // // Get determine version based on counterbalance id
@@ -57,7 +57,7 @@ exp.ACF1 = class extends exp.ExperimentKernel {
         const g3 = new disp.ACFDisplayGenerator1(15, "red", "green", "blue");
 
         this.add_new_step(new exp.SubmitStimuliStep(
-            `receive.php?PROLIFIC_PID=${util.Util.get_prolific_id}`,
+            `receive.php?PROLIFIC_PID=${util.Util.get_prolific_id()}`,
             g1, g2, g3));
 
         this.add_new_step(new exp.ACFBlock(this._db, 1, g1));
