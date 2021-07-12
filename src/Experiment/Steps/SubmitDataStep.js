@@ -31,7 +31,7 @@ exp.SubmitDataStep = class extends util.AbstractStep {
             type: "POST",
             url: sub_link,
             data: {
-                "full": JSON.stringify(this._db)
+                "data": JSON.stringify(this._db)
             },
             success: () => {
                 util.Workspace.workspace().select(".debriefing-title")
