@@ -51,20 +51,21 @@ disp.ACFDisplayGenerator1 = class extends disp.ACFDisplayGenerator {
      */
     _generate_trial_conditions() {
 
-        let result = [];
+        // let result = [];
 
-        (function assert() {
-            if (this._n_total_trials % 3 !== 0) {
-                throw Error("Total trial number must be a multiple of 3.")
-            }
-        }).bind(this)();
+        // (function assert() {
+        //     if (this._n_total_trials % 3 !== 0) {
+        //         throw Error("Total trial number must be a multiple of 3.")
+        //     }
+        // }).bind(this)();
 
-        let nonOptColors = util.Util.generate_random_array([0, 1, 2], this._n_total_trials, 3);
+        // let nonOptColors = util.Util.generate_random_array([0, 1, 2], this._n_total_trials, 3);
 
-        for (let i = 0; i < this._n_total_trials; i++) {
-            result[i] = [nonOptColors.pop()];
-        }
-        return result;
+        // for (let i = 0; i < this._n_total_trials; i++) {
+        //     result[i] = [nonOptColors.pop()];
+        // }
+        // return result;
+        return this._rand_trial_seq[util.Util.gen_random_int(0, this._rand_trial_seq.length-1, true)];
 
     }
 
