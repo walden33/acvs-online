@@ -26,8 +26,48 @@ exp.ACF1 = class extends exp.ExperimentKernel {
         const INSTR_FILE_EXT = "jpeg";
 
         // // Get determine version based on counterbalance id
-        // // Possible values for version_id: 1, 0
-        const version_id = parseInt(util.Util.get_cb_id()) % 2;
+        // // Possible values for version_id: 1, 2, 3, 4, 5, 0
+        const version_id = parseInt(util.Util.get_cb_id()) % 6;
+
+        let g1, g2, g3;
+        const trialsPerBlock = 15;
+        if (version_id === 1) {
+            const targColors = ["red", "green", "blue"];
+            // Create display generators
+            g1 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+            g2 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+            g3 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+        } else if (version_id === 2) {
+            const targColors = ["red", "blue", "green"];
+            // Create display generators
+            g1 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+            g2 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+            g3 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+        } else if (version_id === 3) {
+            const targColors = ["green", "red", "blue"];
+            // Create display generators
+            g1 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+            g2 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+            g3 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+        } else if (version_id === 4) {
+            const targColors = ["green", "blue", "red"];
+            // Create display generators
+            g1 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+            g2 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+            g3 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+        } else if (version_id === 5) {
+            const targColors = ["blue", "red", "green"];
+            // Create display generators
+            g1 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+            g2 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+            g3 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+        } else if (version_id === 0) {
+            const targColors = ["blue", "green", "red"];
+            // Create display generators
+            g1 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+            g2 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+            g3 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+        }        
 
         // if (version_id === 1) {
         //     this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}1.${INSTR_FILE_EXT}>`], " "));
@@ -50,11 +90,6 @@ exp.ACF1 = class extends exp.ExperimentKernel {
         //     this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}4.${INSTR_FILE_EXT}>`], " "));
         //     this.add_new_step(new exp.MCFBlock(this._db, 4, baseline_display_generator));
         // }
-
-        // Create display generators
-        const g1 = new disp.ACFDisplayGenerator1(3, "red", "green", "blue");
-        const g2 = new disp.ACFDisplayGenerator1(15, "red", "green", "blue");
-        const g3 = new disp.ACFDisplayGenerator1(15, "red", "green", "blue");
 
         this.add_new_step(new exp.SubmitStimuliStep(
             `receive.php?PROLIFIC_PID=${util.Util.get_prolific_id()}`,
