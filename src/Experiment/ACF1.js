@@ -1,5 +1,5 @@
 /**
- * ACF1 experiment.
+ * ACF1 is a pilot task for Adaptive Choice Visual Foraging.
  */
 exp.ACF1 = class extends exp.ExperimentKernel {
     constructor() {
