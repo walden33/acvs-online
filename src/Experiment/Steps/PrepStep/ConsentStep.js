@@ -1,7 +1,7 @@
 /**
  * 
  */
-exp.ConsentStep = class extends(util.AbstractStep) {
+exp.ConsentStep = class extends util.AbstractStep {
     constructor(db) {
         super();
         this._db = db;
@@ -10,12 +10,6 @@ exp.ConsentStep = class extends(util.AbstractStep) {
     execute() {
 
         const CONSENT_FORM_URL = "https://exp.leberatory.org/files/forms/Consent_Prolific.pdf";
-        // const SUB_ID = d3.select("#hidden-sub-id").html();
-
-        // Prolific
-        const prolific_id = util.Util.get_prolific_id();
-        const study_id = util.Util.get_study_id();
-        const session_id = util.Util.get_session_id();
 
         // The message
         util.Workspace.workspace().append("p")
@@ -49,9 +43,10 @@ exp.ConsentStep = class extends(util.AbstractStep) {
                 self_reported_age: age,
                 self_reported_gender: gender,
                 // sub_id: SUB_ID,
-                prolific_id: prolific_id,
-                study_id: study_id,
-                session_id: session_id
+                prolific_id: util.Util.get_prolific_id(),
+                study_id: util.Util.get_study_id(),
+                session_id: util.Util.get_session_id(),
+                cb_id: util.Util.get_cb_id()
             };
             util.Workspace.clear_workspace();
             this.step_completed_signal.emit();
