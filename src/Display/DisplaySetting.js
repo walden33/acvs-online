@@ -15,6 +15,7 @@ disp.DisplaySetting = class {
         // digits
         this.digit_size = this.square_size * 0.65;
         this.digit_color = "white";
+        this.digit_font = "Arial, Helvetica, sans-serif",
         this.digit_class_name = "acvs-digit";
         // for non-Chrome browsers, text location needs to be adjusted in order to center on squares
         this.digit_shift_x = 0;

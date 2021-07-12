@@ -98,6 +98,7 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGenerator {
             optTargGrid.y + this._setting.digit_shift_y + '',
             this._setting.digit_color,
             this._setting.digit_size,
+            this._setting.digit_font,
             this._setting.digit_class_name
         ));
         stimuli.add_a_text(new disp.Text(
@@ -106,6 +107,7 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGenerator {
             nonOptTargGrid.y + this._setting.digit_shift_y + '',
             this._setting.digit_color,
             this._setting.digit_size,
+            this._setting.digit_font,
             this._setting.digit_class_name
         ));
 
@@ -134,6 +136,7 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGenerator {
                 grid.y + this._setting.digit_shift_y + '',
                 this._setting.digit_color,
                 this._setting.digit_size,
+                this._setting.digit_font,
                 this._setting.digit_class_name
             ));
         }
@@ -162,6 +165,7 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGenerator {
                 grid.y + this._setting.digit_shift_y + '',
                 this._setting.digit_color,
                 this._setting.digit_size,
+                this._setting.digit_font,
                 this._setting.digit_class_name
             ));
         }
@@ -190,6 +194,7 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGenerator {
                 grid.y + this._setting.digit_shift_y + '',
                 this._setting.digit_color,
                 this._setting.digit_size,
+                this._setting.digit_font,
                 this._setting.digit_class_name
             ));
         }
@@ -219,13 +224,14 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGenerator {
                 grid.y + this._setting.digit_shift_y + '',
                 this._setting.digit_color,
                 this._setting.digit_size,
+                this._setting.digit_font,
                 this._setting.digit_class_name
             ));
         }
 
         // Finally, generate a fixation cross to everything
         const fixation_text = new disp.Text(
-            '+', x, y, 'white', 3, this._setting.fixation_cross_class_name
+            '+', x, y, 'white', 3, null, this._setting.fixation_cross_class_name
         );
 
         fixation.add_a_text(fixation_text);
