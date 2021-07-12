@@ -31,7 +31,7 @@ exp.SubmitDataStep = class extends util.AbstractStep {
             type: "POST",
             url: this._submit_link,
             data: {
-                "full": JSON.stringify(this._db)
+                "data": JSON.stringify(this._db)
             },
             success: () => {
                 exp.HtmlGui.workspace().select(".debriefing-title")
@@ -54,7 +54,7 @@ exp.SubmitDataStep = class extends util.AbstractStep {
                 "If you " +
                 "have any questions or concerns, " +
                 "please email us at the following address:</br>" +
-                "khandelwal.34@osu.edu (Vaibhav Khandelwal), leber.30@osu.edu (Andrew Leber)."
+                "li.6942@osu.edu (Walden Li)."
             );
 
         // Debriefing form button
