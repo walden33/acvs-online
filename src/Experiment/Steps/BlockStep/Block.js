@@ -82,8 +82,7 @@ exp.Block = class extends util.AbstractStep {
 
     _save_data() {
         this._db.ExperimentTable.add_new_row(this._block_no, this._all_trials_data);
-        console.log(this._db);
-        localStorage.setItem(window._acvs_guid, btoa(JSON.stringify(this._db)));
+        // localStorage.setItem(window._acvs_guid, btoa(JSON.stringify(this._db)));
     }
 
     _show_summary() {
@@ -104,20 +103,20 @@ exp.Block = class extends util.AbstractStep {
         paragraph.push("Your Accuracy: " + accuracy + "%");
         paragraph.push("<hr>");
         paragraph.push("<b>Ready to continue?</b>");
-        exp.HtmlGui.append_paragraphs(paragraph);
+        util.Workspace.append_paragraphs(paragraph);
 
         // create a button for the user to press to acknowledge
-        exp.HtmlGui.append_button("Yes", this.step_completed_signal.emit.bind(this.step_completed_signal));
-        exp.HtmlGui.clear_message()
+        util.Workspace.append_button("Yes", this.step_completed_signal.emit.bind(this.step_completed_signal));
+        util.Workspace.clear_message()
     }
 
     execute() {
         util.Workspace.hide_cursor();
-        exp.HtmlGui.clear_header();
-        exp.HtmlGui.clear_workspace();
+        util.Workspace.clear_header();
+        util.Workspace.clear_workspace();
         this._db.EventsTable.add_new_row("beginning block step #" + this._block_no);
         this._run_next_trial();
-        exp.HtmlGui.show_message(".", "black");
+        util.Workspace.show_message(".", "black");
     }
 
 }
