@@ -63,10 +63,9 @@ exp.ACFTrial = class extends exp.AbstractTrial {
             // Record svg object info
             response.objectInfo = data;
             // Determine if this is a switch of target type (only when this is not the first target in the trial)
-            if (this._response > 0 &&
+            if (this._response.length > 0 &&
                 data.className.slice(5, 7) !== this._response[this._response.length - 1].objectInfo.className.slice(5, 7)) {
                 this._n_run++;
-                console.log(this._n_run);
             }
             // Add reponse data into the trial response array
             this._response.push(response);
@@ -131,13 +130,12 @@ exp.ACFTrial = class extends exp.AbstractTrial {
         this._trial_data.logic.targ_sq_color = this._targ_sq_color;
         this._trial_data.logic.targ_cir_color = this._targ_cir_color;
         this._trial_data.logic.targ_diamond_color = this._targ_diamond_color;
+        this._trial_data.logic.non_opt_targ_color = this._non_opt_targ_color;
         // Record trial result
         this._trial_data.run_number = this._n_run;
         this._trial_data.run_length = this._n_total_targs / this._n_run;
         this._trial_data.n_wrong_attempt = this._n_wrong_attempt;
-        this._trial_data.response_sequence = this._response_sequence;
-        this._trial_data.response_timestamps = this._response_timestamps;
-        this._trial_data.response_locations = this._response_locations;
+        this._trial_data.response = this._response;
         this._trial_data.rt = (this._trial_data.trial_completed_timestamp - this._trial_data.stimuli_rendered_timestamp) / 1000;
         this._display_widget.clear();
         setTimeout((() => {

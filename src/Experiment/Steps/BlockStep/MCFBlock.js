@@ -100,7 +100,6 @@ exp.MCFBlock = class extends util.AbstractStep {
 
     _save_data() {
         this._db.ExperimentTable.add_new_row(this._block_no, this._all_trials_data);
-        console.log(this._db);
     }
 
     _show_summary() {
