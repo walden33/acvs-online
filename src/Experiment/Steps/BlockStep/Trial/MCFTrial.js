@@ -37,7 +37,7 @@ exp.MCFTrial = class extends exp.AbstractTrial {
         this._err_msg_duration = 3000;  // duration of error message (wrong targ click or timed out) appears on screen
 
         // Trial runtime variables
-        this._n_total_targs = 30; // 40 = whole, <40 = partial
+        this._n_total_targs = 40; // 40 = whole, <40 = partial
         this._n_targ_left = this._n_total_targs;
         this._n_run = 1;
         this._response_sequence = [];
