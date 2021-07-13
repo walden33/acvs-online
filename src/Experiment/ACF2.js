@@ -43,16 +43,15 @@ exp.ACF2 = class extends exp.ExperimentKernel {
         }
 
         // Generate displays
-        const g_acvs_0 = new disp.StandardDisplayGenerator(84);
-        const g_acvs_1 = new disp.StandardDisplayGenerator(84);
+        const g_acvs = new disp.StandardDisplayGenerator(108);
         const b = new disp.MCFBaselineDisplayGenerator();
-        const g_mcf_0 = new disp.MCFDisplayGenerator1(20, ...mcf_colors);
-        const g_acf_0 = new disp.ACFDisplayGenerator1(21, ...acf_colors);
+        const g_mcf = new disp.MCFDisplayGenerator1(20, ...mcf_colors);
+        const g_acf = new disp.ACFDisplayGenerator1(21, ...acf_colors);
 
         // Send stimuli (first part)
         this.add_new_step(new exp.SubmitStimuliStep(
             `receive.php?PROLIFIC_PID=${util.Util.get_prolific_id()}`,
-            g_acvs_0, g_acvs_1)
+            g_acvs)
         );
 
         // Informed consent
@@ -71,18 +70,17 @@ exp.ACF2 = class extends exp.ExperimentKernel {
         ));
 
         // Block 1 & 2 (ACVS)
-        this.add_new_step(new exp.Block(this._db, 1, g_acvs_0, [0, 400, 1400]));
-        this.add_new_step(new exp.Block(this._db, 2, g_acvs_1, [0, 400, 1400]));
+        this.add_new_step(new exp.Block(this._db, 1, g_acvs, [0, 400, 1400]));
 
         // Send stimuli (second part)
         this.add_new_step(new exp.SubmitStimuliStep(
             `receive.php?PROLIFIC_PID=${util.Util.get_prolific_id()}`,
-            b, g_mcf_0)
+            b, g_mcf)
         );
 
         // Block 3 (Mouse Click Baseline)
         this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}baseline_0.${INSTR_FILE_EXT}>`], " "));
-        this.add_new_step(new exp.ACFBlock(this._db, 3, b, 18));
+        this.add_new_step(new exp.ACFBlock(this._db, 2, b, 18));
 
         // MCF Practice Block
         this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}mcf_0_cb_${mcf_version}.${INSTR_FILE_EXT}>`], " "));
@@ -90,12 +88,12 @@ exp.ACF2 = class extends exp.ExperimentKernel {
 
         // Block 4 (MCF)
         this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}mcf_1_cb_${mcf_version}.${INSTR_FILE_EXT}>`], " "));
-        this.add_new_step(new exp.MCFBlock(this._db, 4, g_mcf_0, mcf_version));
+        this.add_new_step(new exp.MCFBlock(this._db, 3, g_mcf, mcf_version));
 
         // Send stimuli (final part)
         this.add_new_step(new exp.SubmitStimuliStep(
             `receive.php?PROLIFIC_PID=${util.Util.get_prolific_id()}`,
-            g_acf_0)
+            g_acf)
         );
 
         // ACVF Practice Block
@@ -104,11 +102,11 @@ exp.ACF2 = class extends exp.ExperimentKernel {
 
         // Block 5 (ACVF)
         this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}acf_1_cb_${acf_version}.${INSTR_FILE_EXT}>`], " "));
-        this.add_new_step(new exp.ACFBlock(this._db, 5, g_acf_0));
+        this.add_new_step(new exp.ACFBlock(this._db, 4, g_acf));
 
         // Block 6 (Mouse Click Baseline 2nd half)
         this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}baseline_1.${INSTR_FILE_EXT}>`], " "));
-        this.add_new_step(new exp.ACFBlock(this._db, 6, b));
+        this.add_new_step(new exp.ACFBlock(this._db, 5, b));
 
         this.add_new_step(new exp.SubmitDataStep(this._db,
             `receive.php?PROLIFIC_PID=${util.Util.get_prolific_id()}`,
