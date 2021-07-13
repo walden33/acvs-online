@@ -47,13 +47,12 @@ exp.ACF2 = class extends exp.ExperimentKernel {
         const g_acvs_1 = new disp.StandardDisplayGenerator(84);
         const b = new disp.MCFBaselineDisplayGenerator();
         const g_mcf_0 = new disp.MCFDisplayGenerator1(20, ...mcf_colors);
-        const g_acf_0 = new disp.ACFDisplayGenerator1(18, ...acf_colors);
-        const g_acf_1 = new disp.ACFDisplayGenerator1(18, ...acf_colors);
+        const g_acf_0 = new disp.ACFDisplayGenerator1(21, ...acf_colors);
 
         // Send stimuli (first part)
         this.add_new_step(new exp.SubmitStimuliStep(
             `receive.php?PROLIFIC_PID=${util.Util.get_prolific_id()}`,
-            g_acvs_0, g_acvs_1, b, g_mcf_0)
+            g_acvs_0, g_acvs_1)
         );
 
         // Informed consent
@@ -78,7 +77,7 @@ exp.ACF2 = class extends exp.ExperimentKernel {
         // Send stimuli (second part)
         this.add_new_step(new exp.SubmitStimuliStep(
             `receive.php?PROLIFIC_PID=${util.Util.get_prolific_id()}`,
-            g_acf_0)
+            b, g_mcf_0)
         );
 
         // Block 3 (Mouse Click Baseline)
@@ -96,19 +95,18 @@ exp.ACF2 = class extends exp.ExperimentKernel {
         // Send stimuli (final part)
         this.add_new_step(new exp.SubmitStimuliStep(
             `receive.php?PROLIFIC_PID=${util.Util.get_prolific_id()}`,
-            g_acf_1)
+            g_acf_0)
         );
 
         // ACVF Practice Block
         this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}acf_0_cb_${acf_version}.${INSTR_FILE_EXT}>`], " "));
         this.add_new_step(new exp.ACFBlock(this._db, 0, new disp.ACFDisplayGenerator1(3, ...acf_colors)));
 
-        // Block 5 & 6 (ACVF)
+        // Block 5 (ACVF)
         this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}acf_1_cb_${acf_version}.${INSTR_FILE_EXT}>`], " "));
         this.add_new_step(new exp.ACFBlock(this._db, 5, g_acf_0));
-        this.add_new_step(new exp.ACFBlock(this._db, 6, g_acf_1));
 
-        // Block 7 (Mouse Click Baseline 2nd half)
+        // Block 6 (Mouse Click Baseline 2nd half)
         this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}baseline_1.${INSTR_FILE_EXT}>`], " "));
         this.add_new_step(new exp.ACFBlock(this._db, 7, b));
 
