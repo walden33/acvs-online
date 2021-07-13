@@ -108,7 +108,7 @@ exp.ACF2 = class extends exp.ExperimentKernel {
 
         // Block 6 (Mouse Click Baseline 2nd half)
         this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}baseline_1.${INSTR_FILE_EXT}>`], " "));
-        this.add_new_step(new exp.ACFBlock(this._db, 7, b));
+        this.add_new_step(new exp.ACFBlock(this._db, 6, b));
 
         this.add_new_step(new exp.SubmitDataStep(this._db,
             `receive.php?PROLIFIC_PID=${util.Util.get_prolific_id()}`,
