@@ -46,7 +46,7 @@ exp.ACF2 = class extends exp.ExperimentKernel {
         const g_acvs = new disp.StandardDisplayGenerator(108);
         const b = new disp.MCFBaselineDisplayGenerator();
         const g_mcf = new disp.MCFDisplayGenerator1(20, ...mcf_colors);
-        const g_acf = new disp.ACFDisplayGenerator1(21, ...acf_colors);
+        const g_acf = new disp.ACFDisplayGenerator1(24, ...acf_colors);
 
         // Send stimuli (first part)
         this.add_new_step(new exp.SubmitStimuliStep(
