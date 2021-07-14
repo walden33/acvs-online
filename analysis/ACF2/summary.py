@@ -46,6 +46,7 @@ def main():
             blrt = baseline_trimmed['rt'].mean()
             csv_writer.writerow(
                 [sub, acc, rt, opt, mcfrl, mcfrn, mcfrt, acfrl, acfrn, acfrt, acfopt, blrt])
+            print('Finish reading sub ' + sub)
     f.close()
 
 
