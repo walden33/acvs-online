@@ -48,10 +48,11 @@ disp.ACFDisplayGenerator = class {
         this._shape_2 = "diamond";
         this._shapes = [this._shape_0, this._shape_1, this._shape_2];
         this._circle_radius = 1.128379;
-        this._square_size = 2;
+        this._square_size = 2;  // length of each *side* of the square
         this._diamond_diagonal_len = 2.828427;
         this._diamond_main_axis_len = this._diamond_diagonal_len;
         this._diamond_cross_axis_len = this._diamond_diagonal_len;
+        this._triangle_side_len = 3.039343;
         this._background_rect_size = 3;
 
         // Stimulus color settings
@@ -356,6 +357,27 @@ disp.ACFDisplayGenerator = class {
             .concat(`${x - mainLen / 2},${y} `) // left
             .concat(`${x},${y + crossLen / 2} `) // bottom
             .concat(`${x + mainLen / 2},${y}`); // right
+        return new disp.Polygon(points, fill, className, id, transform);
+    }
+
+    /**
+     * Given center point coordinates and the length of each side, return a
+     * <Polygon> object of a equalateral triangle.
+     * 
+     * @param {number} x center x
+     * @param {number} y center y
+     * @param {number} sideLen length of the side
+     * @param {string} fill color
+     * @param {string} className 
+     * @param {string} id 
+     * @param {string} transform 
+     */
+    _make_a_triangle(x, y, sideLen, fill, className=undefined, id=undefined,
+        transform=undefined) {
+        const sqrt3 = 1.73205080757;
+        const points = `${x-sideLen/2},${y+sideLen/(2*sqrt3)} `   // left
+            .concat(`${x+sideLen/2},${y+sideLen/(2*sqrt3)} `)   // right
+            .concat(`${x},${y-sideLen*(sqrt3/2-1/(2*sqrt3))}`); // top
         return new disp.Polygon(points, fill, className, id, transform);
     }
 
