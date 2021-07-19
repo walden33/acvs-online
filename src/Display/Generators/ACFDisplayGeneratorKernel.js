@@ -52,7 +52,7 @@ disp.ACFDisplayGenerator = class {
         this._diamond_diagonal_len = 2.828427;
         this._diamond_main_axis_len = this._diamond_diagonal_len;
         this._diamond_cross_axis_len = this._diamond_diagonal_len;
-        this._triangle_side_len = 3.039343;
+        this._triangle_side_len = 3.039343*0.9;
         this._background_rect_size = 3;
 
         // Stimulus color settings
@@ -374,7 +374,7 @@ disp.ACFDisplayGenerator = class {
      */
     _make_a_triangle(x, y, sideLen, fill, className=undefined, id=undefined,
         transform=undefined) {
-        const sqrt3 = 1.73205080757;
+        const sqrt3 = Math.sqrt(3);
         const points = `${x-sideLen/2},${y+sideLen/(2*sqrt3)} `   // left
             .concat(`${x+sideLen/2},${y+sideLen/(2*sqrt3)} `)   // right
             .concat(`${x},${y-sideLen*(sqrt3/2-1/(2*sqrt3))}`); // top
