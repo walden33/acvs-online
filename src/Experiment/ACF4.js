@@ -1,6 +1,5 @@
 /**
- * ACF4 changes circles to triangles to see if we can get a different range of
- * optimality.
+ * ACF4 only contains 2 blocks of 21 trials of ACF task.
  */
 exp.ACF4 = class extends exp.ExperimentKernel {
     
@@ -18,7 +17,7 @@ exp.ACF4 = class extends exp.ExperimentKernel {
 
         this._db.add_new_table("_user_data");
 
-        const INSTR_ROOT = "https://exp.leberatory.org/files/instr/acf4/";
+        const INSTR_ROOT = "https://exp.leberatory.org/files/instr/acf1/";
         const INSTR_FILE_EXT = "jpeg";
 
         // Get determine version based on counterbalance id
@@ -35,8 +34,8 @@ exp.ACF4 = class extends exp.ExperimentKernel {
             case 0: targColors = ["blue", "green", "red"]; break;
             default:
         }
-        const g1 = new disp.ACFDisplayGenerator2(trialsPerBlock, ...targColors);
-        const g2 = new disp.ACFDisplayGenerator2(trialsPerBlock, ...targColors);
+        const g1 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
+        const g2 = new disp.ACFDisplayGenerator1(trialsPerBlock, ...targColors);
         // const b = new disp.MCFBaselineDisplayGenerator();
 
         // Send stimuli
@@ -55,7 +54,7 @@ exp.ACF4 = class extends exp.ExperimentKernel {
 
         // ACF Practice Block
         this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}1_cb_${version_id}.${INSTR_FILE_EXT}>`], " "));
-        this.add_new_step(new exp.ACFBlock(this._db, 0, new disp.ACFDisplayGenerator2(3, ...targColors), 3));
+        this.add_new_step(new exp.ACFBlock(this._db, 0, new disp.ACFDisplayGenerator1(3, ...targColors), 3));
 
         // Send stimuli
         this.add_new_step(new exp.SubmitStimuliStep(

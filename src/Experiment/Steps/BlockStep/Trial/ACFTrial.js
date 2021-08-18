@@ -93,6 +93,11 @@ exp.ACFTrial = class extends exp.AbstractTrial {
                 `${this._targ_cir_color} circles, and ` +
                 `${this._targ_diamond_color} diamonds. Let's try again!`,
                 50, 40, "1.5pt");
+            // this._display_widget.show_feedback(
+            //     `Remember the targets are ${this._targ_sq_color} squares, ` +
+            //     `${this._targ_cir_color} triangles, and ` +
+            //     `${this._targ_diamond_color} diamonds. Let's try again!`,
+            //     50, 40, "1.5pt");
             // Increment wrong attempt count
             this._n_wrong_attempt++;
             // After 3 seconds, reset trial parameters show the display again
@@ -138,6 +143,7 @@ exp.ACFTrial = class extends exp.AbstractTrial {
         this._trial_data.response = this._response;
         this._trial_data.rt = (this._trial_data.trial_completed_timestamp - this._trial_data.stimuli_rendered_timestamp) / 1000;
         this._display_widget.clear();
+        this._display_widget.show_feedback("Success");
         setTimeout((() => {
             this._display_widget = this._display_widget.destroy();
             this._trial_completed_signal.emit(this._trial_data);

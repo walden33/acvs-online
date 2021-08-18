@@ -193,7 +193,7 @@ disp.ACFDisplayGenerator2 = class extends disp.ACFDisplayGenerator {
                 let x = grid[0] + (Math.random() - 0.5) * this._max_x_jitter;
                 let y = grid[1] + (Math.random() - 0.5) * this._max_y_jitter;
                 // Generate polygon
-                const poly = this._make_a_triangle(
+                const poly = this._make_a_pentagon(
                     x,
                     y,
                     this._triangle_side_len,

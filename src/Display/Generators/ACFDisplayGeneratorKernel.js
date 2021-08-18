@@ -381,6 +381,25 @@ disp.ACFDisplayGenerator = class {
         return new disp.Polygon(points, fill, className, id, transform);
     }
 
+    /**
+     * 
+     * @param {number} x 
+     * @param {number} y 
+     * @param {number} sideLen 
+     * @param {string} fill 
+     * @param {string} className 
+     * @param {string} id 
+     * @param {string} transform 
+     */
+    _make_a_pentagon(x, y, sideLen, fill, className=undefined, id=undefined,
+        transform=undefined) {
+        const sqrt3 = Math.sqrt(3);
+        const points = `${x-sideLen/2},${y+sideLen/(2*sqrt3)} `   // left
+            .concat(`${x+sideLen/2},${y+sideLen/(2*sqrt3)} `)   // right
+            .concat(`${x},${y-sideLen*(sqrt3/2-1/(2*sqrt3))}`); // top
+        return new disp.Polygon(points, fill, className, id, transform); 
+    }
+
     _generate_trial_conditions() {
         throw Error("Abstract method called.")
     }
