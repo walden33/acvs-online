@@ -3,7 +3,9 @@
  * Adaptive Choice Mouse Click Foraging) Task.
  * 
  * @author Walden Y. Li
- * @version 1.1 (07/05/2021)
+ * @version 1.2 (08/27/2021)
+ * 
+ * @update 1.2 Included makers for diamonds and pentagons
  */
 disp.ACFDisplayGenerator = class {
 
@@ -53,6 +55,7 @@ disp.ACFDisplayGenerator = class {
         this._diamond_main_axis_len = this._diamond_diagonal_len;
         this._diamond_cross_axis_len = this._diamond_diagonal_len;
         this._triangle_side_len = 3.039343*0.9;
+        this._pentagon_radius = 1.297;
         this._background_rect_size = 3;
 
         // Stimulus color settings
@@ -382,22 +385,25 @@ disp.ACFDisplayGenerator = class {
     }
 
     /**
+     * Given center point coordinates and the length of each side, return a
+     * <Polygon> object of a regular pentagon.
      * 
-     * @param {number} x 
-     * @param {number} y 
-     * @param {number} sideLen 
-     * @param {string} fill 
+     * @param {number} x center x
+     * @param {number} y center y
+     * @param {number} radius radius of circumcircle
+     * @param {string} fill color
      * @param {string} className 
      * @param {string} id 
      * @param {string} transform 
      */
-    _make_a_pentagon(x, y, sideLen, fill, className=undefined, id=undefined,
+    _make_a_pentagon(x, y, radius, fill, className=undefined, id=undefined,
         transform=undefined) {
-        const sqrt3 = Math.sqrt(3);
-        const points = `${x-sideLen/2},${y+sideLen/(2*sqrt3)} `   // left
-            .concat(`${x+sideLen/2},${y+sideLen/(2*sqrt3)} `)   // right
-            .concat(`${x},${y-sideLen*(sqrt3/2-1/(2*sqrt3))}`); // top
-        return new disp.Polygon(points, fill, className, id, transform); 
+        const points = `${x},${y-radius} `   // top
+            .concat(`${x+radius*Math.sin(2*Math.PI/5*1)},${y-radius*Math.cos(2*Math.PI/5*1)} `)   // top right
+            .concat(`${x+radius*Math.sin(2*Math.PI/5*2)},${y-radius*Math.cos(2*Math.PI/5*2)} `) // bottom right
+            .concat(`${x+radius*Math.sin(2*Math.PI/5*3)},${y-radius*Math.cos(2*Math.PI/5*3)} `) // bottom left
+            .concat(`${x+radius*Math.sin(2*Math.PI/5*4)},${y-radius*Math.cos(2*Math.PI/5*4)} `); // top left
+        return new disp.Polygon(points, fill, className, id, transform);
     }
 
     _generate_trial_conditions() {
