@@ -24,9 +24,9 @@ disp.ACFDisplayGenerator = class {
         this._n_items_y = 11;    // number of items on the cross axis
         this._n_total_items = this._n_items_x * this._n_items_y;
         this._n_targ_per_color = 20;
-        this._n_dist_opt_color = 16;
+        this._n_dist_opt_color = 10;
         this._n_items_opt_color = this._n_targ_per_color + this._n_dist_opt_color;
-        this._n_dist_non_opt_color = 62;
+        this._n_dist_non_opt_color = 74;
         this._n_items_non_opt_color = this._n_targ_per_color + this._n_dist_non_opt_color;
         (function assert_total_item_within_bound() {
             if (this._n_items_opt_color * 2 + this._n_items_non_opt_color >
@@ -46,7 +46,7 @@ disp.ACFDisplayGenerator = class {
 
         // Stimulus shape settings
         this._shape_0 = "square";
-        this._shape_1 = "circle";
+        this._shape_1 = "pentagon";
         this._shape_2 = "diamond";
         this._shapes = [this._shape_0, this._shape_1, this._shape_2];
         this._circle_radius = 1.128379;

@@ -5,7 +5,7 @@
  * @author Walden Y. Li
  * @created 07/02/2021
  */
-disp.ACFDisplayGenerator2 = class extends disp.ACFDisplayGenerator {
+disp.ACFDisplayGenerator3 = class extends disp.ACFDisplayGenerator {
 
     /**
      * 
@@ -96,7 +96,7 @@ disp.ACFDisplayGenerator2 = class extends disp.ACFDisplayGenerator {
         // Determine number of each item type in the display
         // Targets
         this._set_item_count(this._targ_sq_color, "square", this._n_targ_per_color);
-        this._set_item_count(this._targ_cir_color, "circle", this._n_targ_per_color);
+        this._set_item_count(this._targ_cir_color, "pentagon", this._n_targ_per_color);
         this._set_item_count(this._targ_diamond_color, "diamond", this._n_targ_per_color);
         // Determine non optimal color distractors (more abundant)
         // let temp = util.Util.split_int(this._n_dist_non_opt_color, 2);  // spliting nonoptimal dist items into 2
@@ -182,10 +182,10 @@ disp.ACFDisplayGenerator2 = class extends disp.ACFDisplayGenerator {
 
         }).bind(this) );
 
-        // 2. Add triangles (previously circles)
-        this._colors.forEach( (function add_triangles(color) {
+        // 2. Add pentagons
+        this._colors.forEach( (function add_pentagons(color) {
 
-            for (let i = 0; i < this._get_item_count(color, "circle"); i++) {
+            for (let i = 0; i < this._get_item_count(color, "pentagon"); i++) {
                 // Get grid info
                 let grid_no = items.pop();
                 let grid = gridPos.get(grid_no);
@@ -193,14 +193,14 @@ disp.ACFDisplayGenerator2 = class extends disp.ACFDisplayGenerator {
                 let x = grid[0] + (Math.random() - 0.5) * this._max_x_jitter;
                 let y = grid[1] + (Math.random() - 0.5) * this._max_y_jitter;
                 // Generate polygon
-                const poly = this._make_a_triangle(
+                const poly = this._make_a_pentagon(
                     x,
                     y,
-                    this._triangle_side_len,
+                    this._pentagon_radius,
                     this._get_color_value(color),
                     this._colors_are_equal(color, this._targ_cir_color) ?
-                        `targ_triangle_${this._get_color_alias(color)}` :
-                        `dist_triangle_${this._get_color_alias(color)}`,
+                        `targ_pentagon_${this._get_color_alias(color)}` :
+                        `dist_pentagon_${this._get_color_alias(color)}`,
                     `pos_${grid_no}`
                 );
                 // Add target shape
@@ -213,8 +213,8 @@ disp.ACFDisplayGenerator2 = class extends disp.ACFDisplayGenerator {
                     this._background_rect_size,
                     "transparent",
                     this._colors_are_equal(color, this._targ_cir_color) ?
-                        `targ_triangle_${this._get_color_alias(color)}` :
-                        `dist_triangle_${this._get_color_alias(color)}`,
+                        `targ_pentagon_${this._get_color_alias(color)}` :
+                        `dist_pentagon_${this._get_color_alias(color)}`,
                     `pos_${grid_no}_bg`
                 ));
             }

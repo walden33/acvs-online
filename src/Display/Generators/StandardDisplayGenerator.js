@@ -30,11 +30,19 @@ disp.StandardDisplayGenerator = class extends disp.DisplayGenerator {
             "rgb(0, 0, 255)",
             "rgb(0, 150, 0)"
         ];
+
+        // // Set square colors (1+1+14+12+12+14=54)
+        // this._num_green_dist = 14;
+        // this._num_red_dist = 12;
+        // this._num_blue_dist = 12;
+        // this._num_var_dist = 14;    // variable distractor is either red or blue
+
         // Set square colors (1+1+14+12+12+14=54)
         this._num_green_dist = 14;
-        this._num_red_dist = 12;
-        this._num_blue_dist = 12;
-        this._num_var_dist = 14;    // variable distractor is either red or blue
+        this._num_red_dist = 9;
+        this._num_blue_dist = 9;
+        this._num_var_dist = 20;    // variable distractor is either red or blue
+
         // Create block data according to trial conditions
         this._block_data = this._make_block_displays(
             this._generate_trial_conditions());
