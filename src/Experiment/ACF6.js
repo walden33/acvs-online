@@ -63,6 +63,18 @@ exp.ACF6 = class extends exp.ExperimentKernel {
         this.add_new_step(new exp.ConsentStep(this._db));
         this.add_new_step(new exp.CheckBrowserStep(this._db));
 
+        // Block 1 (Mouse Click Baseline)
+        this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}baseline_0.${INSTR_FILE_EXT}>`], " "));
+        this.add_new_step(new exp.ACFBlock(this._db, 1, b, 18));
+
+        // ACF Practice Block
+        this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}acf_0_cb_${acf_version}.${INSTR_FILE_EXT}>`], " "));
+        this.add_new_step(new exp.ACFBlock(this._db, 0, new disp.ACFDisplayGenerator3(3, ...acf_colors)));
+
+        // Block 2 (ACF)
+        this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}acf_1_cb_${acf_version}.${INSTR_FILE_EXT}>`], " "));
+        this.add_new_step(new exp.ACFBlock(this._db, 2, g_acf));
+
         // ACVS instruction and practice block
         for (let i = 0; i < 9; i++) {
             this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}acvs_${i}.${INSTR_FILE_EXT}>`], " "));
@@ -74,18 +86,8 @@ exp.ACF6 = class extends exp.ExperimentKernel {
             [0, 400, 1400]  // timing
         ));
 
-        // Block 1 & 2 (ACVS)
-        this.add_new_step(new exp.Block(this._db, 1, g_acvs, [0, 400, 1400]));
-
-        // Send stimuli (second part)
-        // this.add_new_step(new exp.SubmitStimuliStep(
-        //     `receive.php?PROLIFIC_PID=${util.Util.get_prolific_id()}`,
-        //     b, g_mcf)
-        // );
-
-        // Block 3 (Mouse Click Baseline)
-        this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}baseline_0.${INSTR_FILE_EXT}>`], " "));
-        this.add_new_step(new exp.ACFBlock(this._db, 2, b, 18));
+        // Block 3 (ACVS)
+        this.add_new_step(new exp.Block(this._db, 3, g_acvs, [0, 400, 1400]));
 
         // MCF Practice Block
         this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}mcf_0_cb_${mcf_version}.${INSTR_FILE_EXT}>`], " "));
@@ -93,23 +95,9 @@ exp.ACF6 = class extends exp.ExperimentKernel {
 
         // Block 4 (MCF)
         this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}mcf_1_cb_${mcf_version}.${INSTR_FILE_EXT}>`], " "));
-        this.add_new_step(new exp.MCFBlock(this._db, 3, g_mcf, mcf_version));
+        this.add_new_step(new exp.MCFBlock(this._db, 4, g_mcf, mcf_version));
 
-        // Send stimuli (final part)
-        // this.add_new_step(new exp.SubmitStimuliStep(
-        //     `receive.php?PROLIFIC_PID=${util.Util.get_prolific_id()}`,
-        //     g_acf)
-        // );
-
-        // ACF Practice Block
-        this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}acf_0_cb_${acf_version}.${INSTR_FILE_EXT}>`], " "));
-        this.add_new_step(new exp.ACFBlock(this._db, 0, new disp.ACFDisplayGenerator3(3, ...acf_colors)));
-
-        // Block 5 (ACF)
-        this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}acf_1_cb_${acf_version}.${INSTR_FILE_EXT}>`], " "));
-        this.add_new_step(new exp.ACFBlock(this._db, 4, g_acf));
-
-        // Block 6 (Mouse Click Baseline 2nd half)
+        // Block 5 (Mouse Click Baseline 2nd half)
         this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}baseline_1.${INSTR_FILE_EXT}>`], " "));
         this.add_new_step(new exp.ACFBlock(this._db, 5, b));
 
