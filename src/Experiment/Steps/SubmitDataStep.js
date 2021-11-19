@@ -24,7 +24,8 @@ exp.SubmitDataStep = class extends util.AbstractStep {
 
         // Tell participants we are submitting data
         util.Workspace.workspace().append("p").attr("class", "debriefing-title")
-            .html("Submitting data ...");
+            .style("animation", "blinker 1s linear infinite")
+            .html("Submitting data ... Please wait ...");
 
         // Submit data
         $.ajax({

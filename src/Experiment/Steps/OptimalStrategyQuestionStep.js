@@ -49,14 +49,16 @@ exp.OptimalStrategyQuestion = class extends util.AbstractStep {
             .on("click", () => {
                 const result = question_widget.check_correctness();
                 this._db._answer.push(result);
-                console.log(this._db)
                 if (result === true) {
-                    // Remove grid layout and clear workspace
-                    ws.style("display", null)
-                        .style("grid-template-columns", null);
-                    util.Workspace.clear_workspace();
-                    // Send complete signal
-                    this.step_completed_signal.emit();
+                    question_widget.show_error_msg("Correct.");
+                    setTimeout((() => {
+                        // Remove grid layout and clear workspace
+                        ws.style("display", null)
+                            .style("grid-template-columns", null);
+                        util.Workspace.clear_workspace();
+                        // Send complete signal
+                        this.step_completed_signal.emit();
+                    }).bind(this), 500);
                 }
                 else {
                     question_widget.show_error_msg("Incorrect. Please try again.");

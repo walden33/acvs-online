@@ -6,13 +6,12 @@ disp.ColumnWidget = class {
     /**
      * 
      * @param {d3.selection} workspace 
-     * @param {Array<number>} fr_values 
+     * @param {number} args fr values of "grid-template-columns"
      */
-    constructor(workspace, fr_values) {
+    constructor(workspace, ...args) {
         this._ws = workspace;
-        this._n_col = fr_values.length;
         let grid_temp_col = "";
-        fr_values.forEach(fr => grid_temp_col += `${fr}fr `);
+        args.forEach(fr => grid_temp_col += `${fr}fr `);
         this._ws.style("display", "grid")
             .style("grid-template-columns", grid_temp_col);
     }

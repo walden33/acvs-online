@@ -1,5 +1,6 @@
 /**
- * 
+ * The preparation step is intended to collect participant's demographic
+ * information.
  */
 exp.PreparationStep = class extends(util.AbstractStep) {
     constructor(db) {
@@ -8,11 +9,18 @@ exp.PreparationStep = class extends(util.AbstractStep) {
     }
 
     execute() {
-        exp.HtmlGui.guiDiv().append("div").attr("id", "workspace").attr("class", "ac-workspace");
-        this._db.EventsTable.add_new_row("Workspace element attached.");
-        exp.HtmlGui.clear_header();
-        exp.HtmlGui.clear_workspace();
-        this.step_completed_signal.emit();
+
+
+        // exp.HtmlGui.clear_header();
+        // exp.HtmlGui.clear_workspace();
+
+        const form = exp.HtmlGui.workspace().append("form")
+            .attr("name", "info")
+            .attr("id", "participant-info");
+        form.append("label").html("Age");
+
+        
+        // this.step_completed_signal.emit();
     }
 
 }

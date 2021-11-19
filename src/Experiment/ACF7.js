@@ -1,12 +1,12 @@
 /**
- * The tasks in ACF6 is otherwise same as ACF2 except for changes in:
+ * The tasks in ACF7 is otherwise same as ACF2 except for changes in:
  * ACVS: ratio becomes 3:1
  * ACF: shapes become squares, pentagons, and diamonds, and ratio increases
  * 
- * ACF6 is also otherwise same as ACF5 except for a difference in task order:
+ * ACF7 is also otherwise same as ACF5 except for a difference in task order:
  * ACF --> ACVS --> MCF
  */
-exp.ACF6 = class extends exp.ExperimentKernel {
+exp.ACF7 = class extends exp.ExperimentKernel {
     constructor() {
 
         super();
@@ -22,7 +22,7 @@ exp.ACF6 = class extends exp.ExperimentKernel {
 
         this._db.add_new_table("_user_data");
 
-        const INSTR_ROOT = "https://exp.leberatory.org/files/instr/acf6/";
+        const INSTR_ROOT = "https://exp.leberatory.org/files/instr/acf7/";
         const INSTR_FILE_EXT = "jpeg";
 
         // Get determine version based on counterbalance id

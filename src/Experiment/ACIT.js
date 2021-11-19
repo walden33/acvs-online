@@ -21,14 +21,17 @@ exp.ACIT = class extends exp.ExperimentKernel {
 
         this._db.add_new_table("_user_data");
 
+        this.add_new_step(new exp.OptimalStrategyQuestion(this._db, 0));
+
         this.add_new_step(new exp.ConsentStep(this._db));
         this.add_new_step(new exp.CheckBrowserStep(this._db));
 
+
         const INSTR_FILE_EXT = "jpeg";
-        const NUM_TASK1_BLOCK = 1;
-        const NUM_TASK2_BLOCK = 1;
-        const NUM_STANDARD_INSTR_PAGES = 0;
-        const NUM_COLORCUE_INSTR_PAGES = 0;
+        const NUM_TASK1_BLOCK = 2;
+        const NUM_TASK2_BLOCK = 2;
+        const NUM_STANDARD_INSTR_PAGES = 6;
+        const NUM_COLORCUE_INSTR_PAGES = 7;
         const NUM_STANDARD_INFO_PAGES = 1;
         const NUM_COLORCUE_INFO_PAGES = 1;
 
@@ -55,7 +58,23 @@ exp.ACIT = class extends exp.ExperimentKernel {
             for (let i = 1+NUM_STANDARD_INSTR_PAGES+1; i <= 1+NUM_STANDARD_INSTR_PAGES+NUM_STANDARD_INFO_PAGES; i++) {
                 this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
             }
-            // 4. Experimental blocks for Standard ACVS
+            // 4. Attention check (Multiple Choice Question)
+
+            this.add_new_step(question);
+
+            // 5. Practice trials for Standard ACVS part 2
+            this.add_new_step(new exp.Block(
+                this._db,
+                0.5,  // block number for 2nd set of practice trials
+                new disp.StandardDisplayGenerator(12, 10),    // 2nd practice block; has preview
+                [0, 400, 1400]  // timing
+            ));
+            // 6. Last slide that says experimental block beginning
+
+            for (let i = 1+NUM_STANDARD_INSTR_PAGES+NUM_STANDARD_INFO_PAGES+1; i <= 1+NUM_STANDARD_INSTR_PAGES+NUM_STANDARD_INFO_PAGES+1; i++) {
+                this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
+            }
+            // 7. Experimental blocks for Standard ACVS
             for (let i = 1; i <= NUM_TASK1_BLOCK; i++) {
                 this.add_new_step(new exp.Block(
                     this._db,
@@ -64,20 +83,20 @@ exp.ACIT = class extends exp.ExperimentKernel {
                     [0, 400, 1400]  // timing
                 ));
             }
-            // 5. Task interval
+            // 8. Task interval
             this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${1+NUM_STANDARD_INSTR_PAGES+NUM_STANDARD_INFO_PAGES + 1}.${INSTR_FILE_EXT}>`], " "));
-            // 6. Instructions for Color Cue ACVS
+            // 9. Instructions for Color Cue ACVS
             for (let i = 1+NUM_STANDARD_INSTR_PAGES+NUM_STANDARD_INFO_PAGES+1 + 1; i <= 1+NUM_STANDARD_INSTR_PAGES+NUM_STANDARD_INFO_PAGES+1 + NUM_COLORCUE_INSTR_PAGES; i++) {
                 this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
             }
-            // 7. Practice trials for Color Cue ACVS
+            // 10. Practice trials for Color Cue ACVS
             this.add_new_step(new exp.Block(
                 this._db,
                 0,  // block number
-                new disp.ColorCueDisplayGenerator2(12, 10),    // is practice block; has preview
+                new disp.ColorCueDisplayGenerator2(24, 20),    // is practice block; has preview
                 [0, 400, 1400]  // timing
             ));
-            // 8. Experimental blocks for Color Cue ACVS
+            // 11. Experimental blocks for Color Cue ACVS
             for (let i = NUM_TASK1_BLOCK + 1; i <= NUM_TASK1_BLOCK + NUM_TASK2_BLOCK; i++) {
                 this.add_new_step(new exp.Block(
                     this._db,
@@ -105,7 +124,23 @@ exp.ACIT = class extends exp.ExperimentKernel {
             for (let i = 1+NUM_COLORCUE_INSTR_PAGES + 1; i <= 1+NUM_COLORCUE_INSTR_PAGES+NUM_COLORCUE_INFO_PAGES; i++) {
                 this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
             }
-            // 4. Experimental blocks for Color Cue ACVS
+            // 4. Attention check (Multiple Choice Question)
+
+            this.add_new_step(question);
+
+            // 5. Practice trials for Color Cue ACVS part2
+            this.add_new_step(new exp.Block(
+                this._db,
+                0.5,  // block number
+                new disp.ColorCueDisplayGenerator2(12, 10),    // is practice block; has preview
+                [0, 400, 1400]  // timing
+            ));
+            // 6. Last slide that says experimental block beginning
+
+            for (let i = 1+NUM_COLORCUE_INSTR_PAGES+NUM_COLORCUE_INFO_PAGES+1; i <= 1+NUM_COLORCUE_INSTR_PAGES+NUM_COLORCUE_INFO_PAGES+1; i++) {
+                this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
+            }
+            // 7. Experimental blocks for Color Cue ACVS
             for (let i = 1; i <= NUM_TASK1_BLOCK; i++) {
                 this.add_new_step(new exp.Block(
                     this._db,
@@ -114,20 +149,20 @@ exp.ACIT = class extends exp.ExperimentKernel {
                     [0, 400, 1400]  // timing
                 ));
             }
-            // 5. Task interval
+            // 8. Task interval
             this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${1+NUM_COLORCUE_INSTR_PAGES+NUM_COLORCUE_INFO_PAGES + 1}.${INSTR_FILE_EXT}>`], " "));
-            // 6. Instructions for Standard ACVS
+            // 9. Instructions for Standard ACVS
             for (let i = 1+NUM_COLORCUE_INSTR_PAGES+NUM_COLORCUE_INFO_PAGES+1 + 1; i <= 1+NUM_COLORCUE_INSTR_PAGES+NUM_COLORCUE_INFO_PAGES+1 + NUM_STANDARD_INSTR_PAGES; i++) {
                 this.add_new_step(new exp.BriefingStep(this._db, [`<img src=${INSTR_ROOT}${i}.${INSTR_FILE_EXT}>`], " "));
             }
-            // 7. Practice trials for Standard ACVS
+            // 10. Practice trials for Standard ACVS
             this.add_new_step(new exp.Block(
                 this._db,
                 0,  // block number
-                new disp.StandardDisplayGenerator(12, 10),    // is practice block; has preview
+                new disp.StandardDisplayGenerator(12, 10),    // 2nd practice block; has preview
                 [0, 400, 1400]  // timing
             ));
-            // 8. Experimental blocks for Standard ACVS
+            // 11. Experimental blocks for Standard ACVS
             for (let i = NUM_TASK1_BLOCK + 1; i <= NUM_TASK1_BLOCK + NUM_TASK2_BLOCK; i++) {
                 this.add_new_step(new exp.Block(
                     this._db,
@@ -148,7 +183,7 @@ exp.ACIT = class extends exp.ExperimentKernel {
             this.add_new_step(new exp.Block(
                 this._db,
                 0,  // block number
-                new disp.StandardDisplayGenerator(12, 10),    // is practice block; has preview
+                new disp.StandardDisplayGenerator(24, 20),    // is practice block; has preview
                 [0, 400, 1400]  // timing
             ));
             // 3. Experimental blocks for Standard ACVS
@@ -194,7 +229,7 @@ exp.ACIT = class extends exp.ExperimentKernel {
             this.add_new_step(new exp.Block(
                 this._db,
                 0,  // block number
-                new disp.ColorCueDisplayGenerator2(12, 10),    // is practice block; has preview
+                new disp.ColorCueDisplayGenerator2(24, 20),    // is practice block; has preview
                 [0, 400, 1400]  // timing
             ));
             // 3. Experimental blocks for Color Cue ACVS
@@ -232,6 +267,6 @@ exp.ACIT = class extends exp.ExperimentKernel {
 
         this.add_new_step(new exp.SubmitDataStep(this._db,
             "https://exp.leberatory.org/experiments/acit/receive.php",
-            "https://prolific.co"));
+            "https://app.prolific.co/submissions/complete?cc=140F5649"));
     }
 }
