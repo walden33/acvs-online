@@ -90,7 +90,7 @@ exp.ACFTrial = class extends exp.AbstractTrial {
             // Show feedback
             this._display_widget.show_feedback(
                 `Remember the targets are ${this._targ_sq_color} squares, ` +
-                `${this._targ_cir_color} circles, and ` +
+                `${this._targ_cir_color} pentagons, and ` +
                 `${this._targ_diamond_color} diamonds. Let's try again!`,
                 50, 40, "1.5pt");
             // this._display_widget.show_feedback(
@@ -133,7 +133,7 @@ exp.ACFTrial = class extends exp.AbstractTrial {
         // Record trial logic
         this._trial_data.logic = {};
         this._trial_data.logic.targ_sq_color = this._targ_sq_color;
-        this._trial_data.logic.targ_cir_color = this._targ_cir_color;
+        this._trial_data.logic.targ_pentagon_color = this._targ_cir_color;
         this._trial_data.logic.targ_diamond_color = this._targ_diamond_color;
         this._trial_data.logic.non_opt_targ_color = this._non_opt_targ_color;
         // Record trial result

@@ -1,11 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <link rel="stylesheet" href="../Css/custom.css">
+    <title>Task Playground</title>
 </head>
+
 <body>
+    <div id="gui-container">
+        <div id="gui" class="gui-div">
+            <div id="menu" style="display:flex; align-items: center; border-bottom: 1px solid white;">
+                <div id="trial-info" style="padding-left: 2%; width: 70%; color: white;"></div>
+                <button id="next" class="btn-regular" style="margin: 12px auto;">Next Trial</button>
+            </div>
+            <div id="workspace" class="ac-workspace"></div>
+            <!-- <div id="workspace" class="ac-workspace" style="width: 70%;"></div>
+            <div id="console" style="width: 30%; display: inline-block;"> -->
+        </div>
+    </div>
     <script src="../Common/UtilNamespace.js"></script>
     <script src="../Common/Utilities.js"></script>
     <script src="../Common/Signal.js"></script>
@@ -14,22 +29,85 @@
     <script src="../Common/ExperimentBase.js"></script>
     <script src="../Common/AbstractStep.js"></script>
     <script src="../Common/Database.js"></script>
+    <script src="../Common/Workspace.js"></script>
     <script src="../Display/DisplayNamespace.js"></script>
     <script src="../Display/Display.js"></script>
     <script src="../Display/Shapes.js"></script>
     <script src="../Display/DisplayDataset.js"></script>
     <script src="../Display/DisplayWidget.js"></script>
+    <script src="../Display/DisplaySetting.js"></script>
+    <script src="../Display/DisplayGeneratorKernel.js"></script>
+    <script src="../Display/Generators/ColorCueDisplayGenerator2.js"></script>
+    <script src="../Display/Generators/ColorCueDisplayGenerator3.js"></script>
+    <script src="../Display/Generators/SpatialLetterCueDisplayGenerator2.js"></script>
+    <script src="../Display/Generators/SpatialLetterCueDisplayGenerator3.js"></script>
+    <script src="../Display/Generators/StandardDisplayGenerator.js"></script>
+    <script src="../Display/Generators/ColorCueDisplayGenerator.js"></script>
+    <script src="../Display/Generators/TemporalDisplayGenerator.js"></script>
     <script src="../Experiment/ExpNamespace.js"></script>
+    <script src="../Experiment/Steps/BlockStep/Trial/TrialDataGenerator.js"></script>
+    <script src="../Experiment/Steps/BlockStep/Trial/StandardTrialDataGenerator.js"></script>
+    <script src="../Experiment/Steps/BlockStep/Trial/TemporalTrialDataGenerator.js"></script>
+    <script src="../Experiment/Steps/BlockStep/Trial/SpatialLetterCueDisplayGenerator.js"></script>
+    <script src="../Experiment/Steps/BlockStep/Trial/ColorCueTrialDataGenerator.js"></script>
+    <script src="../Experiment/Steps/BlockStep/Trial/SpatialCueTrialDataGenerator.js"></script>
+    <script src="../Experiment/Steps/BlockStep/Trial/AbstractTrial.js"></script>
+    <script src="../Experiment/Steps/BlockStep/Trial/Trial.js"></script>
+    <script src="../Experiment/Steps/BlockStep/HtmlGui.js"></script>
     <script src="../Experiment/Steps/PrepStep/TestStep.js"></script>
     <script src="../Experiment/Steps/PrepStep/ConsentStep.js"></script>
     <script src="../Experiment/Steps/PrepStep/CheckBrowserStep.js"></script>
     <script src="../Experiment/Steps/PrepStep/PreparationStep.js"></script>
+
+    <!-- Playground-specific dependencies -->
+    <!-- <script src="ChooseExpStep.js"></script> -->
+    <script src="Playground.js"></script>
     <script>
         window.onload = () => {
-            exp.HtmlGui.show_header("Online REP Experiment - Cognitive Control Lab");
-    const experiment = new exp.DefaultExperiment("");
-    experiment.run();
+            window._acvs_guid = "AAAAAAAAAAAA";
+            // exp.HtmlGui.show_header("AC Temp 1.1 - Cognitive Control Lab");
+            // const c = new exp.TemporalTrialDataGenerator();
+            // const ws = util.Workspace.workspace();
+            // const w = new disp.DisplayWidget(ws);
+            // const con = d3.select("#console");
+            // let ds = c.yield_trial_display();
+            // d3.select("#trial-info").html(JSON.stringify(ds.logic));
+            // // w.draw(c.yield_trial_display().stimuli[0]);
+            // w.run_rsvp(ds.cue, ds.stimuli, 500, 1000, 250);
+            // d3.select("#next").on("click", () => {
+            //     ds = c.yield_trial_display();
+            //     w.run_rsvp(ds.cue, ds.stimuli, 500, 1000, 250);
+            //     d3.select("#trial-info").html(JSON.stringify(ds.logic));
+            // });
+            // exp.HtmlGui.show_header("Task Playground");
+            const c = new disp.ColorCueDisplayGenerator3(84);
+            const ws = util.Workspace.workspace();
+            const w = new disp.DisplayWidget(ws);
+            const con = d3.select("#console");
+            let ds = c.yield_trial_display();
+            d3.select("#trial-info").html(JSON.stringify(ds.logic));
+            w.draw(c.yield_trial_display().stimuli[0]);
+            w.draw(ds.stimuli[0]);
+            d3.select("#next").on("click", () => {
+                ds = c.yield_trial_display();
+                w.draw(ds.stimuli[0]);
+                d3.select("#trial-info").html(JSON.stringify(ds.logic));
+            });
+            // w.draw(ds.cue[0]);
+            // let frame = 0;
+            // d3.select("#next").on("click", () => {
+            //     w.draw(ds.cue[1]);
+            //     d3.select("#next").on("click", () => {
+            //         showNextFrameInTrial(ds, frame);
+            //         frame++;
+            //     });
+            // });
+            // const showNextFrameInTrial = (ds, frameNo) => {
+            //     w.draw(ds.stimuli[frameNo]);
+            // }
         }
+
     </script>
 </body>
+
 </html>
