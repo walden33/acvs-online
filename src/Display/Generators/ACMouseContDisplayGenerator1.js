@@ -7,7 +7,7 @@
  */
 disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerator {
 
-    constructor(num_trials, num_trials_to_slice=undefined, has_preview=true)
+    constructor(num_trials, num_trials_to_slice=undefined)
     {
         super(num_trials, num_trials_to_slice);
         if (num_trials % 12 !== 0) {
@@ -18,7 +18,6 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
             throw RangeError( "Number of sliced trials must not exceed " +
             "number of total trials." );
         }
-        this._has_preview = has_preview;
         // Set paradigm-specific settings
         this._colors = [
             "rgb(255, 0, 0)",
@@ -54,7 +53,6 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
         const sz = this._setting.square_size;
 
         let fixation = new disp.DisplayDataset();
-        let preview = new disp.DisplayDataset();
         let stimuli = new disp.DisplayDataset();
 
         const gridPos = this._get_grid_pos();
@@ -69,7 +67,7 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
 
         // 1. Add two targets
 
-        // 1.1 Add rects to both preivew and stimuli (if a preview is ordered)
+        // 1.1 Add rects to stimuli
         let optRect = new disp.Rect(
             optTargGrid.rect_x + '',
             optTargGrid.rect_y + '',
@@ -87,9 +85,7 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
 
         stimuli.add_rects([optRect, nonOptRect]);
 
-        if (this._has_preview) preview.add_rects([optRect, nonOptRect]);
-
-        // 1.2 Add digits to stimuli but not preview
+        // 1.2 Add digits to stimuli
         stimuli.add_a_text(new disp.Text(
             optTargDigit + '',
             optTargGrid.x + this._setting.digit_shift_x + '',
@@ -116,7 +112,7 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
             let j = nonTargPool.pop();  // grid position number
             let grid = gridPos.get(j);  // grid info
 
-            // 2.1 add rects to both preview and stimuli
+            // 2.1 add rects to stimuli
             let currentRect = new disp.Rect(
                 grid.rect_x + '',
                 grid.rect_y + '',
@@ -125,7 +121,6 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
                 this._colors[2]
             );
             stimuli.add_a_rect(currentRect);
-            if (this._has_preview) preview.add_a_rect(currentRect);
 
             // 2.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
@@ -146,7 +141,7 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
             let j = nonTargPool.pop();  // grid position number
             let grid = gridPos.get(j);  // grid info
 
-            // 3.1 add rects to both preview and stimuli
+            // 3.1 add rects to stimuli
             let currentRect = new disp.Rect(
                 grid.rect_x + '',
                 grid.rect_y + '',
@@ -155,7 +150,6 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
                 this._colors[0]
             );
             stimuli.add_a_rect(currentRect);
-            if (this._has_preview) preview.add_a_rect(currentRect);
 
             // 3.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
@@ -175,7 +169,7 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
             let j = nonTargPool.pop();  // grid position number
             let grid = gridPos.get(j);  // grid info
 
-            // 4.1 add rects to both preview and stimuli
+            // 4.1 add rects to stimuli
             let currentRect = new disp.Rect(
                 grid.rect_x + '',
                 grid.rect_y + '',
@@ -184,7 +178,6 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
                 this._colors[1]
             );
             stimuli.add_a_rect(currentRect);
-            if (this._has_preview) preview.add_a_rect(currentRect);
 
             // 4.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
@@ -204,7 +197,7 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
             let j = nonTargPool.pop();  // grid position number
             let grid = gridPos.get(j);  // grid info
 
-            // 5.1 add rects to both preview and stimuli
+            // 5.1 add rects to stimuli
             let currentRect = new disp.Rect(
                 grid.rect_x + '',
                 grid.rect_y + '',
@@ -214,7 +207,6 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
                 optTargColor === 0 ? this._colors[1] : this._colors[0]
             );
             stimuli.add_a_rect(currentRect);
-            if (this._has_preview) preview.add_a_rect(currentRect);
 
             // 5.2 add digits to only stimuli
             stimuli.add_a_text(new disp.Text(
@@ -234,17 +226,9 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
         );
 
         fixation.add_a_text(fixation_text);
-        if (this._has_preview) preview.add_a_text(fixation_text);
         stimuli.add_a_text(fixation_text);
 
 
-        // Decide if return includes a preview
-        if (this._has_preview) {
-            return {
-                cue: [fixation, preview],
-                stimuli: [stimuli]
-            }
-        }
         return {
             cue: [fixation],
             stimuli: [stimuli]
