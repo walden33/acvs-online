@@ -5,7 +5,7 @@
  * @version 1.1 (updated 11/19/2021)
  * 
  */
-disp.DisplayGenerator = class {
+disp.ACMouseContDisplayGenerator = class {
 
     /**
      * 
