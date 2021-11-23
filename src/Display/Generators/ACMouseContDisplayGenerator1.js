@@ -376,6 +376,19 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
                         `${color}_circlefield_${class_names[i]}_${gridIndex}`
                     )
                 )
+                // Placeholder digits
+                stimuli.add_a_text(
+                    new disp.Text(
+                        "0",
+                        `${grid.x + this._setting.digit_shift_x}`,
+                        `${grid.y + this._setting.digit_shift_y}`,
+                        `${this._setting.digit_color}`,
+                        `${this._setting.digit_size}`,
+                        `${this._setting.digit_font}`,
+                        "acvs-digit",
+                        `${color}_text_${class_names[i]}_${gridIndex}`
+                    )
+                )
             }
         });
 
