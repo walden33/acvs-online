@@ -62,279 +62,322 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
         const gridPos = this._get_grid_pos();
         const grids = util.Util.range(this._total);
         util.Util.fisher_yates_shuffle(grids);
-        const optTargGrids = [], nonOptTargGrids = [];
-        for (let i = 0; i < this._num_opt_targ; i++) {
-            optTargGrids.push(grids.pop());
-        }
-        for (let i = 0; i < this._num_non_opt_targ; i++) {
-            nonOptTargGrids.push(grids.pop());
+
+        // // 1. Add targets
+        // // 1.1 Optimal targets
+        // optTargGrids.forEach(e => {
+        //     const gridIndex = e + 1;  // In the gridPos map the index starts at 1
+        //     const grid = gridPos.get(gridIndex);
+        //     // 1.1.1 Add target rects
+        //     stimuli.add_a_rect(
+        //         new disp.Rect(
+        //             `${grid.rect_x}`,
+        //             `${grid.rect_y}`,
+        //             `${sz}`,
+        //             `${sz}`,
+        //             `${this._colors[optTargColor]}`,
+        //             "opt_targ_square",
+        //             `opt_targ_square_${gridIndex}`
+        //         )
+        //     );
+        //     // 1.1.2 Add target digits
+        //     stimuli.add_a_text(
+        //         new disp.Text(
+        //             `${util.Util.gen_random_int(2, 5, true)}`,
+        //             `${grid.x + this._setting.digit_shift_x}`,
+        //             `${grid.y + this._setting.digit_shift_y}`,
+        //             `${this._setting.digit_color}`,
+        //             `${this._setting.digit_size}`,
+        //             `${this._setting.digit_font}`,
+        //             "acvs-digit",
+        //             `digit_${gridIndex}`
+        //         )
+        //     )
+        //     // 1.1.3 Add target superimposed transparent circle
+        //     stimuli.add_a_circle(
+        //         new disp.Circle(
+        //             `${grid.x}`,
+        //             `${grid.y}`,
+        //             `${sz}`,
+        //             "transparent",
+        //             "transparent",
+        //             "0",
+        //             "opt_targ_circle_field",
+        //             `opt_targ_circle_field_${gridIndex}`
+        //         )
+        //     )
+        // });
+        // // 1.2 Non-Optimal targets
+        // nonOptTargGrids.forEach(e => {
+        //     const gridIndex = e + 1;  // In the gridPos map the index starts at 1
+        //     const grid = gridPos.get(gridIndex);
+        //     // 1.2.1 Add target rects
+        //     stimuli.add_a_rect(
+        //         new disp.Rect(
+        //             `${grid.rect_x}`,
+        //             `${grid.rect_y}`,
+        //             `${sz}`,
+        //             `${sz}`,
+        //             `${this._colors[nonOptTargColor]}`,
+        //             "non_opt_targ_square",
+        //             `non_opt_targ_square_${gridIndex}`
+        //         )
+        //     );
+        //     // 1.2.2 Add target digits
+        //     stimuli.add_a_text(
+        //         new disp.Text(
+        //             `${util.Util.gen_random_int(2, 5, true)}`,
+        //             `${grid.x + this._setting.digit_shift_x}`,
+        //             `${grid.y + this._setting.digit_shift_y}`,
+        //             `${this._setting.digit_color}`,
+        //             `${this._setting.digit_size}`,
+        //             `${this._setting.digit_font}`,
+        //             "acvs-digit",
+        //             `digit_${gridIndex}`
+        //         )
+        //     )
+        //     // 1.2.3 Add target superimposed transparent circle
+        //     stimuli.add_a_circle(
+        //         new disp.Circle(
+        //             `${grid.x}`,
+        //             `${grid.y}`,
+        //             `${sz}`,
+        //             "transparent",
+        //             "transparent",
+        //             "0",
+        //             "non_opt_targ_circle_field",
+        //             `non_opt_targ_circle_field_${gridIndex}`
+        //         )
+        //     )
+        // });
+
+        // // 2. Add green distractors
+        // for (let i = 0; i < this._num_green_dist; i++) {
+        //     const gridIndex = grids.pop() + 1;
+        //     const grid = gridPos.get(gridIndex);
+        //     // 2.1 Add square rects
+        //     stimuli.add_a_rect(
+        //         new disp.Rect(
+        //             `${grid.rect_x}`,
+        //             `${grid.rect_y}`,
+        //             `${sz}`,
+        //             `${sz}`,
+        //             `${this._colors[2]}`,
+        //             "green_dist_square",
+        //             `green_dist_square_${gridIndex}`
+        //         )
+        //     );
+        //     // 2.2 Add digits
+        //     stimuli.add_a_text(
+        //         new disp.Text(
+        //             `${util.Util.gen_random_int(6, 9, true)}`,
+        //             `${grid.x + this._setting.digit_shift_x}`,
+        //             `${grid.y + this._setting.digit_shift_y}`,
+        //             `${this._setting.digit_color}`,
+        //             `${this._setting.digit_size}`,
+        //             `${this._setting.digit_font}`,
+        //             "acvs-digit",
+        //             `digit_${gridIndex}`
+        //         )
+        //     )
+        //     // 2.3 Add superimposed transparent circle
+        //     stimuli.add_a_circle(
+        //         new disp.Circle(
+        //             `${grid.x}`,
+        //             `${grid.y}`,
+        //             `${sz}`,
+        //             "transparent",
+        //             "transparent",
+        //             "0",
+        //             "green_dist_circle_field",
+        //             `green_dist_circle_field_${gridIndex}`
+        //         )
+        //     )
+        // }
+
+        // // 3. Add red distractors
+        // for (let i = 0; i < this._num_red_dist; i++) {
+        //     const gridIndex = grids.pop() + 1;
+        //     const grid = gridPos.get(gridIndex);
+        //     // 3.1 Add square rects
+        //     stimuli.add_a_rect(
+        //         new disp.Rect(
+        //             `${grid.rect_x}`,
+        //             `${grid.rect_y}`,
+        //             `${sz}`,
+        //             `${sz}`,
+        //             `${this._colors[0]}`,
+        //             "red_dist_square",
+        //             `red_dist_square_${gridIndex}`
+        //         )
+        //     );
+        //     // 3.2 Add digits
+        //     stimuli.add_a_text(
+        //         new disp.Text(
+        //             `${util.Util.gen_random_int(6, 9, true)}`,
+        //             `${grid.x + this._setting.digit_shift_x}`,
+        //             `${grid.y + this._setting.digit_shift_y}`,
+        //             `${this._setting.digit_color}`,
+        //             `${this._setting.digit_size}`,
+        //             `${this._setting.digit_font}`,
+        //             "acvs-digit",
+        //             `digit_${gridIndex}`
+        //         )
+        //     )
+        //     // 3.3 Add superimposed transparent circle
+        //     stimuli.add_a_circle(
+        //         new disp.Circle(
+        //             `${grid.x}`,
+        //             `${grid.y}`,
+        //             `${sz}`,
+        //             "transparent",
+        //             "transparent",
+        //             "0",
+        //             "red_dist_circle_field",
+        //             `red_dist_circle_field_${gridIndex}`
+        //         )
+        //     )
+        // }
+
+        // // 4. Add blue distractors
+        // for (let i = 0; i < this._num_blue_dist; i++) {
+        //     const gridIndex = grids.pop() + 1;
+        //     const grid = gridPos.get(gridIndex);
+        //     // 4.1 Add square rects
+        //     stimuli.add_a_rect(
+        //         new disp.Rect(
+        //             `${grid.rect_x}`,
+        //             `${grid.rect_y}`,
+        //             `${sz}`,
+        //             `${sz}`,
+        //             `${this._colors[1]}`,
+        //             "blue_dist_square",
+        //             `blue_dist_square_${gridIndex}`
+        //         )
+        //     );
+        //     // 4.2 Add digits
+        //     stimuli.add_a_text(
+        //         new disp.Text(
+        //             `${util.Util.gen_random_int(6, 9, true)}`,
+        //             `${grid.x + this._setting.digit_shift_x}`,
+        //             `${grid.y + this._setting.digit_shift_y}`,
+        //             `${this._setting.digit_color}`,
+        //             `${this._setting.digit_size}`,
+        //             `${this._setting.digit_font}`,
+        //             "acvs-digit",
+        //             `digit_${gridIndex}`
+        //         )
+        //     )
+        //     // 4.3 Add superimposed transparent circle
+        //     stimuli.add_a_circle(
+        //         new disp.Circle(
+        //             `${grid.x}`,
+        //             `${grid.y}`,
+        //             `${sz}`,
+        //             "transparent",
+        //             "transparent",
+        //             "0",
+        //             "blue_dist_circle_field",
+        //             `blue_dist_circle_field_${gridIndex}`
+        //         )
+        //     )
+        // }
+
+        // // 5. Add variable distractors
+        // // The optimal target in this paradigm is actually the larger subset,
+        // // so variable distractors should be the color of optimal targets
+        // for (let i = 0; i < this._num_var_dist; i++) {
+        //     const gridIndex = grids.pop() + 1;
+        //     const grid = gridPos.get(gridIndex);
+        //     // 5.1 Add square rects
+        //     stimuli.add_a_rect(
+        //         new disp.Rect(
+        //             `${grid.rect_x}`,
+        //             `${grid.rect_y}`,
+        //             `${sz}`,
+        //             `${sz}`,
+        //             `${this._colors[optTargColor]}`,
+        //             "red_dist_square",
+        //             `red_dist_square_${gridIndex}`
+        //         )
+        //     );
+        //     // 5.2 Add digits
+        //     stimuli.add_a_text(
+        //         new disp.Text(
+        //             `${util.Util.gen_random_int(6, 9, true)}`,
+        //             `${grid.x + this._setting.digit_shift_x}`,
+        //             `${grid.y + this._setting.digit_shift_y}`,
+        //             `${this._setting.digit_color}`,
+        //             `${this._setting.digit_size}`,
+        //             `${this._setting.digit_font}`,
+        //             "acvs-digit",
+        //             `digit_${gridIndex}`
+        //         )
+        //     )
+        //     // 5.3 Add superimposed transparent circle
+        //     stimuli.add_a_circle(
+        //         new disp.Circle(
+        //             `${grid.x}`,
+        //             `${grid.y}`,
+        //             `${sz}`,
+        //             "transparent",
+        //             "transparent",
+        //             "0",
+        //             `${optTargColor === 0 ? "red" : "blue"}_dist_circle_field`,
+        //             `${optTargColor === 0 ? "red" : "blue"}_dist_circle_field_${gridIndex}`
+        //         )
+        //     )
+        // }
+
+        // 1. Calculate number of squares for each color
+        let num_red = this._num_red_dist;
+        let num_blue = this._num_blue_dist;
+        const num_green = this._num_green_dist;
+        if (optTargColor === 0) {
+            num_red += this._num_opt_targ + this._num_var_dist;
+            num_blue += this._num_non_opt_targ;
+        } else {
+            num_red += this._num_non_opt_targ;
+            num_blue += this._num_opt_targ + this._num_var_dist;
         }
 
-        // 1. Add targets
-        // 1.1 Optimal targets
-        optTargGrids.forEach(e => {
-            const gridIndex = e + 1;  // In the gridPos map the index starts at 1
-            const grid = gridPos.get(gridIndex);
-            // 1.1.1 Add target rects
-            stimuli.add_a_rect(
-                new disp.Rect(
-                    `${grid.rect_x}`,
-                    `${grid.rect_y}`,
-                    `${sz}`,
-                    `${sz}`,
-                    `${this._colors[optTargColor]}`,
-                    "opt_targ_square",
-                    `opt_targ_square_${gridIndex}`
+        // 2. Add stimuli
+        const num_rects = [num_red, num_blue, num_green];
+        let class_names = [];
+        if (optTargColor === 0) {
+            class_names = ["opt", "nonopt", "dist"];
+        } else {
+            class_names = ["nonopt", "opt", "dist"];
+        }
+        ["red", "blue", "green"].forEach((color, i) => {
+            for (let j = 0; j < num_rects[i]; j++) {
+                const gridIndex = grids.pop() + 1;
+                const grid = gridPos.get(gridIndex);
+                stimuli.add_a_rect(
+                    new disp.Rect(
+                        `${grid.rect_x}`,
+                        `${grid.rect_y}`,
+                        `${sz}`,
+                        `${sz}`,
+                        color,
+                        `${color}_square_${class_names[i]}`,
+                        `${color}_square_${class_names[i]}_${gridIndex}`
+                    )
+                );
+                stimuli.add_a_circle(
+                    new disp.Circle(
+                        `${grid.x}`,
+                        `${grid.y}`,
+                        `${sz}`,
+                        "transparent",
+                        "transparent",
+                        "0",
+                        `${color}_circle_field_${class_names[i]}`,
+                        `${color}_circle_field_${class_names[i]}_${gridIndex}`
+                    )
                 )
-            );
-            // 1.1.2 Add target digits
-            stimuli.add_a_text(
-                new disp.Text(
-                    `${util.Util.gen_random_int(2, 5, true)}`,
-                    `${grid.x + this._setting.digit_shift_x}`,
-                    `${grid.y + this._setting.digit_shift_y}`,
-                    `${this._setting.digit_color}`,
-                    `${this._setting.digit_size}`,
-                    `${this._setting.digit_font}`,
-                    "acvs-digit",
-                    `digit_${gridIndex}`
-                )
-            )
-            // 1.1.3 Add target superimposed transparent circle
-            stimuli.add_a_circle(
-                new disp.Circle(
-                    `${grid.x}`,
-                    `${grid.y}`,
-                    `${sz}`,
-                    "transparent",
-                    "transparent",
-                    "0",
-                    "opt_targ_circle_field",
-                    `opt_targ_circle_field_${gridIndex}`
-                )
-            )
+            }
         });
-        // 1.2 Non-Optimal targets
-        nonOptTargGrids.forEach(e => {
-            const gridIndex = e + 1;  // In the gridPos map the index starts at 1
-            const grid = gridPos.get(gridIndex);
-            // 1.2.1 Add target rects
-            stimuli.add_a_rect(
-                new disp.Rect(
-                    `${grid.rect_x}`,
-                    `${grid.rect_y}`,
-                    `${sz}`,
-                    `${sz}`,
-                    `${this._colors[nonOptTargColor]}`,
-                    "non_opt_targ_square",
-                    `non_opt_targ_square_${gridIndex}`
-                )
-            );
-            // 1.2.2 Add target digits
-            stimuli.add_a_text(
-                new disp.Text(
-                    `${util.Util.gen_random_int(2, 5, true)}`,
-                    `${grid.x + this._setting.digit_shift_x}`,
-                    `${grid.y + this._setting.digit_shift_y}`,
-                    `${this._setting.digit_color}`,
-                    `${this._setting.digit_size}`,
-                    `${this._setting.digit_font}`,
-                    "acvs-digit",
-                    `digit_${gridIndex}`
-                )
-            )
-            // 1.2.3 Add target superimposed transparent circle
-            stimuli.add_a_circle(
-                new disp.Circle(
-                    `${grid.x}`,
-                    `${grid.y}`,
-                    `${sz}`,
-                    "transparent",
-                    "transparent",
-                    "0",
-                    "non_opt_targ_circle_field",
-                    `non_opt_targ_circle_field_${gridIndex}`
-                )
-            )
-        });
-
-        // 2. Add green distractors
-        for (let i = 0; i < this._num_green_dist; i++) {
-            const gridIndex = grids.pop() + 1;
-            const grid = gridPos.get(gridIndex);
-            // 2.1 Add square rects
-            stimuli.add_a_rect(
-                new disp.Rect(
-                    `${grid.rect_x}`,
-                    `${grid.rect_y}`,
-                    `${sz}`,
-                    `${sz}`,
-                    `${this._colors[2]}`,
-                    "green_dist_square",
-                    `green_dist_square_${gridIndex}`
-                )
-            );
-            // 2.2 Add digits
-            stimuli.add_a_text(
-                new disp.Text(
-                    `${util.Util.gen_random_int(6, 9, true)}`,
-                    `${grid.x + this._setting.digit_shift_x}`,
-                    `${grid.y + this._setting.digit_shift_y}`,
-                    `${this._setting.digit_color}`,
-                    `${this._setting.digit_size}`,
-                    `${this._setting.digit_font}`,
-                    "acvs-digit",
-                    `digit_${gridIndex}`
-                )
-            )
-            // 2.3 Add superimposed transparent circle
-            stimuli.add_a_circle(
-                new disp.Circle(
-                    `${grid.x}`,
-                    `${grid.y}`,
-                    `${sz}`,
-                    "transparent",
-                    "transparent",
-                    "0",
-                    "green_dist_circle_field",
-                    `green_dist_circle_field_${gridIndex}`
-                )
-            )
-        }
-
-        // 3. Add red distractors
-        for (let i = 0; i < this._num_red_dist; i++) {
-            const gridIndex = grids.pop() + 1;
-            const grid = gridPos.get(gridIndex);
-            // 3.1 Add square rects
-            stimuli.add_a_rect(
-                new disp.Rect(
-                    `${grid.rect_x}`,
-                    `${grid.rect_y}`,
-                    `${sz}`,
-                    `${sz}`,
-                    `${this._colors[0]}`,
-                    "red_dist_square",
-                    `red_dist_square_${gridIndex}`
-                )
-            );
-            // 3.2 Add digits
-            stimuli.add_a_text(
-                new disp.Text(
-                    `${util.Util.gen_random_int(6, 9, true)}`,
-                    `${grid.x + this._setting.digit_shift_x}`,
-                    `${grid.y + this._setting.digit_shift_y}`,
-                    `${this._setting.digit_color}`,
-                    `${this._setting.digit_size}`,
-                    `${this._setting.digit_font}`,
-                    "acvs-digit",
-                    `digit_${gridIndex}`
-                )
-            )
-            // 3.3 Add superimposed transparent circle
-            stimuli.add_a_circle(
-                new disp.Circle(
-                    `${grid.x}`,
-                    `${grid.y}`,
-                    `${sz}`,
-                    "transparent",
-                    "transparent",
-                    "0",
-                    "red_dist_circle_field",
-                    `red_dist_circle_field_${gridIndex}`
-                )
-            )
-        }
-
-        // 4. Add blue distractors
-        for (let i = 0; i < this._num_blue_dist; i++) {
-            const gridIndex = grids.pop() + 1;
-            const grid = gridPos.get(gridIndex);
-            // 4.1 Add square rects
-            stimuli.add_a_rect(
-                new disp.Rect(
-                    `${grid.rect_x}`,
-                    `${grid.rect_y}`,
-                    `${sz}`,
-                    `${sz}`,
-                    `${this._colors[1]}`,
-                    "blue_dist_square",
-                    `blue_dist_square_${gridIndex}`
-                )
-            );
-            // 4.2 Add digits
-            stimuli.add_a_text(
-                new disp.Text(
-                    `${util.Util.gen_random_int(6, 9, true)}`,
-                    `${grid.x + this._setting.digit_shift_x}`,
-                    `${grid.y + this._setting.digit_shift_y}`,
-                    `${this._setting.digit_color}`,
-                    `${this._setting.digit_size}`,
-                    `${this._setting.digit_font}`,
-                    "acvs-digit",
-                    `digit_${gridIndex}`
-                )
-            )
-            // 4.3 Add superimposed transparent circle
-            stimuli.add_a_circle(
-                new disp.Circle(
-                    `${grid.x}`,
-                    `${grid.y}`,
-                    `${sz}`,
-                    "transparent",
-                    "transparent",
-                    "0",
-                    "blue_dist_circle_field",
-                    `blue_dist_circle_field_${gridIndex}`
-                )
-            )
-        }
-
-        // 5. Add variable distractors
-        // The optimal target in this paradigm is actually the larger subset,
-        // so variable distractors should be the color of optimal targets
-        for (let i = 0; i < this._num_var_dist; i++) {
-            const gridIndex = grids.pop() + 1;
-            const grid = gridPos.get(gridIndex);
-            // 5.1 Add square rects
-            stimuli.add_a_rect(
-                new disp.Rect(
-                    `${grid.rect_x}`,
-                    `${grid.rect_y}`,
-                    `${sz}`,
-                    `${sz}`,
-                    `${this._colors[optTargColor]}`,
-                    "red_dist_square",
-                    `red_dist_square_${gridIndex}`
-                )
-            );
-            // 5.2 Add digits
-            stimuli.add_a_text(
-                new disp.Text(
-                    `${util.Util.gen_random_int(6, 9, true)}`,
-                    `${grid.x + this._setting.digit_shift_x}`,
-                    `${grid.y + this._setting.digit_shift_y}`,
-                    `${this._setting.digit_color}`,
-                    `${this._setting.digit_size}`,
-                    `${this._setting.digit_font}`,
-                    "acvs-digit",
-                    `digit_${gridIndex}`
-                )
-            )
-            // 5.3 Add superimposed transparent circle
-            stimuli.add_a_circle(
-                new disp.Circle(
-                    `${grid.x}`,
-                    `${grid.y}`,
-                    `${sz}`,
-                    "transparent",
-                    "transparent",
-                    "0",
-                    `${optTargColor === 0 ? "red" : "blue"}_dist_circle_field`,
-                    `${optTargColor === 0 ? "red" : "blue"}_dist_circle_field_${gridIndex}`
-                )
-            )
-        }
 
         // Finally, generate a fixation cross to everything
         const fixation_text = new disp.Text(
