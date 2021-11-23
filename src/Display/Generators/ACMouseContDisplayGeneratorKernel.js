@@ -59,7 +59,7 @@ disp.ACMouseContDisplayGenerator = class {
         throw ReferenceError("Abstract method called");
     }
 
-    _make_block_displays() {
+    make_block_displays() {
         throw ReferenceError("Abstract method called");
     }
 
