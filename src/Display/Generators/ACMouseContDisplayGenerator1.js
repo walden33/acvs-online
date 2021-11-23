@@ -372,8 +372,8 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
                         "transparent",
                         "transparent",
                         "0",
-                        `${color}_circle_field_${class_names[i]}`,
-                        `${color}_circle_field_${class_names[i]}_${gridIndex}`
+                        `${color}_circlefield_${class_names[i]}`,
+                        `${color}_circlefield_${class_names[i]}_${gridIndex}`
                     )
                 )
             }
@@ -415,14 +415,13 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
 
     }
 
-    _make_trial_logic(optTargColor, nonOptTargColor, optTargGridIndex,
-        nonOptTargGridIndex) {
+    _make_trial_logic(optTargColor, nonOptTargColor, optTargPos, nonOptTargPos) {
         return (
             {
                 optTargColor: optTargColor,
                 nonOptTargColor: nonOptTargColor,
-                optTargGridIndex: optTargGridIndex,
-                nonOptTargGridIndex: nonOptTargGridIndex,
+                optTargPos: optTargPos,
+                nonOptTargPos: nonOptTargPos,
             }
         );
     }
