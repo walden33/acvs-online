@@ -25,7 +25,7 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
         ];
 
         // Target digits
-        this._targ_digit = [5];
+        this._targ_digit = 5;
 
         // Set square colors
         this._num_opt_targ = 1;
@@ -382,7 +382,7 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
                 // Placeholder digits
                 stimuli.add_a_text(
                     new disp.Text(
-                        `${util.Util.choose_from(util.Util.range(10), this._targ_digit)}`,
+                        `${util.Util.choose_from(util.Util.range(10), [this._targ_digit])}`,
                         `${grid.x + this._setting.digit_shift_x}`,
                         `${grid.y + this._setting.digit_shift_y}`,
                         `${this._setting.digit_color}`,
