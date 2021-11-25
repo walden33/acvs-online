@@ -8,6 +8,11 @@
  */
 exp.ACMCTrial = class extends exp.AbstractTrial {
 
+    /**
+     * 
+     * @param {Array<disp.DisplayDataset>} stimuli
+     * @param {Object} logic
+     */
     constructor(stimuli, logic) {
 
         super();
