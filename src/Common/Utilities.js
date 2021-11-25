@@ -73,15 +73,15 @@ util.Util = class Util {
      * @param {number} n how many integers to split to
      * @param {number} min minimum of each resulting integer
      */
-    static split_int(int, n, min=1) {
+    static split_int(int, n, min = 1) {
         let result = [];
         if (n === 1) {
             if (int >= min) {
                 result.push(int);
             }
         } else {
-            let rand = Util.gen_random_int(min, int-n+1, true);
-            result = Util.split_int(int-rand, n-1, min);
+            let rand = Util.gen_random_int(min, int - n + 1, true);
+            result = Util.split_int(int - rand, n - 1, min);
             result.push(rand);
         }
         return result;
@@ -231,7 +231,7 @@ util.Util = class Util {
      * @param {number} length : expected output array length
      * @param {number} max_rep : maximum number of repeats of a single object
      */
-    static generate_random_array(items, length, max_rep=0) {
+    static generate_random_array(items, length, max_rep = 0) {
         if (length % items.length !== 0) {
             throw RangeError("Output array length has to be a multiple of number of items")
         }
@@ -243,7 +243,7 @@ util.Util = class Util {
             }
         }
         Util.fisher_yates_shuffle(result);
-        if ( max_rep===0) return result;
+        if (max_rep === 0) return result;
 
         // Check if there are more than MAXREP reps in a run
         let previous = result[0];
@@ -292,13 +292,13 @@ util.Util = class Util {
      */
     static ndarray(size, init) {
         let result = new Array(size[0]);
-        if(size.length === 1) {
-            for(let i = 0; i < size[0]; i++) {
+        if (size.length === 1) {
+            for (let i = 0; i < size[0]; i++) {
                 result[i] = init;
             }
         } else {
             let subsize = size.splice(1);   // size of the next dimension
-            for(let i = 0; i < result.length; i++) {
+            for (let i = 0; i < result.length; i++) {
                 let arr = Util.ndarray(subsize, init);
                 result[i] = arr;
             }
@@ -313,12 +313,12 @@ util.Util = class Util {
      * @param {*} args element(s) to remove
      */
     static remove_element_from_array(arr, ...args) {
-        args.forEach( (e) => {
+        args.forEach((e) => {
             const index = arr.indexOf(e);
             if (index > -1) {
                 arr.splice(index, 1);
             }
-        } );
+        });
     }
 
     /**
@@ -326,21 +326,28 @@ util.Util = class Util {
      */
     static clear_timeouts() {
 
-        let id = window.setTimeout(function() {}, 0);
+        let id = window.setTimeout(function () { }, 0);
 
         while (id--) {
             window.clearTimeout(id);
         }
     }
 
-    static redirect(url, timeout=0) {
-        if(timeout > 0) {
-            setTimeout(()=>{
+    static redirect(url, timeout = 0) {
+        if (timeout > 0) {
+            setTimeout(() => {
                 window.location.replace(url);
             }, timeout);
         } else {
             window.location.replace(url);
         }
+    }
+
+    static get_timestamp(format="int") {
+        if (format === "int") {
+            return parseInt(performance.now()).toString();
+        }
+        return performance.now().toString();
     }
 
 }
