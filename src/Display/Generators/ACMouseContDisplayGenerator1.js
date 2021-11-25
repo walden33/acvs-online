@@ -400,10 +400,7 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
         fixation.add_a_text(fixation_text);
         stimuli.add_a_text(fixation_text);
 
-        return {
-            cue: [fixation],
-            stimuli: [stimuli]
-        }
+        return stimuli;
 
     }
 
@@ -451,7 +448,6 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
             result.push(
                 {
                     "logic": currentTrialLogic,
-                    "cue": currentTrialDisplays.cue,
                     "stimuli": currentTrialDisplays.stimuli
                 }
             );
