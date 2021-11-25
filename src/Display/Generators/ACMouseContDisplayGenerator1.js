@@ -9,9 +9,8 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
 
     constructor(num_trials, num_trials_to_slice = undefined, finalize = true) {
         super(num_trials, num_trials_to_slice);
-        if (num_trials % 12 !== 0) {
-            throw RangeError("Number of total block trials must be an " +
-                "integer multiple of 12.");
+        if (num_trials % 2 !== 0) {
+            throw RangeError("Number of total block trials must be even");
         }
         if (num_trials_to_slice !== undefined && num_trials_to_slice > num_trials) {
             throw RangeError("Number of sliced trials must not exceed " +
@@ -38,10 +37,10 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
             this._num_var_dist + this._num_opt_targ + this._num_non_opt_targ;
 
         // Set optimal / nonoptimal target appearing position in click sequence
-        this._opt_targ_pos_min = 2;
-        this._opt_targ_pos_max = 5;
-        this._non_opt_targ_pos_min = 9;
-        this._non_opt_targ_pos_max = 12;
+        this._opt_targ_pos_min = 4;
+        this._opt_targ_pos_max = 7;
+        this._non_opt_targ_pos_min = 10;
+        this._non_opt_targ_pos_max = 13;
 
         // Create block data according to trial conditions
         this._block_data = [];
@@ -51,10 +50,8 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
     /**
      * 
      * @param {number} optTargColor : 0, 1
-     * @param {number} nonOptTargColor : 0, 1
      */
-    _make_trial_display(optTargColor, nonOptTargColor, opt_targ_pos,
-        non_opt_targ_pos) {
+    _make_trial_display(optTargColor) {
         const x = this._setting.screen_center_x;
         const y = this._setting.screen_center_y;
         const sz = this._setting.square_size;
