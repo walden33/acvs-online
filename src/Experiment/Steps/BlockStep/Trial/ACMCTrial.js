@@ -31,6 +31,7 @@ exp.ACMCTrial = class extends exp.AbstractTrial {
         this._trial_tracking = {};
 
         // Trial parameters
+        this._targ_digit = '5';
         this._fixation_duration = 1000;   // duration fixation cross is shown
         this._feedback_duration = 1500;
 
@@ -53,8 +54,8 @@ exp.ACMCTrial = class extends exp.AbstractTrial {
         this._trial_result.trial_initialized_at = util.Util.get_timestamp();
         this._trial_tracking.trial_initialized_at = util.Util.get_timestamp();
         d3.selectAll("rect,text,circle")
-            .on("mouseover", _process_mouseover)
-            .on("click", _process_click);
+            .on("mouseover", this._process_mouseover.bind(this))
+            .on("click", this._process_click.bind(this));
     }
 
     _process_mouseover(d) {
@@ -75,7 +76,7 @@ exp.ACMCTrial = class extends exp.AbstractTrial {
         if (this._mouseovered.length > 0) {
             // If element index is unique, meaning it is not visited
             // before, update count
-            if (!mouseovered.some(e => e[2] === index)) {
+            if (!this._mouseovered.some(e => e[2] === index)) {
                 if (opt === "opt") this._mouseovered_opt++;
                 if (opt === "nonopt") this._mouseovered_nonopt++;
             }
@@ -94,14 +95,14 @@ exp.ACMCTrial = class extends exp.AbstractTrial {
             if (this._mouseovered_opt === parseInt(this._logic.optTargPos) &&
                 !this._opt_targ_revealed) {
                 d3.selectAll(".acvs-digit").filter(d => d.id.split('_')[3] === index)
-                    .text(`${g._targ_digit}`)
+                    .text(this._targ_digit)
                 this._opt_targ_revealed = true;
                 this._targs.push(index);
             } else {
                 if (this._mouseovered_nonopt === parseInt(this._logic.nonOptTargPos) &&
                     !this._nonopt_targ_revealed) {
                     d3.selectAll(".acvs-digit").filter(d => d.id.split('_')[3] === index)
-                        .text(`${g._targ_digit}`)
+                        .text(this._targ_digit)
                     this._nonopt_targ_revealed = true;
                     this._targs.push(index);
                 }
@@ -121,21 +122,34 @@ exp.ACMCTrial = class extends exp.AbstractTrial {
         const color = id[0];
         const opt = id[2];
         const index = id[3];
-        if (this._targs.some(t => t === index)) _end_trial();
+        if (this._targs.some(t => t === index)) {
+            this._trial_result.is_opt = opt;
+            this._trial_result.color = color;
+            this._trial_result.rt =
+                parseInt(util.Util.get_timestamp()) -
+                parseInt(this._trial_result.trial_initialized_at);
+            this._end_trial();
+        }
     }
 
     _end_trial() {
-        trial_tracking.mouseover_seq = this._mouseovered;
-        
-        console.log(this._trial_result)
+        this._trial_tracking.mouseover_seq = this._mouseovered;
+
+        this._display_widget.clear();
+        this._display_widget.show_feedback("Success");
+        setTimeout((() => {
+            this._display_widget = this._display_widget.destroy();
+            this._trial_completed_signal.emit({result: this._trial_result, tracking: this._trial_tracking});
+        }).bind(this), this._feedback_duration);
     }
 
     run_trial() {
 
         this._display_widget.clear();
         util.Workspace.clear_message();
-
-        d3.select(".fixation-cross-center").on("click", initialize_trial);
+        this._display_widget.draw(this._stimuli);
+        d3.selectAll("text").filter(d => d.className === "acvs-digit").style("display", "none");
+        d3.select(".fixation-cross-center").on("click", this._initialize_trial.bind(this));
 
     }
 

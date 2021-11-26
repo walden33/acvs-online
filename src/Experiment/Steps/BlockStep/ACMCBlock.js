@@ -41,15 +41,17 @@ exp.ACMCBlock = class extends util.AbstractStep {
 
     _run_next_trial(previous_results = null) {
         if (previous_results !== null) {
-            this._all_trials_data.push(previous_results);
+            this._all_trial_result.push(previous_results.result);
+            this._all_trial_tracking.push(previous_results.tracking);
         }
 
         let display = this._display_generator.yield_trial_display();
 
         if (display !== null) {
             // create a new trial
-            let trial = this._construct_trial(display.logic, display.cue, display.stimuli);
-            trial.set_trial_number(this._trial_num);            this._trial_num++;
+            let trial = this._construct_trial(display.stimuli, display.logic);
+            trial.set_trial_number(this._trial_num);
+            this._trial_num++;
             trial.set_block_number(this._block_no);
 
             // when the trial is completed call the next trial (~recursive)
@@ -65,7 +67,29 @@ exp.ACMCBlock = class extends util.AbstractStep {
     }
 
     _save_data() {
-        this._db.ExperimentTable.add_new_row(this._block_no, this._all_trials_data);
+        this._db.ExperimentTable.add_new_row(this._block_no, this._all_trial_result);
+        $.ajax({
+            type: "POST",
+            url: `receive.php?id=${util.Util.get_sub_id()}`,
+            data: {
+                stimuli: {
+                    stimuliData: JSON.stringify(this._all_trial_tracking)
+                }
+            },
+            success: () => {
+                util.Workspace.workspace().select(".debriefing-title")
+                    .html("Saving data...");
+                setTimeout( (()=> {
+                    util.Workspace.workspace().select(".debriefing-title")
+                        .html("Data saved.");
+                }).bind(this), 100);
+                
+            },
+            failure: (errMsg) => {
+                alert("There is something wrong this your Internet connection" +
+                ". Please refresh and try again. Error message: " + errMsg);
+            }
+        })
         // localStorage.setItem(window._acvs_guid, btoa(JSON.stringify(this._db)));
     }
 
@@ -73,25 +97,21 @@ exp.ACMCBlock = class extends util.AbstractStep {
         // Show cursor
         util.Workspace.show_cursor();
         // Calculate accuracy (%)
-        const accuracy = (Math.round(util.Util.mean(this._accuracy_data) * 1000) / 10);
         let paragraph = [];
         paragraph.push("<br><br><br>");
         if(this._block_no === 0) {
-            paragraph.push("<b>You complete the first practice block!</b>");
-        } else if (this._block_no === 0.5) {
-            paragraph.push("<b>You completed the second practice block!")
+            paragraph.push("<b>You complete the practice block!</b>");
         } else {
             paragraph.push("<b>You Completed Block #" + this._block_no + "!</b>");
         }
         paragraph.push("<hr>");
-        paragraph.push("Your Accuracy: " + accuracy + "%");
         paragraph.push("<hr>");
         paragraph.push("<b>Ready to continue?</b>");
         util.Workspace.append_paragraphs(paragraph);
 
         // create a button for the user to press to acknowledge
         util.Workspace.append_button("Yes", this.step_completed_signal.emit.bind(this.step_completed_signal));
-        util.Workspace.clear_message()
+        util.Workspace.clear_message();
     }
 
     execute() {
