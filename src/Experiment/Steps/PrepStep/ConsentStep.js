@@ -2,14 +2,15 @@
  * 
  */
 exp.ConsentStep = class extends util.AbstractStep {
-    constructor(db) {
+    constructor(db, isProlific=true) {
         super();
+        this._form_url = isProlific ?
+        "https://exp.leberatory.org/files/forms/Consent_Prolific.pdf" :
+        "https://exp.leberatory.org/files/forms/Consent_REP.pdf";
         this._db = db;
     }
 
     execute() {
-
-        const CONSENT_FORM_URL = "https://exp.leberatory.org/files/forms/Consent_Prolific.pdf";
 
         // The message
         util.Workspace.workspace().append("p")
@@ -22,7 +23,7 @@ exp.ConsentStep = class extends util.AbstractStep {
         util.Workspace.workspace().append("iframe")
             .attr("width", "70%")
             .attr("height", "400")
-            .attr("src", CONSENT_FORM_URL);
+            .attr("src", this._form_url);
         
         const responseArea = util.Workspace.workspace().append("div")
             .attr("id", "consent-response-area")
@@ -35,19 +36,19 @@ exp.ConsentStep = class extends util.AbstractStep {
         .text("I agree to participate")
         .on("click", (function(){
             this._db.EventsTable.add_new_row("Subject agreed to consent form");
-            alert("Before we get started, please answer 2 quick questions.");
-            let age = prompt("Please type your age:", "N/A");
-            let gender = prompt("Please type your gender (Female/Male/Non-Binary):", "N/A");
-            alert("Thank you!");
-            this._db._user_data = {
-                self_reported_age: age,
-                self_reported_gender: gender,
-                // sub_id: SUB_ID,
-                prolific_id: util.Util.get_prolific_id(),
-                study_id: util.Util.get_study_id(),
-                session_id: util.Util.get_session_id(),
-                cb_id: util.Util.get_cb_id()
-            };
+            // alert("Before we get started, please answer 2 quick questions.");
+            // let age = prompt("Please type your age:", "N/A");
+            // let gender = prompt("Please type your gender (Female/Male/Non-Binary):", "N/A");
+            // alert("Thank you!");
+            // this._db._user_data = {
+            //     self_reported_age: age,
+            //     self_reported_gender: gender,
+            //     // sub_id: SUB_ID,
+            //     prolific_id: util.Util.get_prolific_id(),
+            //     study_id: util.Util.get_study_id(),
+            //     session_id: util.Util.get_session_id(),
+            //     cb_id: util.Util.get_cb_id()
+            // };
             util.Workspace.clear_workspace();
             this.step_completed_signal.emit();
             }).bind(this));
