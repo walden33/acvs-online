@@ -377,9 +377,13 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
                     )
                 )
                 // Placeholder digits
+                // If color is green, digits can be 5
+                const digit = color === 2 ?
+                    `${util.Util.choose_from(util.Util.range(10))}` :
+                    `${util.Util.choose_from(util.Util.range(10), [this._targ_digit])}`;
                 stimuli.add_a_text(
                     new disp.Text(
-                        `${util.Util.choose_from(util.Util.range(10), [this._targ_digit])}`,
+                        digit,
                         `${grid.x + this._setting.digit_shift_x}`,
                         `${grid.y + this._setting.digit_shift_y}`,
                         `${this._setting.digit_color}`,
@@ -443,12 +447,12 @@ disp.ACMouseContDisplayGenerator1 = class extends disp.ACMouseContDisplayGenerat
         let currentTrialCond;
         while (trial_conditions.length > 0) {
             currentTrialCond = trial_conditions.pop();
-            let currentTrialDisplays = this._make_trial_display(...currentTrialCond);
+            let currentTrialDisplay = this._make_trial_display(...currentTrialCond);
             let currentTrialLogic = this._make_trial_logic(...currentTrialCond);
             result.push(
                 {
                     "logic": currentTrialLogic,
-                    "stimuli": currentTrialDisplays.stimuli
+                    "stimuli": currentTrialDisplay
                 }
             );
         }
