@@ -4,7 +4,7 @@
  * @author Walden Y. Li
  * @version 1.1 (01/07/2021)
  */
-exp.MultipleChoice = class extends util.AbstractStep {
+exp.MultipleChoiceSurvey = class extends util.AbstractStep {
 
     constructor(db) {
         super();
