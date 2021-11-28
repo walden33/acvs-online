@@ -25,6 +25,9 @@ exp.ACMCBlock = class extends util.AbstractStep {
         this._all_trial_result = [];
         this._all_trial_tracking = [];
 
+        // rts
+        this._rts = [];
+
         this._trial_num = 1;
 
     }
@@ -42,6 +45,7 @@ exp.ACMCBlock = class extends util.AbstractStep {
     _run_next_trial(previous_results = null) {
         if (previous_results !== null) {
             this._all_trial_result.push(previous_results.result);
+            this._rts.push(previous_results.result.rt);
             this._all_trial_tracking.push(previous_results.tracking);
         }
 
@@ -101,6 +105,8 @@ exp.ACMCBlock = class extends util.AbstractStep {
         paragraph.push("<br><br><br>");
         if(this._block_no === 0) {
             paragraph.push("<b>You complete the practice block!</b>");
+            paragraph.push(`Your average response time is ${util.Util.mean(this._rts)/1000}s!`);
+            paragraph.push("Let's keep up!")
         } else {
             paragraph.push("<b>You Completed Block #" + this._block_no + "!</b>");
         }
