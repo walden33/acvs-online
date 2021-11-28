@@ -1,7 +1,7 @@
 /**
  * 
  */
-exp.ACMC1 = class extends exp.ExperimentKernel {
+exp.ACMC2 = class extends exp.ExperimentKernel {
     constructor() {
 
         super();
