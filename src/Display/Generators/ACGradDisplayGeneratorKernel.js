@@ -9,6 +9,7 @@ disp.ACGradDisplayGenerator = class {
         this._screen_center_y = 50;
         // ACVS rings
         this._ring_radius = 45;
+        this._num_rings = 3;
         this._square_size = 4;
         // digits
         this._digit_size = this.square_size * 0.65;
@@ -26,8 +27,6 @@ disp.ACGradDisplayGenerator = class {
         this._square_color = "rgb(128, 128, 128)";
     }
 
-
-
     _get_grid_pos() {
         let result = new Map();
         const r = this._ring_radius;
@@ -36,7 +35,7 @@ disp.ACGradDisplayGenerator = class {
         const sz = this._square_size;
         const p = this._subring_radius_proportion;
         let i = 1;  // grid number, to be set as the key of the output <Map>
-        for (let j = 0; j < 3; j++) {   // three rings, from inner to outer
+        for (let j = 0; j < this._num_rings; j++) {   // three rings, from inner to outer
             let n = this._ring_square_numbers[j];    // get # of squares in this ring
             for (let k = 0; k < n; k++) {
                 // Create an Object to store grid info
@@ -58,7 +57,7 @@ disp.ACGradDisplayGenerator = class {
     }
 
     /**
-     * Return 
+     * Return an array of grid info for either left or right side, or both
      * 
      * @param {boolean} randomize Whether indexes are randomized
      * 
@@ -88,12 +87,26 @@ disp.ACGradDisplayGenerator = class {
     }
 
     /**
+     * Return an array of an array of grid info based on their eccentricity.
+     * By default, all possible eccentricities will be returned.
      * 
      * @param {boolean} randomize If indexes should be randomized
      * @param {number} ecc Which eccentricity to return, if specified
+     * 
+     * @returns number[] | number[][]
      */
     _get_grid_pos_by_ecc(randomize=true, ecc=undefined) {
-        
+        // Initialize return array
+        const result = new Array(this._num_rings);
+        for(let i = 0; i < result.length; i++) result[i] = new Array();
+        for(let [i, g] of this._get_grid_pos()) {
+            result[g.ecc-1].push(i);
+        };
+        if (randomize) {
+            result.forEach( arr => util.Util.fisher_yates_shuffle(arr) );
+        }
+        if (ecc !== undefined) result = result[ecc-1];
+        return result;
     }
 
 
