@@ -8,7 +8,7 @@ To start, you can create a new class extends `ExperimentKernel`. For demonstrati
 
 We initate this class by calling the parent class constructor.
 
-``` {JavaScript}
+```js
 exp.SimpleExperiment = class extends exp.ExperimentKernel {
 
   constructor() {
@@ -22,7 +22,7 @@ The `ExperimentKernel` constructor will create a database object that can be ref
 
 Next, we write a very simple `Step` class that represent an informed consent.
 
-``` {JavaScript}
+```js
 exp.ConsentStep = class extends util.AbstractStep {
 
     constructor(db) {
@@ -84,7 +84,7 @@ exp.ConsentStep = class extends util.AbstractStep {
 
 Next, we add this step to our `SimpleExperiment`.
 
-``` {JavaScript}
+``js
 exp.SimpleExperiment = class extends exp.ExperimentKernel {
 
   constructor() {
@@ -100,7 +100,7 @@ exp.SimpleExperiment = class extends exp.ExperimentKernel {
 
 Finally, in our `main.js` file, we make this experiment run when window loads.
 
-``` {JavaScript}
+```js
 window.onload = () => {
     const experiment = new exp.SimpleExperiment();
     experiment.run();
