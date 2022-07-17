@@ -84,7 +84,7 @@ exp.ConsentStep = class extends util.AbstractStep {
 
 Next, we add this step to our `SimpleExperiment`.
 
-``js
+```js
 exp.SimpleExperiment = class extends exp.ExperimentKernel {
 
   constructor() {
