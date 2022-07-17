@@ -1,4 +1,4 @@
-# acvs-online
+# ACVS-Online
 
 ACVS-Online is an online human behavoiral experiment delivery framework. It is written in object-oriented JavaScript. 
 
